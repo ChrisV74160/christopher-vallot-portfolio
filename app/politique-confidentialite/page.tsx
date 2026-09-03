@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import { legalConfig } from "@/data/legal-config";
 import { siteName } from "@/lib/site-config";
@@ -67,12 +68,12 @@ export default function PrivacyPolicyPage() {
               Le responsable du traitement est{" "}
               {legalConfig.privacy.controllerName}, éditeur de ce site. Ses
               coordonnées professionnelles figurent dans les{" "}
-              <a href="/mentions-legales">mentions légales</a>. Vous pouvez le
+              <Link href="/mentions-legales">mentions légales</Link>. Vous pouvez le
               contacter à l’adresse{" "}
               <a href={`mailto:${legalConfig.privacy.contactEmail}`}>
                 {legalConfig.privacy.contactEmail}
               </a>{" "}
-              ou au moyen du <a href="/contact">formulaire de contact</a>.
+              ou au moyen du <Link href="/contact">formulaire de contact</Link>.
             </p>
           </section>
 
@@ -142,23 +143,26 @@ export default function PrivacyPolicyPage() {
             <p>
               Netlify et Resend sont des prestataires établis aux États-Unis et des
               traitements peuvent intervenir hors de l’Espace économique européen.
-              Leurs modalités de traitement et les garanties contractuelles qu’ils
-              déclarent appliquer sont détaillées dans le{" "}
+              Selon les situations, ces transferts sont encadrés notamment par le
+              cadre de protection des données UE–États-Unis (EU-U.S. Data Privacy
+              Framework) et/ou par les clauses contractuelles types de la Commission
+              européenne. Les modalités et garanties applicables sont détaillées dans
+              les documents de protection des données de{" "}
               <a
                 href="https://www.netlify.com/pdf/netlify-dpa.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                DPA de Netlify
+                Netlify
                 <span className="sr-only"> (nouvel onglet)</span>
               </a>{" "}
-              et le{" "}
+              et{" "}
               <a
                 href="https://resend.com/legal/dpa"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                DPA de Resend
+                Resend
                 <span className="sr-only"> (nouvel onglet)</span>
               </a>
               .
@@ -169,10 +173,13 @@ export default function PrivacyPolicyPage() {
             <h2 id="retention-heading">5. Durées de conservation</h2>
             <p>
               Le code applicatif ne conserve les demandes de contact ni dans une
-              base de données ni dans un fichier. Après acheminement, le message est
-              conservé dans la messagerie du destinataire pendant le temps
-              nécessaire au traitement de la demande et au suivi des échanges, puis
-              supprimé lorsqu’il n’est plus nécessaire à ces finalités.
+              base de données ni dans un fichier. Après acheminement, les demandes
+              reçues par e-mail peuvent être conservées pendant la durée nécessaire
+              au traitement des échanges et, au maximum, trois ans à compter du
+              dernier contact émanant de la personne concernée. Elles sont ensuite
+              supprimées, sauf lorsqu’une conservation plus longue est nécessaire
+              au respect d’une obligation légale ou à la constatation, à l’exercice
+              ou à la défense de droits en justice.
             </p>
             <p>
               Dans ses informations relatives au RGPD, Resend indique actuellement
@@ -228,7 +235,7 @@ export default function PrivacyPolicyPage() {
               <a href={`mailto:${legalConfig.privacy.contactEmail}`}>
                 {legalConfig.privacy.contactEmail}
               </a>{" "}
-              ou utilisez le <a href="/contact">formulaire de contact</a> en
+              ou utilisez le <Link href="/contact">formulaire de contact</Link> en
               précisant votre demande. Une preuve d’identité pourra être demandée
               uniquement en cas de doute raisonnable sur votre identité.
             </p>

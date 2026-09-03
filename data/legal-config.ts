@@ -47,12 +47,14 @@ export const legalConfig: LegalConfig = {
     email: profile.contact.email,
     publicationDirector: publisherName,
     description:
-      "Site personnel et professionnel présentant le parcours, les compétences et le projet d’activité indépendante de Christopher VALLOT en tant que Consultant Data & BI.",
+      "Site professionnel présentant le parcours, les compétences et le projet d’activité indépendante de Christopher VALLOT en tant que Consultant Data & BI.",
   },
   business: {
     status: "prelaunch",
     notice:
       "Activité indépendante en cours de création. Les informations relatives à l’immatriculation seront ajoutées à l’issue de la création de l’entreprise.",
+    address: "1 Mail Françoise Maral, 37200 Tours, France",
+    phone: "06 42 52 28 76",
   },
   hosting: {
     provider: "Netlify",

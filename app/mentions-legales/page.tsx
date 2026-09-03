@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import { legalConfig } from "@/data/legal-config";
 import { siteName } from "@/lib/site-config";
@@ -129,7 +130,11 @@ export default function LegalNoticePage() {
               {legalConfig.business.phone ? (
                 <div>
                   <dt>Téléphone</dt>
-                  <dd>{legalConfig.business.phone}</dd>
+                  <dd>
+                    <a href={`tel:${legalConfig.business.phone.replace(/\s/g, "")}`}>
+                      {legalConfig.business.phone}
+                    </a>
+                  </dd>
                 </div>
               ) : null}
               <div>
@@ -213,9 +218,9 @@ export default function LegalNoticePage() {
             <p>
               Les modalités de collecte et de traitement des données personnelles,
               notamment via le formulaire de contact, sont décrites dans la{" "}
-              <a href="/politique-confidentialite">
+              <Link href="/politique-confidentialite">
                 politique de confidentialité
-              </a>
+              </Link>
               .
             </p>
           </section>
