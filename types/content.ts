@@ -153,27 +153,3 @@ export interface FaqItem {
   question: string;
   answer: string;
 }
-
-export type PlaceholderValue = `[À COMPLÉTER : ${string}]`;
-
-export interface SitePlaceholders {
-  legal: {
-    legalStatus: PlaceholderValue;
-    legalName: PlaceholderValue;
-    registrationNumber: PlaceholderValue;
-    vatNumber: PlaceholderValue;
-    postalAddress: PlaceholderValue;
-    phoneNumber: PlaceholderValue;
-    publicationDirector: PlaceholderValue;
-    hostName: PlaceholderValue;
-    hostAddress: PlaceholderValue;
-    hostContact: PlaceholderValue;
-  };
-  contact: {
-    formRecipient: PlaceholderValue;
-    resendSender: PlaceholderValue;
-  };
-  privacy: {
-    formDataRetentionPeriod: PlaceholderValue;
-  };
-}

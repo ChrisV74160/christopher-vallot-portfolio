@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 
-import { PLACEHOLDERS } from "@/data/placeholders";
-import { profile } from "@/data/profile";
+import { legalConfig } from "@/data/legal-config";
 import { siteName } from "@/lib/site-config";
 
 export const metadata: Metadata = {
@@ -16,7 +15,7 @@ export const metadata: Metadata = {
     follow: true,
   },
   openGraph: {
-    title: "Politique de confidentialité — Christopher Vallot",
+    title: "Politique de confidentialité — Christopher VALLOT",
     description:
       "Informations sur les données traitées par le formulaire de contact et sur l’exercice de vos droits.",
     url: "/politique-confidentialite",
@@ -28,13 +27,13 @@ export const metadata: Metadata = {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "Christopher Vallot, Consultant Data & BI Freelance",
+        alt: "Christopher VALLOT, Consultant Data & BI Freelance",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Politique de confidentialité — Christopher Vallot",
+    title: "Politique de confidentialité — Christopher VALLOT",
     description:
       "Informations sur les données traitées par le formulaire de contact et sur l’exercice de vos droits.",
     images: ["/opengraph-image"],
@@ -53,7 +52,9 @@ export default function PrivacyPolicyPage() {
             le formulaire de contact et comment exercer vos droits.
           </p>
           <p className="legal-updated">
-            <time dateTime="2026-08-29">Dernière mise à jour : 29 août 2026</time>
+            <time dateTime="2026-09-03">
+              Dernière mise à jour : 3 septembre 2026
+            </time>
           </p>
         </div>
       </header>
@@ -63,12 +64,13 @@ export default function PrivacyPolicyPage() {
           <section aria-labelledby="controller-heading">
             <h2 id="controller-heading">1. Responsable du traitement</h2>
             <p>
-              Le responsable du traitement est {PLACEHOLDERS.legal.legalName},
-              éditeur de ce site. Ses coordonnées professionnelles figurent dans les{" "}
+              Le responsable du traitement est{" "}
+              {legalConfig.privacy.controllerName}, éditeur de ce site. Ses
+              coordonnées professionnelles figurent dans les{" "}
               <a href="/mentions-legales">mentions légales</a>. Vous pouvez le
               contacter à l’adresse{" "}
-              <a href={`mailto:${profile.contact.email}`}>
-                {profile.contact.email}
+              <a href={`mailto:${legalConfig.privacy.contactEmail}`}>
+                {legalConfig.privacy.contactEmail}
               </a>{" "}
               ou au moyen du <a href="/contact">formulaire de contact</a>.
             </p>
@@ -78,10 +80,10 @@ export default function PrivacyPolicyPage() {
             <h2 id="data-heading">2. Données traitées</h2>
             <p>Lorsque vous envoyez une demande, le formulaire traite :</p>
             <ul>
-              <li>votre nom ;</li>
-              <li>le nom de votre entreprise, si vous choisissez de l’indiquer ;</li>
-              <li>votre adresse e-mail ;</li>
-              <li>le type de besoin sélectionné ;</li>
+              <li>Votre nom.</li>
+              <li>Le nom de votre entreprise, si vous choisissez de l’indiquer.</li>
+              <li>Votre adresse e-mail.</li>
+              <li>Le type de besoin sélectionné.</li>
               <li>le contenu de votre message.</li>
             </ul>
             <p>
@@ -92,8 +94,8 @@ export default function PrivacyPolicyPage() {
               dans l’e-mail transmis.
             </p>
             <p>
-              Le code du site ne collecte pas le User-Agent et ne crée pas de profil
-              à partir de votre navigation.
+              Le code applicatif du formulaire n’exploite pas le User-Agent et ne
+              crée pas de profil à partir de votre navigation.
             </p>
           </section>
 
@@ -101,32 +103,36 @@ export default function PrivacyPolicyPage() {
             <h2 id="purposes-heading">3. Finalités et bases légales</h2>
             <p>Ces données sont utilisées pour :</p>
             <ul>
-              <li>recevoir, qualifier et répondre à votre demande ;</li>
-              <li>échanger au sujet d’une éventuelle mission ou collaboration ;</li>
-              <li>prévenir les envois abusifs et protéger le formulaire.</li>
+              <li>Recevoir, qualifier et répondre à votre demande.</li>
+              <li>Échanger au sujet d’une éventuelle mission ou collaboration.</li>
+              <li>Prévenir les envois abusifs et protéger le formulaire.</li>
             </ul>
             <p>
-              Le traitement d’une demande de prestation repose sur les mesures
-              précontractuelles prises à votre initiative. Les autres demandes et
-              la protection antispam reposent sur l’intérêt légitime de l’éditeur à
-              gérer ses échanges professionnels et à sécuriser le site.
+              Le traitement d’une demande relative à une éventuelle future mission
+              repose sur les mesures précontractuelles prises à votre initiative.
+              Les autres demandes et la protection antispam reposent sur l’intérêt
+              légitime de l’éditeur à gérer ses échanges professionnels et à
+              sécuriser le site.
             </p>
             <p>
               Les informations demandées comme obligatoires sont nécessaires pour
               répondre utilement. À défaut, le message ne pourra pas être envoyé.
-              Aucune décision automatisée ni prospection automatique n’est réalisée
-              à partir de ces données.
+              Aucune décision automatisée produisant des effets juridiques ou
+              similaires, ni aucune prospection automatique, n’est réalisée à
+              partir de ces données.
             </p>
           </section>
 
           <section aria-labelledby="recipients-heading">
             <h2 id="recipients-heading">4. Destinataires et sous-traitants</h2>
             <p>
-              Les messages sont destinés à {PLACEHOLDERS.legal.legalName}. Lorsque l’envoi
-              d’e-mails est configuré, Resend assure leur acheminement vers
-              l’adresse professionnelle définie par l’éditeur. L’hébergeur du site
-              peut également traiter les données techniques strictement nécessaires
-              à la fourniture et à la sécurisation du service.
+              Les messages sont destinés à {legalConfig.privacy.controllerName}.
+              La requête est traitée par une fonction hébergée chez{" "}
+              {legalConfig.hosting.provider}, puis Resend assure l’acheminement de
+              l’e-mail vers l’adresse électronique configurée par l’éditeur. Ces
+              prestataires peuvent également traiter les données techniques
+              strictement nécessaires à la fourniture et à la sécurisation de
+              leurs services.
             </p>
             <p>
               Les données ne sont ni vendues ni louées. Elles ne sont communiquées
@@ -134,23 +140,57 @@ export default function PrivacyPolicyPage() {
               défense de droits en justice.
             </p>
             <p>
-              Hébergeur prévu : {PLACEHOLDERS.legal.hostName}. Avant la mise en
-              production, l’identité de l’hébergeur, la localisation des
-              traitements et les garanties applicables aux éventuels transferts
-              hors de l’Espace économique européen devront être vérifiées et
-              documentées.
+              Netlify et Resend sont des prestataires établis aux États-Unis et des
+              traitements peuvent intervenir hors de l’Espace économique européen.
+              Leurs modalités de traitement et les garanties contractuelles qu’ils
+              déclarent appliquer sont détaillées dans le{" "}
+              <a
+                href="https://www.netlify.com/pdf/netlify-dpa.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                DPA de Netlify
+                <span className="sr-only"> (nouvel onglet)</span>
+              </a>{" "}
+              et le{" "}
+              <a
+                href="https://resend.com/legal/dpa"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                DPA de Resend
+                <span className="sr-only"> (nouvel onglet)</span>
+              </a>
+              .
             </p>
           </section>
 
           <section aria-labelledby="retention-heading">
             <h2 id="retention-heading">5. Durées de conservation</h2>
             <p>
-              Le site ne possède pas de base de données dédiée aux demandes de
-              contact. Après acheminement, le message est conservé dans la messagerie
-              professionnelle du destinataire.
+              Le code applicatif ne conserve les demandes de contact ni dans une
+              base de données ni dans un fichier. Après acheminement, le message est
+              conservé dans la messagerie du destinataire pendant le temps
+              nécessaire au traitement de la demande et au suivi des échanges, puis
+              supprimé lorsqu’il n’est plus nécessaire à ces finalités.
             </p>
             <p>
-              {PLACEHOLDERS.privacy.formDataRetentionPeriod}
+              Dans ses informations relatives au RGPD, Resend indique actuellement
+              une conservation des données liées aux e-mails de{" "}
+              {legalConfig.privacy.resendRetentionNotice}. La durée réellement
+              applicable dépend donc de l’offre et des paramètres du compte
+              utilisés. Les éventuels journaux techniques des prestataires suivent
+              leurs propres durées de conservation et paramètres. Ces informations
+              sont détaillées sur la{" "}
+              <a
+                href="https://resend.com/security/gdpr"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                page RGPD de Resend
+                <span className="sr-only"> (nouvel onglet)</span>
+              </a>
+              .
             </p>
             <p>
               Une clé de limitation cesse d’être active après dix minutes. Les
@@ -185,8 +225,8 @@ export default function PrivacyPolicyPage() {
             </p>
             <p>
               Pour exercer un droit, écrivez à{" "}
-              <a href={`mailto:${profile.contact.email}`}>
-                {profile.contact.email}
+              <a href={`mailto:${legalConfig.privacy.contactEmail}`}>
+                {legalConfig.privacy.contactEmail}
               </a>{" "}
               ou utilisez le <a href="/contact">formulaire de contact</a> en
               précisant votre demande. Une preuve d’identité pourra être demandée

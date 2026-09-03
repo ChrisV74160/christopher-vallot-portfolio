@@ -21,8 +21,9 @@ export function HeroSection() {
         <div className="hero-system-bar" aria-hidden="true">
           <span>DATA &amp; BI / INTERFACE</span>
           <span>TOURS · FR</span>
-          <span>DISPONIBLE / MISSIONS</span>
+          <span>PROJET FREELANCE / EN PRÉPARATION</span>
         </div>
+        <span className="sr-only">Projet freelance en préparation.</span>
         <div className="hero-grid">
           <Reveal className="hero-copy">
             <p className="eyebrow">Python / SQL / Data Quality</p>
@@ -57,7 +58,7 @@ export function HeroSection() {
             <div className="hero-meta">
               <span>
                 <MapPin aria-hidden="true" size={14} /> {profile.location} ·
-                À distance, hybride ou sur site · Disponible pour missions
+                À distance, hybride ou sur site
               </span>
               <a href="#realisations">
                 Explorer les réalisations <ArrowRight aria-hidden="true" size={14} />

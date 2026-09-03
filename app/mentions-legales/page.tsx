@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 
-import { PLACEHOLDERS } from "@/data/placeholders";
-import { profile } from "@/data/profile";
+import { legalConfig } from "@/data/legal-config";
 import { siteName } from "@/lib/site-config";
 
 export const metadata: Metadata = {
   title: "Mentions légales",
   description:
-    "Informations légales relatives au site professionnel de Christopher Vallot, Consultant Data & BI Freelance.",
+    "Informations légales relatives au site professionnel de Christopher VALLOT, Consultant Data & BI Freelance.",
   alternates: {
     canonical: "/mentions-legales",
   },
@@ -16,9 +15,9 @@ export const metadata: Metadata = {
     follow: true,
   },
   openGraph: {
-    title: "Mentions légales — Christopher Vallot",
+    title: "Mentions légales — Christopher VALLOT",
     description:
-      "Informations légales relatives au site professionnel de Christopher Vallot, Consultant Data & BI Freelance.",
+      "Informations légales relatives au site professionnel de Christopher VALLOT, Consultant Data & BI Freelance.",
     url: "/mentions-legales",
     siteName,
     locale: "fr_FR",
@@ -28,15 +27,15 @@ export const metadata: Metadata = {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "Christopher Vallot, Consultant Data & BI Freelance",
+        alt: "Christopher VALLOT, Consultant Data & BI Freelance",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Mentions légales — Christopher Vallot",
+    title: "Mentions légales — Christopher VALLOT",
     description:
-      "Informations légales relatives au site professionnel de Christopher Vallot, Consultant Data & BI Freelance.",
+      "Informations légales relatives au site professionnel de Christopher VALLOT, Consultant Data & BI Freelance.",
     images: ["/opengraph-image"],
   },
 };
@@ -53,69 +52,119 @@ export default function LegalNoticePage() {
             l’hébergement de ce site professionnel.
           </p>
           <p className="legal-updated">
-            <time dateTime="2026-08-29">Dernière mise à jour : 29 août 2026</time>
+            <time dateTime="2026-09-03">
+              Dernière mise à jour : 3 septembre 2026
+            </time>
           </p>
         </div>
       </header>
 
       <section aria-label="Contenu des mentions légales">
         <div className="container-shell legal-content">
-          <aside className="placeholder-note" aria-label="Informations à finaliser">
-            <strong>Avant la mise en ligne</strong>
-            <p>
-              Les mentions signalées « [À COMPLÉTER] » doivent être remplacées
-              par les informations correspondant à la situation réelle de
-              l’éditeur et à l’hébergement retenu.
-            </p>
-          </aside>
+          {legalConfig.business.status === "prelaunch" ? (
+            <aside
+              className="placeholder-note"
+              aria-label="Statut de l’activité"
+            >
+              <strong>Projet d’activité indépendante</strong>
+              <p>{legalConfig.business.notice}</p>
+            </aside>
+          ) : null}
 
           <section aria-labelledby="editor-heading">
             <h2 id="editor-heading">1. Éditeur du site</h2>
             <dl className="legal-details">
               <div>
-                <dt>Nom légal ou raison sociale</dt>
-                <dd>{PLACEHOLDERS.legal.legalName}</dd>
+                <dt>Éditeur</dt>
+                <dd>{legalConfig.publisher.name}</dd>
               </div>
               <div>
-                <dt>Statut et forme juridique</dt>
-                <dd>{PLACEHOLDERS.legal.legalStatus}</dd>
+                <dt>Nature du site</dt>
+                <dd>{legalConfig.publisher.description}</dd>
               </div>
-              <div>
-                <dt>Numéro SIREN ou SIRET</dt>
-                <dd>{PLACEHOLDERS.legal.registrationNumber}</dd>
-              </div>
-              <div>
-                <dt>TVA intracommunautaire, si applicable</dt>
-                <dd>{PLACEHOLDERS.legal.vatNumber}</dd>
-              </div>
-              <div>
-                <dt>Adresse professionnelle</dt>
-                <dd>{PLACEHOLDERS.legal.postalAddress}</dd>
-              </div>
+              {legalConfig.business.legalStatus ? (
+                <div>
+                  <dt>Statut et forme juridique</dt>
+                  <dd>{legalConfig.business.legalStatus}</dd>
+                </div>
+              ) : null}
+              {legalConfig.business.siren ? (
+                <div>
+                  <dt>SIREN</dt>
+                  <dd>{legalConfig.business.siren}</dd>
+                </div>
+              ) : null}
+              {legalConfig.business.siret ? (
+                <div>
+                  <dt>SIRET</dt>
+                  <dd>{legalConfig.business.siret}</dd>
+                </div>
+              ) : null}
+              {legalConfig.business.registration ? (
+                <div>
+                  <dt>Immatriculation</dt>
+                  <dd>{legalConfig.business.registration}</dd>
+                </div>
+              ) : null}
+              {legalConfig.business.vatNumber ? (
+                <div>
+                  <dt>TVA intracommunautaire</dt>
+                  <dd>{legalConfig.business.vatNumber}</dd>
+                </div>
+              ) : null}
+              {legalConfig.business.address ? (
+                <div>
+                  <dt>Adresse</dt>
+                  <dd>{legalConfig.business.address}</dd>
+                </div>
+              ) : null}
               <div>
                 <dt>Adresse électronique</dt>
                 <dd>
-                  <a href={`mailto:${profile.contact.email}`}>
-                    {profile.contact.email}
+                  <a href={`mailto:${legalConfig.publisher.email}`}>
+                    {legalConfig.publisher.email}
                   </a>
                 </dd>
               </div>
-              <div>
-                <dt>Téléphone</dt>
-                <dd>{PLACEHOLDERS.legal.phoneNumber}</dd>
-              </div>
+              {legalConfig.business.phone ? (
+                <div>
+                  <dt>Téléphone</dt>
+                  <dd>{legalConfig.business.phone}</dd>
+                </div>
+              ) : null}
               <div>
                 <dt>Directeur de la publication</dt>
-                <dd>{PLACEHOLDERS.legal.publicationDirector}</dd>
+                <dd>{legalConfig.publisher.publicationDirector}</dd>
               </div>
             </dl>
           </section>
 
           <section aria-labelledby="hosting-heading">
             <h2 id="hosting-heading">2. Hébergement</h2>
-            <p>{PLACEHOLDERS.legal.hostName}</p>
-            <p>{PLACEHOLDERS.legal.hostAddress}</p>
-            <p>{PLACEHOLDERS.legal.hostContact}</p>
+            <p>
+              {legalConfig.hosting.provider} — {legalConfig.hosting.legalName}
+            </p>
+            <p>{legalConfig.hosting.address}</p>
+            <p>
+              Site :{" "}
+              <a
+                href={legalConfig.hosting.website}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {legalConfig.hosting.website}
+                <span className="sr-only"> (nouvel onglet)</span>
+              </a>
+            </p>
+            <p>
+              Contact :{" "}
+              <a href={`mailto:${legalConfig.hosting.contactEmail}`}>
+                {legalConfig.hosting.contactEmail}
+              </a>
+            </p>
+            {legalConfig.hosting.phone ? (
+              <p>Téléphone : {legalConfig.hosting.phone}</p>
+            ) : null}
           </section>
 
           <section aria-labelledby="intellectual-property-heading">
@@ -123,10 +172,10 @@ export default function LegalNoticePage() {
             <p>
               Sauf mention contraire, les textes, éléments graphiques,
               visualisations, composants et autres contenus présents sur ce site
-              sont la propriété de {profile.fullName}. Toute reproduction,
-              représentation, adaptation ou exploitation, totale ou partielle,
-              nécessite une autorisation écrite préalable, sous réserve des
-              exceptions prévues par la loi.
+              sont la propriété de {legalConfig.publisher.name}. Toute
+              reproduction, représentation, adaptation ou exploitation, totale
+              ou partielle, nécessite une autorisation écrite préalable, sous
+              réserve des exceptions prévues par la loi.
             </p>
             <p>
               Les marques, noms de produits et logos éventuellement cités restent

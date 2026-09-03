@@ -14,11 +14,54 @@ export const siteDescription =
 
 function isTransientHostname(hostname: string) {
   const normalizedHostname = hostname.toLowerCase();
+  const isNetlifyPreview =
+    normalizedHostname.endsWith(".netlify.app") &&
+    normalizedHostname.split(".", 1)[0].includes("--");
 
-  return transientHostnames.some(
-    (transientHostname) =>
-      normalizedHostname === transientHostname ||
-      normalizedHostname.endsWith(`.${transientHostname}`),
+  return (
+    isNetlifyPreview ||
+    transientHostnames.some(
+      (transientHostname) =>
+        normalizedHostname === transientHostname ||
+        normalizedHostname.endsWith(`.${transientHostname}`),
+    )
+  );
+}
+
+function isLocalOrPrivateHostname(hostname: string) {
+  const normalizedHostname = hostname
+    .trim()
+    .toLowerCase()
+    .replace(/^\[|\]$/g, "");
+
+  if (
+    normalizedHostname === "localhost" ||
+    normalizedHostname.endsWith(".localhost") ||
+    normalizedHostname === "::1" ||
+    normalizedHostname.includes(":")
+  ) {
+    return true;
+  }
+
+  const octets = normalizedHostname.split(".").map(Number);
+
+  if (
+    octets.length !== 4 ||
+    octets.some((octet) => !Number.isInteger(octet) || octet < 0 || octet > 255)
+  ) {
+    return false;
+  }
+
+  const [first, second] = octets;
+
+  return (
+    first === 0 ||
+    first === 10 ||
+    first === 127 ||
+    (first === 169 && second === 254) ||
+    (first === 172 && second >= 16 && second <= 31) ||
+    (first === 192 && second === 168) ||
+    (first === 100 && second >= 64 && second <= 127)
   );
 }
 
@@ -45,13 +88,11 @@ export function getSiteUrl() {
     throw new Error("NEXT_PUBLIC_SITE_URL doit utiliser le protocole HTTP ou HTTPS.");
   }
 
-  const isLocalUrl = ["localhost", "127.0.0.1", "::1"].includes(
-    parsedUrl.hostname,
-  );
+  const isLocalUrl = isLocalOrPrivateHostname(parsedUrl.hostname);
 
   if (isTransientHostname(parsedUrl.hostname)) {
     throw new Error(
-      "NEXT_PUBLIC_SITE_URL doit contenir le domaine final, jamais une URL temporaire trycloudflare, Vercel Preview ou Cloudflare Pages.",
+      "NEXT_PUBLIC_SITE_URL doit contenir l’URL publique du site, jamais une URL de prévisualisation temporaire.",
     );
   }
 
@@ -60,7 +101,7 @@ export function getSiteUrl() {
     (isLocalUrl || parsedUrl.protocol !== "https:")
   ) {
     throw new Error(
-      "NEXT_PUBLIC_SITE_URL doit contenir le domaine public final en HTTPS avant un build de production.",
+      "NEXT_PUBLIC_SITE_URL doit contenir une URL publique en HTTPS avant un build de production.",
     );
   }
 
@@ -79,9 +120,10 @@ export function isIndexableDeployment() {
     return false;
   }
 
-  const vercelEnvironment = process.env.VERCEL_ENV?.trim().toLowerCase();
+  const isNetlify = process.env.NETLIFY?.trim().toLowerCase() === "true";
+  const netlifyContext = process.env.CONTEXT?.trim().toLowerCase();
 
-  if (vercelEnvironment && vercelEnvironment !== "production") {
+  if (isNetlify && netlifyContext !== "production") {
     return false;
   }
 

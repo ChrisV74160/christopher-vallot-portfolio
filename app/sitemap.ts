@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import { projects } from "@/data/projects";
-import { getSiteUrl } from "@/lib/site-config";
+import { getSiteUrl, isIndexableDeployment } from "@/lib/site-config";
 
 const staticRoutes: Array<{
   path: string;
@@ -17,6 +17,10 @@ const staticRoutes: Array<{
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  if (!isIndexableDeployment()) {
+    return [];
+  }
+
   const baseUrl = getSiteUrl();
   const pages = staticRoutes.map(({ path, changeFrequency, priority }) => ({
     url: `${baseUrl}${path}`,

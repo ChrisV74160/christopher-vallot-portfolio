@@ -186,8 +186,21 @@ export function DecisionPipeline() {
               réalisé et ce que les équipes obtiennent.
             </p>
             <ol
+              className="sr-only"
+              aria-label="Détail complet des quatre étapes du processus Data et BI"
+            >
+              {pipelineSteps.map((step, stepIndex) => (
+                <li key={step.code}>
+                  <h3>
+                    Étape {stepIndex + 1} : {step.title}
+                  </h3>
+                  <StepFacts step={step} />
+                </li>
+              ))}
+            </ol>
+            <ol
               className="pipeline-markers"
-              aria-label="Les quatre étapes du processus Data et BI"
+              aria-hidden="true"
             >
               {pipelineSteps.map((step, stepIndex) => {
                 const state = getStepState(stepIndex, activeStepIndex);
@@ -209,7 +222,11 @@ export function DecisionPipeline() {
             </ol>
           </div>
 
-          <div className="pipeline-console" data-active-step={activeStepIndex + 1}>
+          <div
+            className="pipeline-console"
+            data-active-step={activeStepIndex + 1}
+            aria-hidden="true"
+          >
             <div className="pipeline-console__head">
               <span>
                 <i aria-hidden="true" /> PROCESSUS DATA &amp; BI · 4 ÉTAPES
@@ -265,7 +282,7 @@ export function DecisionPipeline() {
             </div>
           </div>
 
-          <div className="pipeline-step-list" aria-label="Détail des quatre étapes">
+          <div className="pipeline-step-list" aria-hidden="true">
             {pipelineSteps.map((step, stepIndex) => {
               const StepIcon = step.icon;
 

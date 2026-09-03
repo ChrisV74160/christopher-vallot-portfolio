@@ -75,15 +75,15 @@ mais aucun e-mail n’est envoyé.
 
 ## Variables d’environnement
 
-Les valeurs attendues sont documentées dans `.env.example`.
+Les valeurs locales d’exemple sont documentées dans `.env.example`.
 
 | Variable | Utilisation |
 | --- | --- |
-| `NEXT_PUBLIC_SITE_URL` | URL canonique du site. Utiliser le domaine HTTPS final en production. |
-| `SITE_ENV` | Conserver `preview` en local et en prévisualisation. Utiliser `production` uniquement sur le site public. |
-| `RESEND_API_KEY` | Clé privée Resend nécessaire à l’envoi des messages. |
-| `CONTACT_EMAIL` | Adresse qui reçoit les demandes envoyées depuis le formulaire. |
-| `CONTACT_FROM_EMAIL` | Expéditeur du message, idéalement associé à un domaine vérifié dans Resend. |
+| `NEXT_PUBLIC_SITE_URL` | Origine HTTPS utilisée pour les URL canoniques, le sitemap et `robots.txt`. |
+| `SITE_ENV` | Active l’indexation uniquement avec la valeur `production`. Toute preview doit utiliser `preview`. |
+| `RESEND_API_KEY` | Clé privée Resend utilisée uniquement par la route serveur de contact. |
+| `CONTACT_EMAIL` | Adresse destinataire des demandes. |
+| `CONTACT_FROM_EMAIL` | Expéditeur associé à un domaine vérifié dans Resend. |
 
 Ne jamais committer `.env.local`. Les secrets serveur ne doivent pas utiliser le
 préfixe `NEXT_PUBLIC_`.
@@ -108,27 +108,66 @@ Les principales sources de contenu sont centralisées :
 | `data/projects.ts` | Études de cas. |
 | `data/services.ts` | Services et formats de mission. |
 | `data/faq.ts` | Questions fréquentes. |
-| `data/placeholders.ts` | Informations légales restant à confirmer. |
+| `data/legal-config.ts` | Informations légales et de confidentialité centralisées. |
 | `public/cv-christopher-vallot.pdf` | CV proposé au téléchargement. |
 | `assets/photo-profil-christopher-vallot.webp` | Portrait affiché sur le site. |
 
 Les routes des études de cas sont générées à partir des slugs déclarés dans
 `data/projects.ts`.
 
-## Déploiement
+## Déploiement Netlify
 
-Le projet peut être déployé sur Vercel ou sur tout hébergeur compatible avec
-Next.js et Node.js.
+Netlify détecte automatiquement Next.js. Le projet utilise le rendu Next.js
+standard et la route serveur `/api/contact`, il ne doit donc pas être converti
+en export statique.
 
-1. Importer le dépôt GitHub dans la plateforme choisie.
-2. Configurer les variables d’environnement.
-3. Définir `NEXT_PUBLIC_SITE_URL` avec le domaine HTTPS définitif.
-4. Garder `SITE_ENV=preview` sur les déploiements de test.
-5. Utiliser `SITE_ENV=production` uniquement pour la version publique validée.
+### 1. Relier le dépôt
 
-La route `/api/contact` nécessite un runtime serveur. Un hébergement entièrement
-statique, comme GitHub Pages seul, ne permet pas d’utiliser le formulaire dans
-sa configuration actuelle.
+1. Dans Netlify, choisir **Add new site**, puis **Import an existing project**.
+2. Relier GitHub et sélectionner ce dépôt.
+3. Conserver la détection Next.js avec les réglages suivants.
+
+| Réglage | Valeur |
+| --- | --- |
+| Branche de production | `main` |
+| Base directory | vide |
+| Build command | `npm run build` |
+| Publish directory | `.next` |
+| Version de Node.js | version Netlify compatible avec la contrainte `>=20.9.0` de `package.json` |
+
+Aucun plugin Next.js ni fichier `netlify.toml` n’est nécessaire pour cette
+configuration.
+
+### 2. Configurer les variables Netlify
+
+Ajouter les variables dans **Site configuration > Environment variables**.
+Ne jamais saisir de secret dans le dépôt ou dans `netlify.toml`.
+
+| Variable | Valeur attendue | Contextes | Scope |
+| --- | --- | --- | --- |
+| `NEXT_PUBLIC_SITE_URL` | URL principale du site, d’abord `https://<nom-du-site>.netlify.app`, puis le domaine personnalisé | Tous | Builds |
+| `SITE_ENV` | `production` | Production uniquement | Builds |
+| `SITE_ENV` | `preview` | Deploy Previews et Branch Deploys | Builds |
+| `RESEND_API_KEY` | Clé privée Resend | Production uniquement | Functions |
+| `CONTACT_EMAIL` | Adresse destinataire réelle | Production uniquement | Functions |
+| `CONTACT_FROM_EMAIL` | Expéditeur sur un domaine vérifié dans Resend | Production uniquement | Functions |
+
+`NEXT_PUBLIC_SITE_URL` doit toujours contenir l’URL publique principale, y
+compris pendant les builds de preview. Ne pas utiliser `DEPLOY_PRIME_URL`, qui
+produirait des URL canoniques temporaires.
+
+### 3. Publier puis raccorder le domaine
+
+1. Lancer le premier déploiement et vérifier l’URL principale en `.netlify.app`.
+2. Tester les routes, le formulaire, `/robots.txt` et `/sitemap.xml`.
+3. Ajouter le domaine personnalisé dans **Domain management** et configurer le
+   DNS selon les instructions de Netlify.
+4. Remplacer `NEXT_PUBLIC_SITE_URL` par le domaine HTTPS final.
+5. Relancer un déploiement de production, puis vérifier les URL canoniques,
+   Open Graph, `robots.txt` et le sitemap sur ce domaine.
+
+Les Deploy Previews et Branch Deploys restent non indexables grâce à
+`SITE_ENV=preview` et au contrôle du contexte Netlify dans l’application.
 
 ### Vérifications avant publication
 
@@ -141,11 +180,12 @@ npm run build
 
 Avant la mise en ligne publique :
 
-- remplacer toutes les valeurs `[À COMPLÉTER]` de `data/placeholders.ts`.
+- confirmer les coordonnées légales requises pour l’éditeur et l’hébergeur.
+- définir la règle de conservation appliquée aux e-mails reçus.
 - vérifier le CV, les liens LinkedIn et les cinq études de cas.
 - configurer puis tester l’envoi Resend avec un domaine vérifié.
 - contrôler le formulaire, `/robots.txt` et `/sitemap.xml` sur le domaine final.
-- vérifier les pages légales et la politique de confidentialité.
+- relire les pages légales et la politique de confidentialité avant publication.
 
 La limitation de débit du formulaire est stockée en mémoire. Pour un déploiement
 sur plusieurs instances, prévoir une limitation distribuée ou une règle WAF.
