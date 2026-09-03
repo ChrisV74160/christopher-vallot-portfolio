@@ -1,8 +1,8 @@
-# Portfolio Data & BI — Christopher Vallot
+# Portfolio Consultant Data & BI Freelance — Christopher Vallot
 
-Portfolio professionnel de Christopher Vallot, Consultant Data & BI spécialisé
-dans la transformation, la fiabilisation et l’automatisation des données avec
-Python, SQL et Power BI.
+Portfolio professionnel de Christopher Vallot, Consultant Data & BI freelance
+spécialisé dans la transformation, la fiabilisation et l’automatisation des
+données avec Python, SQL et Power BI.
 
 Le site présente mes services, mon parcours et cinq études de cas issues de mes
 expériences professionnelles, sans divulguer de données internes ou
