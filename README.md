@@ -13,21 +13,21 @@ confidentielles.
 
 ## Fonctionnalités
 
-- présentation des expertises et services Data & BI ;
-- parcours professionnel et études de cas détaillées ;
-- interface responsive avec animations adaptées au défilement ;
-- navigation clavier et prise en charge de `prefers-reduced-motion` ;
+- présentation des expertises et services Data & BI.
+- parcours professionnel et études de cas détaillées.
+- interface responsive avec animations adaptées au défilement.
+- navigation clavier et prise en charge de `prefers-reduced-motion`.
 - formulaire de contact avec validation serveur, protection antispam et envoi
-  par Resend ;
+  par Resend.
 - métadonnées, sitemap, `robots.txt`, manifeste et image Open Graph.
 
 ## Stack technique
 
-- Next.js 16 avec App Router ;
-- React 19 et TypeScript ;
-- Motion pour les animations ;
-- Zod pour la validation serveur ;
-- Resend pour les e-mails ;
+- Next.js 16 avec App Router.
+- React 19 et TypeScript.
+- Motion pour les animations.
+- Zod pour la validation serveur.
+- Resend pour les e-mails.
 - CSS et Tailwind CSS 4.
 
 Les versions exactes sont définies dans `package.json` et verrouillées dans
@@ -37,7 +37,7 @@ Les versions exactes sont définies dans `package.json` et verrouillées dans
 
 ### Prérequis
 
-- Node.js 20.9 ou plus récent ;
+- Node.js 20.9 ou plus récent.
 - npm.
 
 ### Démarrage
@@ -141,10 +141,10 @@ npm run build
 
 Avant la mise en ligne publique :
 
-- remplacer toutes les valeurs `[À COMPLÉTER]` de `data/placeholders.ts` ;
-- vérifier le CV, les liens LinkedIn et les cinq études de cas ;
-- configurer puis tester l’envoi Resend avec un domaine vérifié ;
-- contrôler le formulaire, `/robots.txt` et `/sitemap.xml` sur le domaine final ;
+- remplacer toutes les valeurs `[À COMPLÉTER]` de `data/placeholders.ts`.
+- vérifier le CV, les liens LinkedIn et les cinq études de cas.
+- configurer puis tester l’envoi Resend avec un domaine vérifié.
+- contrôler le formulaire, `/robots.txt` et `/sitemap.xml` sur le domaine final.
 - vérifier les pages légales et la politique de confidentialité.
 
 La limitation de débit du formulaire est stockée en mémoire. Pour un déploiement
