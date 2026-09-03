@@ -263,7 +263,7 @@ export const projects = [
       "Préparation et intégration des données dans le Datalab.",
       "Création de datasets et analyse des anomalies.",
       "Conception des restitutions avec Power BI, DAX et Power Query.",
-      "Automatisation avec Power Automate et RPA.",
+      "Automatisation avec Power Automate.",
     ],
     intervention:
       "Création de datasets, analyse d’anomalies, dashboards Power BI, DAX, Power Query et automatisation de certains processus avec Power Automate.",

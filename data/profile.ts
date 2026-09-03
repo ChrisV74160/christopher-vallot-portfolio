@@ -90,7 +90,7 @@ export const experiences = [
       "Analyse, préparation et intégration de données métier dans un Datalab.",
       "Création de datasets, analyse d’anomalies et fiabilisation des données.",
       "Conception de rapports et dashboards Power BI avec DAX et Power Query.",
-      "Automatisation de reportings et amélioration de processus avec Power Automate et RPA.",
+      "Automatisation de reportings et amélioration de processus avec Power Automate.",
     ],
     technologies: [
       "Power BI",
@@ -146,7 +146,7 @@ export const skillGroups = [
   },
   {
     title: "BI & reporting",
-    skills: ["Power BI", "DAX", "Power Query", "Power Automate", "RPA"],
+    skills: ["Power BI", "DAX", "Power Query", "Power Automate"],
   },
   {
     title: "Plateformes & qualité",

@@ -1,5 +1,4 @@
 import {
-  Bot,
   Braces,
   BrainCircuit,
   ChartColumnBig,
@@ -79,7 +78,6 @@ const TECHNOLOGY_ICONS: Record<string, TechnologyIconDefinition> = {
   GitLab: { glyph: SiGitlab, color: "#e24329" },
   GitHub: { glyph: SiGithub, color: "#d8e2eb" },
   Jenkins: { glyph: SiJenkins, color: "#a43d3d" },
-  RPA: { glyph: Bot, color: "#7c8cff" },
 };
 
 const DEFAULT_ICON: TechnologyIconDefinition = {
