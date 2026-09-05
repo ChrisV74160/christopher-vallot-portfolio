@@ -1,16 +1,17 @@
 "use client";
 
+import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ComponentPropsWithoutRef } from "react";
 import { useEffect, useRef, useState } from "react";
 
+import icon from "@/app/icon.png";
 import { profile } from "@/data/profile";
 
 import { ButtonLink } from "./ui/button-link";
 import { Container } from "./ui/container";
-import { IdentityMark } from "./ui/identity-mark";
 
 const sectionLinks = [
   { label: "Services", sectionId: "services" },
@@ -36,15 +37,21 @@ export function SiteHeader({ className, ...props }: SiteHeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const [observedSection, setObservedSection] = useState<SectionId | null>(null);
   const [menuState, setMenuState] = useState({ open: false, pathname });
+
   const menuOpen = menuState.pathname === pathname && menuState.open;
 
   useEffect(() => {
     const updateScrolledState = () => setScrolled(window.scrollY > 12);
 
     updateScrolledState();
-    window.addEventListener("scroll", updateScrolledState, { passive: true });
 
-    return () => window.removeEventListener("scroll", updateScrolledState);
+    window.addEventListener("scroll", updateScrolledState, {
+      passive: true,
+    });
+
+    return () => {
+      window.removeEventListener("scroll", updateScrolledState);
+    };
   }, []);
 
   useEffect(() => {
@@ -61,24 +68,33 @@ export function SiteHeader({ className, ...props }: SiteHeaderProps) {
     }
 
     const visibility = new Map<string, number>();
+
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
-          visibility.set(entry.target.id, entry.isIntersecting ? entry.intersectionRatio : 0);
+          visibility.set(
+            entry.target.id,
+            entry.isIntersecting ? entry.intersectionRatio : 0,
+          );
         }
 
-        const nextSection = sections.reduce<HTMLElement | null>((mostVisible, section) => {
-          if (!mostVisible) {
-            return visibility.get(section.id) ? section : null;
-          }
+        const nextSection = sections.reduce<HTMLElement | null>(
+          (mostVisible, section) => {
+            if (!mostVisible) {
+              return visibility.get(section.id) ? section : null;
+            }
 
-          return (visibility.get(section.id) ?? 0) >
-            (visibility.get(mostVisible.id) ?? 0)
-            ? section
-            : mostVisible;
-        }, null);
+            return (visibility.get(section.id) ?? 0) >
+              (visibility.get(mostVisible.id) ?? 0)
+              ? section
+              : mostVisible;
+          },
+          null,
+        );
 
-        setObservedSection((nextSection?.id as SectionId | undefined) ?? null);
+        setObservedSection(
+          (nextSection?.id as SectionId | undefined) ?? null,
+        );
       },
       {
         rootMargin: "-18% 0px -55% 0px",
@@ -101,29 +117,45 @@ export function SiteHeader({ className, ...props }: SiteHeaderProps) {
         return;
       }
 
-      setMenuState({ open: false, pathname });
+      setMenuState({
+        open: false,
+        pathname,
+      });
+
       menuButtonRef.current?.focus();
     };
 
     window.addEventListener("keydown", closeOnEscape);
 
-    return () => window.removeEventListener("keydown", closeOnEscape);
+    return () => {
+      window.removeEventListener("keydown", closeOnEscape);
+    };
   }, [menuOpen, pathname]);
 
-  const closeMenu = () => setMenuState({ open: false, pathname });
+  const closeMenu = () =>
+    setMenuState({
+      open: false,
+      pathname,
+    });
+
   const toggleMenu = () =>
     setMenuState((current) => ({
       open: !(current.pathname === pathname && current.open),
       pathname,
     }));
+
   const sectionHref = (sectionId: SectionId) =>
     pathname === "/" ? `#${sectionId}` : `/#${sectionId}`;
-  const headerClasses = ["site-header", className].filter(Boolean).join(" ");
+
+  const headerClasses = ["site-header", className]
+    .filter(Boolean)
+    .join(" ");
 
   const navigationLinks = (
     <>
       {sectionLinks.map(({ label, sectionId }) => {
-        const active = pathname === "/" && observedSection === sectionId;
+        const active =
+          pathname === "/" && observedSection === sectionId;
 
         return (
           <Link
@@ -137,6 +169,7 @@ export function SiteHeader({ className, ...props }: SiteHeaderProps) {
           </Link>
         );
       })}
+
       {pageLinks.map(({ label, href }) => {
         const active = pathname === href;
 
@@ -170,15 +203,33 @@ export function SiteHeader({ className, ...props }: SiteHeaderProps) {
             href="/"
             onClick={closeMenu}
           >
-            <IdentityMark />
-            <span className="wordmark-label">{profile.fullName}</span>
+            <Image
+              src={icon}
+              alt=""
+              aria-hidden="true"
+              className="wordmark-icon"
+              width={40}
+              height={40}
+              priority
+            />
+
+            <span className="wordmark-label">
+              {profile.fullName}
+            </span>
           </Link>
 
-          <nav aria-label="Navigation principale" className="desktop-nav">
+          <nav
+            aria-label="Navigation principale"
+            className="desktop-nav"
+          >
             {navigationLinks}
           </nav>
 
-          <ButtonLink className="nav-cta" href="/contact" variant="accent">
+          <ButtonLink
+            className="nav-cta"
+            href="/contact"
+            variant="accent"
+          >
             Discuter de votre projet
           </ButtonLink>
 
@@ -186,15 +237,25 @@ export function SiteHeader({ className, ...props }: SiteHeaderProps) {
             ref={menuButtonRef}
             aria-controls="mobile-navigation"
             aria-expanded={menuOpen}
-            aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+            aria-label={
+              menuOpen ? "Fermer le menu" : "Ouvrir le menu"
+            }
             className="mobile-menu-button"
             onClick={toggleMenu}
             type="button"
           >
             {menuOpen ? (
-              <X aria-hidden="true" focusable="false" size={20} />
+              <X
+                aria-hidden="true"
+                focusable="false"
+                size={20}
+              />
             ) : (
-              <Menu aria-hidden="true" focusable="false" size={20} />
+              <Menu
+                aria-hidden="true"
+                focusable="false"
+                size={20}
+              />
             )}
           </button>
         </div>
@@ -206,7 +267,12 @@ export function SiteHeader({ className, ...props }: SiteHeaderProps) {
           id="mobile-navigation"
         >
           {navigationLinks}
-          <ButtonLink href="/contact" onClick={closeMenu} variant="accent">
+
+          <ButtonLink
+            href="/contact"
+            onClick={closeMenu}
+            variant="accent"
+          >
             Discuter de votre projet
           </ButtonLink>
         </nav>
