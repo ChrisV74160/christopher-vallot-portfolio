@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
 
+import icon from "./icon.png";
+
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Christopher Vallot — Consultant Data & BI Freelance",
@@ -11,6 +13,12 @@ export default function manifest(): MetadataRoute.Manifest {
     background_color: "#020812",
     theme_color: "#020812",
     lang: "fr",
-    icons: [{ src: "/icon.svg", sizes: "any", type: "image/svg+xml" }],
+    icons: [
+      {
+        src: "/icon.png",
+        sizes: `${icon.width}x${icon.height}`,
+        type: "image/png",
+      },
+    ],
   };
 }

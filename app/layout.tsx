@@ -11,6 +11,8 @@ import {
 } from "@/lib/site-config";
 
 import "./globals.css";
+import appleIcon from "./apple-icon.png";
+import icon from "./icon.png";
 
 const siteUrl = getSiteUrl();
 const isIndexable = isIndexableDeployment();
@@ -23,6 +25,12 @@ export const metadata: Metadata = {
   },
   description: siteDescription,
   applicationName: siteName,
+  // Stable URLs keep crawlers on the current brand assets across deployments.
+  icons: {
+    icon: [{ url: "/icon.png", sizes: `${icon.width}x${icon.height}`, type: "image/png" }],
+    shortcut: "/favicon.ico",
+    apple: [{ url: "/apple-icon.png", sizes: `${appleIcon.width}x${appleIcon.height}`, type: "image/png" }],
+  },
   authors: [{ name: profile.fullName, url: profile.contact.linkedinUrl }],
   creator: profile.fullName,
   publisher: profile.fullName,
