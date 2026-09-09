@@ -67,6 +67,7 @@ const TECHNOLOGY_ICONS: Record<string, TechnologyIconDefinition> = {
   "Data Quality": { glyph: ShieldCheck, color: "#008d80" },
   Consolidation: { glyph: Combine, color: "#6656d9" },
   "Détection d’anomalies": { glyph: ScanSearch, color: "#c44d82" },
+  "Anomaly detection": { glyph: ScanSearch, color: "#c44d82" },
   Playwright: { glyph: MousePointerClick, color: "#2ead33" },
   PowerShell: { glyph: TbBrandPowershell, color: "#2671be" },
   "Web Scraping": { glyph: Globe2, color: "#008d80" },

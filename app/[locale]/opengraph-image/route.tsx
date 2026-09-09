@@ -1,10 +1,19 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Christopher Vallot, Consultant Data & BI Freelance";
-export const size = { width: 1200, height: 630 };
-export const contentType = "image/png";
+import { requireLocale, type LocalePageProps } from "@/i18n/server";
+import { metaMessages } from "@/i18n/messages/meta";
+import { locales } from "@/i18n/config";
+const size = { width: 1200, height: 630 };
+export const dynamic = "force-static";
 
-export default function OpenGraphImage() {
+// Render both assets at build time, including validation by the image renderer.
+export function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
+}
+
+export async function GET(_request: Request, { params }: LocalePageProps) {
+  const locale = requireLocale((await params).locale);
+  const t = metaMessages[locale].og;
   return new ImageResponse(
     <div
       style={{
@@ -56,18 +65,18 @@ export default function OpenGraphImage() {
           </svg>
         </div>
         <div style={{ fontSize: 24, color: "#c7d5db" }}>
-          Christopher Vallot · Consultant Data &amp; BI Freelance
+          {`Christopher Vallot · ${t.role}`}
         </div>
       </div>
       <div style={{ display: "flex", flexDirection: "column" }}>
         <div style={{ fontSize: 76, lineHeight: 1.02, letterSpacing: -4 }}>
-          Transformer le bruit
+          {t.firstLine}
         </div>
         <div style={{ fontSize: 76, lineHeight: 1.02, letterSpacing: -4 }}>
-          en signal décisionnel.
+          {t.secondLine}
         </div>
         <div style={{ display: "flex", gap: 12, marginTop: 36 }}>
-          {["Power BI", "Python", "SQL", "Data Quality", "Automatisation"].map(
+          {["Power BI", "Python", "SQL", "Data Quality", t.automation].map(
             (item) => (
               <div
                 key={item}

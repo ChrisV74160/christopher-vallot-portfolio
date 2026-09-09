@@ -1,11 +1,16 @@
 import { ArrowRight } from "lucide-react";
 
+import type { Locale } from "@/i18n/config";
+import { projectMessages, type ProjectUiMessages } from "@/i18n/messages/projects";
 import type { ProjectDiagram, ProjectVisualVariant } from "@/types/content";
 
 interface ProjectVisualProps {
   diagram?: ProjectDiagram;
   variant: ProjectVisualVariant;
+  locale?: Locale;
 }
+
+type VisualMessages = ProjectUiMessages["visual"];
 
 function DataCells({ clean = false }: { clean?: boolean }) {
   return (
@@ -17,21 +22,21 @@ function DataCells({ clean = false }: { clean?: boolean }) {
   );
 }
 
-function PipelineVisual() {
+function PipelineVisual({ messages }: { messages: VisualMessages }) {
   return (
     <div className="visual-pipeline">
-      <div className="visual-node">Sources</div>
-      <div className="visual-node">Traitements</div>
-      <div className="visual-node">Données fiables</div>
+      <div className="visual-node">{messages.sources}</div>
+      <div className="visual-node">{messages.processing}</div>
+      <div className="visual-node">{messages.reliableData}</div>
     </div>
   );
 }
 
-function CollectionVisual() {
+function CollectionVisual({ messages }: { messages: VisualMessages }) {
   return (
     <div className="visual-documents">
       <div className="document-stack">
-        <span className="visual-micro-label">Sources</span>
+        <span className="visual-micro-label">{messages.sources}</span>
         <span className="document-sheet">CRM</span>
         <span className="document-sheet">WEB</span>
         <span className="document-sheet">TEXT</span>
@@ -46,26 +51,26 @@ function CollectionVisual() {
   );
 }
 
-function ReconcileVisual() {
+function ReconcileVisual({ messages }: { messages: VisualMessages }) {
   return (
     <div className="visual-reconcile">
       <div className="visual-data-source">
-        <span className="visual-micro-label">Sources</span>
+        <span className="visual-micro-label">{messages.sources}</span>
         <DataCells />
       </div>
       <ArrowRight className="visual-arrow" size={24} strokeWidth={1.6} />
       <div className="visual-data-source">
-        <span className="visual-micro-label">Contrôles</span>
+        <span className="visual-micro-label">{messages.checks}</span>
         <DataCells clean />
       </div>
     </div>
   );
 }
 
-function DashboardVisual() {
+function DashboardVisual({ messages }: { messages: VisualMessages }) {
   return (
     <div className="visual-dashboard">
-      <div className="visual-node">Modèle de données</div>
+      <div className="visual-node">{messages.dataModel}</div>
       <ArrowRight className="visual-arrow" size={24} strokeWidth={1.6} />
       <div className="dashboard-screen">
         <span className="visual-micro-label">Power BI</span>
@@ -83,11 +88,11 @@ function DashboardVisual() {
   );
 }
 
-function ModelVisual() {
+function ModelVisual({ messages }: { messages: VisualMessages }) {
   return (
     <div className="visual-model">
       <div className="model-orbit">
-        <span className="model-core">Modèle</span>
+        <span className="model-core">{messages.model}</span>
         <span className="model-point" />
         <span className="model-point" />
         <span className="model-point" />
@@ -96,20 +101,12 @@ function ModelVisual() {
   );
 }
 
-const visuals: Record<ProjectVisualVariant, () => React.ReactNode> = {
+const visuals: Record<ProjectVisualVariant, (props: { messages: VisualMessages }) => React.ReactNode> = {
   "data-pipeline": PipelineVisual,
   "document-automation": CollectionVisual,
   "data-quality": ReconcileVisual,
   "bi-reporting": DashboardVisual,
   "ml-model": ModelVisual,
-};
-
-const visualLabels: Record<ProjectVisualVariant, string> = {
-  "data-pipeline": "Migration / contrôles",
-  "document-automation": "Collecte / JSON / sémantique",
-  "data-quality": "Sources / contrôle",
-  "bi-reporting": "Modèle / reporting",
-  "ml-model": "Variables / modèle / webservice",
 };
 
 function ConceptFlow({ diagram }: { diagram: ProjectDiagram }) {
@@ -136,8 +133,9 @@ function ConceptFlow({ diagram }: { diagram: ProjectDiagram }) {
   );
 }
 
-export function ProjectVisual({ diagram, variant }: ProjectVisualProps) {
+export function ProjectVisual({ diagram, variant, locale = "fr" }: ProjectVisualProps) {
   const Visual = visuals[variant];
+  const messages = projectMessages[locale].visual;
 
   return (
     <div
@@ -145,9 +143,9 @@ export function ProjectVisual({ diagram, variant }: ProjectVisualProps) {
       aria-hidden="true"
     >
       <span className="project-visual-label">
-        {diagram?.label ?? visualLabels[variant]}
+        {diagram?.label ?? messages.labels[variant]}
       </span>
-      {diagram ? <ConceptFlow diagram={diagram} /> : <Visual />}
+      {diagram ? <ConceptFlow diagram={diagram} /> : <Visual messages={messages} />}
     </div>
   );
 }

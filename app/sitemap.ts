@@ -1,38 +1,22 @@
 import type { MetadataRoute } from "next";
 
-import { projects } from "@/data/projects";
+import { locales, localizedHref, languageAlternates } from "@/i18n/config";
+import { pageRoutes } from "@/i18n/routes";
 import { getSiteUrl, isIndexableDeployment } from "@/lib/site-config";
 
-const staticRoutes: Array<{
-  path: string;
-  changeFrequency: NonNullable<
-    MetadataRoute.Sitemap[number]["changeFrequency"]
-  >;
-  priority: number;
-}> = [
-  { path: "", changeFrequency: "monthly", priority: 1 },
-  { path: "/projets", changeFrequency: "monthly", priority: 0.9 },
-  { path: "/a-propos", changeFrequency: "yearly", priority: 0.7 },
-  { path: "/contact", changeFrequency: "yearly", priority: 0.8 },
-];
-
 export default function sitemap(): MetadataRoute.Sitemap {
-  if (!isIndexableDeployment()) {
-    return [];
-  }
+  if (!isIndexableDeployment()) return [];
 
   const baseUrl = getSiteUrl();
-  const pages = staticRoutes.map(({ path, changeFrequency, priority }) => ({
-    url: `${baseUrl}${path}`,
-    changeFrequency,
-    priority,
-  }));
-
-  const projectPages = projects.map(({ slug }) => ({
-    url: `${baseUrl}/projets/${encodeURIComponent(slug)}`,
-    changeFrequency: "monthly" as const,
-    priority: 0.8,
-  }));
-
-  return [...pages, ...projectPages];
+  return pageRoutes.filter(({ indexable }) => indexable).flatMap(({ path, changeFrequency, priority }) => {
+    const languages = Object.fromEntries(
+      Object.entries(languageAlternates(path)).map(([key, href]) => [key, baseUrl + href]),
+    );
+    return locales.map((locale) => ({
+      url: baseUrl + localizedHref(path, locale),
+      changeFrequency,
+      priority,
+      alternates: { languages },
+    }));
+  });
 }

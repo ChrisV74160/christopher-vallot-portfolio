@@ -1,40 +1,45 @@
+import { type Locale } from "@/i18n/config";
+import { sectionMessages } from "@/i18n/messages/sections";
+import { getContent } from "@/i18n/content";
 import { Container } from "@/components/ui/container";
-import { experiences } from "@/data/profile";
-import { projects } from "@/data/projects";
 
+export function ProofStrip({ locale = "fr" }: { locale?: Locale }) {
+  const t = sectionMessages[locale].proof;
+  const { experiences, projects } = getContent(locale);
 const organizationCount = new Set(experiences.map(({ company }) => company)).size;
 
 const proofItems = [
   {
     value: experiences.length,
-    label: "expériences",
-    subtitle: "Depuis 2019, dans des contextes exigeants",
+    label: t.experienceCount,
+    subtitle: t.experienceSub,
   },
   {
     value: organizationCount,
-    label: "organisations",
-    subtitle: "Les organisations citées dans le CV",
+    label: t.organizationCount,
+    subtitle: t.organizationSub,
   },
   {
     value: 4,
-    label: "domaines d’intervention",
-    subtitle: "Sources · qualité · processus · pilotage",
+    label: t.domainCount,
+    subtitle: t.domainSub,
   },
   {
     value: projects.length,
-    label: "études de cas",
-    subtitle: "Fidèles au parcours, sans métrique ajoutée",
+    label: t.caseCount,
+    subtitle: t.caseSub,
   },
 ];
 
-export function ProofStrip() {
+
+
   return (
-    <section className="proof-rail" aria-label="Périmètre d’intervention">
+    <section className="proof-rail" aria-label={t.aria}>
       <Container className="proof-rail-inner">
         <div className="proof-rail-item proof-rail-item--intro">
-          <span className="proof-system-label">Telemetry / profile</span>
-          <strong>Le parcours, en signaux vérifiables.</strong>
-          <span>Repères issus du parcours et des domaines présentés</span>
+          <span className="proof-system-label">{t.label}</span>
+          <strong>{t.title}</strong>
+          <span>{t.description}</span>
         </div>
         {proofItems.map((item) => (
           <div className="proof-rail-item proof-rail-item--metric" key={item.label}>
@@ -53,7 +58,7 @@ export function ProofStrip() {
           </div>
         ))}
         <p className="proof-organizations">
-          <span>Expériences professionnelles :</span>
+          <span>{t.organizations}</span>
           <strong>CNAV · Harmonie Mutuelle · Banque de France · Apside</strong>
         </p>
       </Container>

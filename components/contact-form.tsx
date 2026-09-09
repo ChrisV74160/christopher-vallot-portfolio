@@ -1,9 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent, type InvalidEvent } from "react";
+
+import type { Locale } from "@/i18n/config";
+import { contactMessages } from "@/i18n/messages/contact";
 
 import {
-  CONTACT_NEED_OPTIONS,
+  CONTACT_NEEDS,
   type ContactApiResponse,
   type ContactFieldErrors,
   type ContactFormInput,
@@ -66,7 +69,8 @@ function focusFirstInvalidField(
   }
 }
 
-export function ContactForm() {
+export function ContactForm({ locale = "fr" }: { locale?: Locale }) {
+  const messages = contactMessages[locale];
   const [status, setStatus] = useState<SubmissionStatus>(INITIAL_STATUS);
   const [fieldErrors, setFieldErrors] = useState<ContactFieldErrors>({});
   const formStartedAt = useRef(0);
@@ -77,6 +81,21 @@ export function ContactForm() {
   }, []);
 
   const isSubmitting = status.type === "pending";
+
+  // Native validation follows the page language, not the browser UI language.
+  function localizeNativeValidation(event: InvalidEvent<HTMLFormElement>) {
+    const control = event.target;
+    if (!(control instanceof HTMLInputElement || control instanceof HTMLSelectElement || control instanceof HTMLTextAreaElement)) return;
+    const validation = messages.validation;
+    const errors: Record<string, string> = {
+      name: control.validity.valueMissing ? validation.nameRequired : control.validity.tooLong ? validation.nameMax : validation.nameMin,
+      company: validation.companyMax,
+      email: control.validity.valueMissing ? validation.emailRequired : control.validity.tooLong ? validation.emailMax : validation.emailInvalid,
+      need: validation.needInvalid,
+      message: control.validity.valueMissing ? validation.messageRequired : control.validity.tooLong ? validation.messageMax : validation.messageMin,
+    };
+    control.setCustomValidity(errors[control.name] ?? "");
+  }
 
   function clearFieldError(field: keyof ContactFieldErrors) {
     setFieldErrors((currentErrors) => {
@@ -110,10 +129,11 @@ export function ContactForm() {
       message: String(formData.get("message") ?? ""),
       website: String(formData.get("website") ?? ""),
       formStartedAt: startedAt,
+      locale,
     };
 
     setFieldErrors({});
-    setStatus({ type: "pending", message: "Envoi en cours…" });
+    setStatus({ type: "pending", message: messages.pending });
     const requestController = new AbortController();
     const requestTimeout = window.setTimeout(
       () => requestController.abort(),
@@ -125,6 +145,7 @@ export function ContactForm() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Accept-Language": locale,
         },
         body: JSON.stringify(payload),
         signal: requestController.signal,
@@ -132,7 +153,7 @@ export function ContactForm() {
       const result: unknown = await response.json();
 
       if (!isContactApiResponse(result)) {
-        throw new Error("Réponse inattendue du service de contact.");
+        throw new Error(messages.unexpectedResponse);
       }
 
       if (result.ok) {
@@ -146,7 +167,7 @@ export function ContactForm() {
 
         setStatus({
           type: "development",
-          message: `Configuration requise — ${result.message}`,
+          message: `${messages.configurationRequired}${result.message}`,
         });
         return;
       }
@@ -162,8 +183,8 @@ export function ContactForm() {
       setStatus({
         type: "error",
         message: timedOut
-          ? "L’envoi prend trop de temps. Réessayez ou utilisez l’adresse e-mail indiquée à côté du formulaire."
-          : "Le service de contact ne répond pas pour le moment. Réessayez dans quelques instants ou utilisez l’adresse e-mail indiquée à côté du formulaire.",
+          ? messages.timeout
+          : messages.networkError,
       });
     } finally {
       window.clearTimeout(requestTimeout);
@@ -186,12 +207,19 @@ export function ContactForm() {
   return (
     <form
       className="contact-form"
-      aria-label="Formulaire de contact"
+      aria-label={messages.formLabel}
       aria-busy={isSubmitting}
       onSubmit={handleSubmit}
+      onInvalidCapture={localizeNativeValidation}
+      onInput={(event) => {
+        const control = event.target;
+        if (control instanceof HTMLInputElement || control instanceof HTMLSelectElement || control instanceof HTMLTextAreaElement) {
+          control.setCustomValidity("");
+        }
+      }}
     >
       <div className="form-field">
-        <label htmlFor="contact-name">Nom *</label>
+        <label htmlFor="contact-name">{messages.fields.name}</label>
         <input
           id="contact-name"
           name="name"
@@ -199,7 +227,7 @@ export function ContactForm() {
           autoComplete="name"
           minLength={2}
           maxLength={80}
-          placeholder="Votre nom"
+          placeholder={messages.placeholders.name}
           required
           aria-invalid={Boolean(nameError)}
           aria-describedby={nameError ? "contact-name-error" : undefined}
@@ -213,14 +241,14 @@ export function ContactForm() {
       </div>
 
       <div className="form-field">
-        <label htmlFor="contact-company">Société (facultatif)</label>
+        <label htmlFor="contact-company">{messages.fields.company}</label>
         <input
           id="contact-company"
           name="company"
           type="text"
           autoComplete="organization"
           maxLength={120}
-          placeholder="Votre entreprise (facultatif)"
+          placeholder={messages.placeholders.company}
           aria-invalid={Boolean(companyError)}
           aria-describedby={companyError ? "contact-company-error" : undefined}
           onChange={() => clearFieldError("company")}
@@ -233,7 +261,7 @@ export function ContactForm() {
       </div>
 
       <div className="form-field">
-        <label htmlFor="contact-email">E-mail *</label>
+        <label htmlFor="contact-email">{messages.fields.email}</label>
         <input
           id="contact-email"
           name="email"
@@ -241,7 +269,7 @@ export function ContactForm() {
           autoComplete="email"
           inputMode="email"
           maxLength={254}
-          placeholder="vous@entreprise.fr"
+          placeholder={messages.placeholders.email}
           required
           aria-invalid={Boolean(emailError)}
           aria-describedby={emailError ? "contact-email-error" : undefined}
@@ -255,7 +283,7 @@ export function ContactForm() {
       </div>
 
       <div className="form-field">
-        <label htmlFor="contact-need">Type de besoin *</label>
+        <label htmlFor="contact-need">{messages.fields.need}</label>
         <select
           id="contact-need"
           name="need"
@@ -266,11 +294,11 @@ export function ContactForm() {
           onChange={() => clearFieldError("need")}
         >
           <option value="" disabled>
-            Sélectionnez un besoin
+            {messages.selectNeed}
           </option>
-          {CONTACT_NEED_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
+          {CONTACT_NEEDS.map((value) => (
+            <option key={value} value={value}>
+              {messages.needLabels[value]}
             </option>
           ))}
         </select>
@@ -282,14 +310,14 @@ export function ContactForm() {
       </div>
 
       <div className="form-field form-field--full">
-        <label htmlFor="contact-message">Message *</label>
+        <label htmlFor="contact-message">{messages.fields.message}</label>
         <textarea
           id="contact-message"
           name="message"
           minLength={20}
           maxLength={3000}
           rows={6}
-          placeholder="Décrivez votre contexte, vos données et le résultat attendu."
+          placeholder={messages.placeholders.message}
           required
           aria-invalid={Boolean(messageError)}
           aria-describedby={messageError ? "contact-message-error" : undefined}
@@ -303,7 +331,7 @@ export function ContactForm() {
       </div>
 
       <div className="form-honeypot" aria-hidden="true" inert>
-        <label htmlFor="contact-website">Votre site web</label>
+        <label htmlFor="contact-website">{messages.fields.website}</label>
         <input
           id="contact-website"
           name="website"
@@ -320,11 +348,10 @@ export function ContactForm() {
           type="submit"
           disabled={isSubmitting}
         >
-          {isSubmitting ? "Envoi en cours…" : "Envoyer ma demande"}
+          {isSubmitting ? messages.pending : messages.submit}
         </button>
         <p className="form-note">
-          Les champs marqués d’un astérisque sont obligatoires. N’indiquez pas
-          de données sensibles dans votre message.
+          {messages.note}
         </p>
       </div>
 

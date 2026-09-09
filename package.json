@@ -11,7 +11,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "node --test tests/contact.test.cjs tests/i18n.test.cjs"
   },
   "dependencies": {
     "lucide-react": "^1.37.0",

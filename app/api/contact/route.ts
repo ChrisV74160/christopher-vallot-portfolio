@@ -1,12 +1,14 @@
 import { Resend } from "resend";
 import type { ZodError } from "zod";
 
+import type { Locale } from "@/i18n/config";
+import { contactMessages } from "@/i18n/messages/contact";
 import {
   CONTACT_NEED_LABELS,
   type ContactApiResponse,
   type ContactFieldErrors,
 } from "@/lib/contact-contract";
-import { contactFormSchema } from "@/lib/contact-schema";
+import { contactFormSchema, getContactFormSchema } from "@/lib/contact-schema";
 
 export const runtime = "nodejs";
 
@@ -174,6 +176,11 @@ function escapeHtml(value: string) {
 }
 
 export async function POST(request: Request) {
+  // The header localizes errors returned before the body is parsed (including
+  // rate limits and oversized requests). A supported payload locale then wins.
+  const preferredLanguage = request.headers.get("accept-language")?.split(",", 1)[0]?.trim().toLowerCase();
+  let locale: Locale = preferredLanguage?.startsWith("en") ? "en" : "fr";
+  let messages = contactMessages[locale].api;
   const mediaType = request.headers
     .get("content-type")
     ?.split(";", 1)[0]
@@ -185,7 +192,7 @@ export async function POST(request: Request) {
       {
         ok: false,
         code: "UNSUPPORTED_MEDIA_TYPE",
-        message: "Envoyez le formulaire au format JSON.",
+        message: messages.unsupportedMediaType,
       },
       415,
     );
@@ -199,8 +206,7 @@ export async function POST(request: Request) {
       {
         ok: false,
         code: "RATE_LIMITED",
-        message:
-          "Trop de tentatives ont été effectuées. Réessayez dans quelques minutes.",
+        message: messages.rateLimited,
       },
       429,
       { "Retry-After": String(rateLimit.retryAfterSeconds) },
@@ -217,7 +223,7 @@ export async function POST(request: Request) {
         {
           ok: false,
           code: "PAYLOAD_TOO_LARGE",
-          message: "Le contenu du formulaire est trop volumineux.",
+          message: messages.payloadTooLarge,
         },
         413,
       );
@@ -227,7 +233,7 @@ export async function POST(request: Request) {
       {
         ok: false,
         code: "INVALID_JSON",
-        message: "Le contenu du formulaire est illisible.",
+        message: messages.unreadableBody,
       },
       400,
     );
@@ -242,20 +248,25 @@ export async function POST(request: Request) {
       {
         ok: false,
         code: "INVALID_JSON",
-        message: "La requête doit contenir un objet JSON valide.",
+        message: messages.invalidJson,
       },
       400,
     );
   }
 
-  const parsedData = contactFormSchema.safeParse(submittedData);
+  if (typeof submittedData === "object" && submittedData !== null && "locale" in submittedData && (submittedData.locale === "fr" || submittedData.locale === "en")) {
+    locale = submittedData.locale;
+    messages = contactMessages[locale].api;
+  }
+
+  const parsedData = getContactFormSchema(locale).safeParse(submittedData);
 
   if (!parsedData.success) {
     return jsonResponse(
       {
         ok: false,
         code: "VALIDATION_ERROR",
-        message: "Certains champs sont invalides. Vérifiez le formulaire.",
+        message: messages.validationError,
         fieldErrors: getFieldErrors(parsedData.error),
       },
       400,
@@ -269,7 +280,7 @@ export async function POST(request: Request) {
       {
         ok: false,
         code: "SPAM_DETECTED",
-        message: "Votre demande n’a pas pu être envoyée.",
+        message: messages.spamDetected,
       },
       400,
     );
@@ -284,8 +295,7 @@ export async function POST(request: Request) {
       {
         ok: false,
         code: "FORM_TIME_INVALID",
-        message:
-          "Le formulaire a été envoyé trop rapidement ou a expiré. Rechargez la page puis réessayez.",
+        message: messages.formTimeInvalid,
       },
       400,
     );
@@ -305,8 +315,7 @@ export async function POST(request: Request) {
           sent: false,
           mode: "development",
           code: "EMAIL_NOT_CONFIGURED",
-          message:
-            "Message validé en mode développement, mais aucun e-mail n’a été envoyé. Configurez RESEND_API_KEY et CONTACT_EMAIL pour activer l’envoi.",
+          message: messages.emailNotConfigured,
         },
         200,
       );
@@ -316,8 +325,7 @@ export async function POST(request: Request) {
       {
         ok: false,
         code: "SERVICE_UNAVAILABLE",
-        message:
-          "Le service de contact est temporairement indisponible. Réessayez plus tard.",
+        message: messages.serviceUnavailable,
       },
       503,
     );
@@ -362,8 +370,7 @@ export async function POST(request: Request) {
         {
           ok: false,
           code: "DELIVERY_FAILED",
-          message:
-            "Le message n’a pas pu être envoyé. Réessayez dans quelques instants.",
+          message: messages.deliveryFailed,
         },
         502,
       );
@@ -378,8 +385,7 @@ export async function POST(request: Request) {
       {
         ok: false,
         code: "DELIVERY_FAILED",
-        message:
-          "Le message n’a pas pu être envoyé. Réessayez dans quelques instants.",
+        message: messages.deliveryFailed,
       },
       502,
     );
@@ -389,7 +395,7 @@ export async function POST(request: Request) {
     {
       ok: true,
       sent: true,
-      message: "Merci, votre message a bien été envoyé. Je vous répondrai rapidement.",
+      message: messages.success,
     },
     200,
   );

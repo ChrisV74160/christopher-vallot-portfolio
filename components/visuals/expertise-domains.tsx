@@ -7,94 +7,36 @@ import {
 } from "lucide-react";
 
 import { TechnologyIcon } from "@/components/ui/technology-icon";
+import type { Locale } from "@/i18n/config";
+import { visualMessages } from "@/i18n/messages/visuals";
 
-interface ExpertiseDomain {
-  description: string;
-  icon: LucideIcon;
-  id: string;
-  label: string;
-  outcome: string;
-  technologies: readonly string[];
-  title: string;
-}
-
-const EXPERTISE_DOMAINS: readonly ExpertiseDomain[] = [
-  {
-    id: "integrer",
-    label: "Sources & flux",
-    title: "Intégrer & transformer",
-    description:
-      "Réunir les bases, fichiers et flux métier, puis harmoniser leurs formats pour construire une donnée cohérente.",
-    outcome: "Des flux structurés et prêts à être contrôlés.",
-    technologies: ["Python", "SQL", "PySpark", "SAS", "Cloudera", "Teradata"],
-    icon: Waypoints,
-  },
-  {
-    id: "fiabiliser",
-    label: "Qualité des données",
-    title: "Fiabiliser & contrôler",
-    description:
-      "Définir les règles de qualité, détecter les anomalies et sécuriser les rapprochements entre sources.",
-    outcome: "Des données traçables et dignes de confiance.",
-    technologies: [
-      "Data Quality",
-      "SQL",
-      "Consolidation",
-      "Détection d’anomalies",
-    ],
-    icon: ShieldCheck,
-  },
-  {
-    id: "automatiser",
-    label: "Traitements & exploitation",
-    title: "Automatiser & industrialiser",
-    description:
-      "Remplacer les opérations manuelles par des traitements relançables, supervisés et simples à maintenir.",
-    outcome: "Des processus robustes, reproductibles et moins chronophages.",
-    technologies: [
-      "Python",
-      "PowerShell",
-      "Playwright",
-      "Power Automate",
-      "GitLab",
-      "Jenkins",
-    ],
-    icon: Workflow,
-  },
-  {
-    id: "piloter",
-    label: "Analyse & Business Intelligence",
-    title: "Analyser & piloter",
-    description:
-      "Construire les modèles, KPI et tableaux de bord qui rendent l’information lisible par les équipes métier.",
-    outcome: "Une information directement exploitable pour décider.",
-    technologies: ["Power BI", "DAX", "Power Query", "Pandas", "Matplotlib"],
-    icon: ChartNoAxesCombined,
-  },
-];
+const domainIcons: Record<string, LucideIcon> = {
+  integrer: Waypoints, fiabiliser: ShieldCheck, automatiser: Workflow, piloter: ChartNoAxesCombined,
+};
 
 /**
  * Presents the portfolio's expertise as four operational domains. This replaces
  * the former technology-frequency chart: tools are now contextualised by the
  * work they support instead of being scored or repeated in a separate stack.
  */
-export function ExpertiseDomains() {
+export function ExpertiseDomains({ locale = "fr" }: { locale?: Locale }) {
+  const messages = visualMessages[locale].expertise;
   return (
     <div
       className="expertise-map"
       role="group"
-      aria-label="Quatre domaines d’intervention Data et BI"
+      aria-label={messages.description}
     >
       <div className="expertise-map__bar" aria-hidden="true">
         <span>
-          <i /> Capacités Data &amp; BI / 04 domaines
+          <i /> {messages.title}
         </span>
-        <span>De la source au pilotage</span>
+        <span>{messages.subtitle}</span>
       </div>
 
       <ol className="expertise-domains">
-        {EXPERTISE_DOMAINS.map((domain, index) => {
-          const Icon = domain.icon;
+        {messages.domains.map((domain, index) => {
+          const Icon = domainIcons[domain.id];
 
           return (
             <li key={domain.id}>
@@ -117,13 +59,13 @@ export function ExpertiseDomains() {
                 </p>
 
                 <p className="expertise-domain__outcome">
-                  <span>Résultat visé</span>
+                  <span>{messages.outcome}</span>
                   <strong>{domain.outcome}</strong>
                 </p>
 
                 <div className="expertise-domain__tools">
-                  <span>Technologies principales</span>
-                  <ul aria-label={`Technologies pour ${domain.title}`}>
+                  <span>{messages.technologies}</span>
+                  <ul aria-label={`${messages.technologiesFor} ${domain.title}`}>
                     {domain.technologies.map((technology) => (
                       <li key={technology}>
                         <TechnologyIcon name={technology} size={16} />

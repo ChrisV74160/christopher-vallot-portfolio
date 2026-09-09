@@ -1,9 +1,14 @@
+import { type Locale } from "@/i18n/config";
+import { sectionMessages } from "@/i18n/messages/sections";
+import { getContent } from "@/i18n/content";
 import { Reveal } from "@/components/animations/reveal";
 import { Container } from "@/components/ui/container";
 import { SectionHeading } from "@/components/ui/section-heading";
-import { interventionCases } from "@/data/services";
 
-export function InterventionCasesSection() {
+export function InterventionCasesSection({ locale = "fr" }: { locale?: Locale }) {
+  const t = sectionMessages[locale].interventionCases;
+  const { interventionCases } = getContent(locale);
+
   return (
     <section
       className="section-shell section-shell--compact"
@@ -12,10 +17,10 @@ export function InterventionCasesSection() {
     >
       <Container>
         <SectionHeading
-          eyebrow="Cas d’intervention"
+          eyebrow={t.label}
           headingId="intervention-cases-title"
-          title="Vous avez les données. Reste à les rendre vraiment exploitables."
-          description="Pour débloquer un reporting, un traitement ou une chaîne devenue difficile à maintenir ou à faire évoluer."
+          title={t.title}
+          description={t.description}
         />
         <ol className="intervention-list">
           {interventionCases.map((item, index) => (

@@ -3,23 +3,27 @@ import Link from "next/link";
 
 import { ProjectVisual } from "@/components/project-visual";
 import { TechnologyIcon } from "@/components/ui/technology-icon";
+import { localizedHref, type Locale } from "@/i18n/config";
+import { projectMessages } from "@/i18n/messages/projects";
 import type { ProjectCaseStudy } from "@/types/content";
 
 interface ProjectCardProps {
   project: ProjectCaseStudy;
+  locale?: Locale;
 }
 
-export function ProjectCard({ project }: ProjectCardProps) {
+export function ProjectCard({ project, locale = "fr" }: ProjectCardProps) {
+  const messages = projectMessages[locale];
   const titleId = `project-${project.slug}-title`;
 
   return (
     <article className="project-card">
       <Link
         className="project-card-link"
-        href={`/projets/${project.slug}`}
+        href={localizedHref(`/projets/${project.slug}`, locale)}
         aria-labelledby={titleId}
       >
-        <ProjectVisual variant={project.visualVariant} />
+        <ProjectVisual variant={project.visualVariant} locale={locale} />
 
         <div className="project-card-content">
           <div className="project-card-topline">
@@ -34,20 +38,20 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
           <dl className="project-card-evidence">
             <div>
-              <dt>Contexte</dt>
+              <dt>{messages.context}</dt>
               <dd>{project.context}</dd>
             </div>
             <div>
-              <dt>Intervention</dt>
+              <dt>{messages.intervention}</dt>
               <dd>{project.shortSummary}</dd>
             </div>
             <div>
-              <dt>Résultat</dt>
+              <dt>{messages.result}</dt>
               <dd>{project.result}</dd>
             </div>
           </dl>
 
-          <ul className="project-stack" aria-label="Technologies utilisées">
+          <ul className="project-stack" aria-label={messages.technologies}>
             {project.technologies.map((technology) => (
               <li key={technology}>
                 <TechnologyIcon name={technology} size={14} />
@@ -57,7 +61,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
           </ul>
 
           <span className="project-link-label">
-            Voir l’étude de cas
+            {messages.viewCase}
             <ArrowUpRight size={18} strokeWidth={1.8} aria-hidden="true" />
           </span>
         </div>

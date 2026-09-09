@@ -1,3 +1,6 @@
+import { localizedHref, type Locale } from "@/i18n/config";
+import { sectionMessages } from "@/i18n/messages/sections";
+import { getContent } from "@/i18n/content";
 import {
   BarChart3,
   DatabaseZap,
@@ -11,7 +14,6 @@ import { Reveal } from "@/components/animations/reveal";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Container } from "@/components/ui/container";
 import { SectionHeading } from "@/components/ui/section-heading";
-import { missionFormats, services } from "@/data/services";
 import type { ServiceId } from "@/types/content";
 
 const icons = {
@@ -22,15 +24,18 @@ const icons = {
   "integration-consolidation": DatabaseZap,
 } satisfies Record<ServiceId, LucideIcon>;
 
-export function ServicesSection() {
+export function ServicesSection({ locale = "fr" }: { locale?: Locale }) {
+  const t = sectionMessages[locale].services;
+  const { missionFormats, services } = getContent(locale);
+
   return (
     <section className="section-shell" id="services" aria-labelledby="services-title">
       <Container>
         <SectionHeading
-          eyebrow="Services"
+          eyebrow={t.label}
           headingId="services-title"
-          title="Une réponse data adaptée au problème, pas l’inverse."
-          description="Audit ciblé, renfort sur un existant ou réalisation de bout en bout : le périmètre s’ajuste à vos données, vos utilisateurs et vos contraintes."
+          title={t.title}
+          description={t.description}
         />
         <div className="service-grid">
           {services.map((service, index) => {
@@ -42,14 +47,14 @@ export function ServicesSection() {
                 </div>
                 <h3>{service.title}</h3>
                 <div className="service-block">
-                  <span className="service-block-label">Le problème</span>
+                  <span className="service-block-label">{t.problem}</span>
                   <p>{service.problem}</p>
                 </div>
                 <div className="service-block">
-                  <span className="service-block-label">Mon intervention</span>
+                  <span className="service-block-label">{t.intervention}</span>
                   <p>{service.intervention}</p>
                 </div>
-                <ul className="service-deliverables" aria-label="Livrables possibles">
+                <ul className="service-deliverables" aria-label={t.deliverables}>
                   {service.deliverables.map((deliverable) => (
                     <li key={deliverable}>{deliverable}</li>
                   ))}
@@ -61,12 +66,11 @@ export function ServicesSection() {
         <Reveal className="mission-formats">
           <div className="mission-formats__heading">
             <div>
-              <p className="eyebrow">Formats de mission</p>
-              <h3>Des interventions adaptées à votre contexte.</h3>
+              <p className="eyebrow">{t.formats}</p>
+              <h3>{t.formatsTitle}</h3>
             </div>
-            <ButtonLink href="/contact" variant="secondary">
-              Me parler de votre besoin
-            </ButtonLink>
+            <ButtonLink href={localizedHref("/contact", locale)} variant="secondary">
+              {t.contact}</ButtonLink>
           </div>
           <ol className="mission-format-list">
             {missionFormats.map((format, index) => (

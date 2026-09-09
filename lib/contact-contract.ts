@@ -1,3 +1,6 @@
+import type { Locale } from "@/i18n/config";
+import { contactMessages } from "@/i18n/messages/contact";
+
 /**
  * Shared, dependency-free contract between the contact form and its API route.
  * Keep runtime validation in `contact-schema.ts` so Zod never enters the
@@ -14,14 +17,7 @@ export const CONTACT_NEEDS = [
 
 export type ContactNeed = (typeof CONTACT_NEEDS)[number];
 
-export const CONTACT_NEED_LABELS: Record<ContactNeed, string> = {
-  "power-bi-reporting": "Power BI / Reporting",
-  "data-quality": "Data Quality",
-  automatisation: "Automatisation",
-  "integration-consolidation": "Intégration / consolidation",
-  "analyse-donnees": "Analyse de données",
-  autre: "Autre",
-};
+export const CONTACT_NEED_LABELS = contactMessages.fr.needLabels;
 
 export const CONTACT_NEED_OPTIONS = CONTACT_NEEDS.map((value) => ({
   value,
@@ -36,6 +32,7 @@ export interface ContactFormInput {
   message: string;
   website?: string;
   formStartedAt: number;
+  locale?: Locale;
 }
 
 export type ContactFieldErrors = Partial<

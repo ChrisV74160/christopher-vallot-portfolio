@@ -18,6 +18,8 @@ import {
 import { useRef, useState } from "react";
 
 import { Container } from "@/components/ui/container";
+import type { Locale } from "@/i18n/config";
+import { visualMessages } from "@/i18n/messages/visuals";
 
 type PipelineStep = {
   action: string;
@@ -30,52 +32,11 @@ type PipelineStep = {
   title: string;
 };
 
-const pipelineSteps: readonly PipelineStep[] = [
-  {
-    code: "CADRER",
-    nodeLabel: "Sources",
-    nodeDetail: "Connecter et documenter",
-    title: "Cadrer les sources utiles",
-    icon: Database,
-    input: "Bases, fichiers, API et outils métier.",
-    action:
-      "Cartographier les formats, les propriétaires, les règles d’usage et le périmètre réellement nécessaire.",
-    output: "Des sources identifiées, documentées et prêtes à être intégrées.",
-  },
-  {
-    code: "PRÉPARER",
-    nodeLabel: "Préparation",
-    nodeDetail: "Nettoyer et automatiser",
-    title: "Préparer et automatiser les traitements",
-    icon: Gauge,
-    input: "Données brutes, dispersées ou hétérogènes.",
-    action:
-      "Nettoyer, harmoniser, consolider et automatiser les transformations avec Python et SQL.",
-    output: "Des traitements reproductibles, lisibles et maintenables.",
-  },
-  {
-    code: "FIABILISER",
-    nodeLabel: "Qualité",
-    nodeDetail: "Contrôler et tracer",
-    title: "Contrôler et fiabiliser les données",
-    icon: ShieldCheck,
-    input: "Données transformées et règles métier attendues.",
-    action:
-      "Détecter doublons, valeurs manquantes et écarts, puis tracer chaque contrôle et son résultat.",
-    output: "Des données contrôlées, explicables et prêtes pour l’analyse.",
-  },
-  {
-    code: "PILOTER",
-    nodeLabel: "Pilotage",
-    nodeDetail: "Analyser et restituer",
-    title: "Restituer une information actionnable",
-    icon: ChartNoAxesCombined,
-    input: "Données validées et besoins de pilotage cadrés.",
-    action:
-      "Construire les modèles de données, KPI et rapports Power BI, avec les mesures DAX adaptées aux besoins métier.",
-    output: "Une information claire, exploitable et directement actionnable.",
-  },
-];
+const stepIcons = [Database, Gauge, ShieldCheck, ChartNoAxesCombined];
+const stepsByLocale: Record<Locale, readonly PipelineStep[]> = {
+  fr: visualMessages.fr.pipeline.steps.map((step, index) => ({ ...step, icon: stepIcons[index] })),
+  en: visualMessages.en.pipeline.steps.map((step, index) => ({ ...step, icon: stepIcons[index] })),
+};
 
 type StepState = "active" | "complete" | "upcoming";
 
@@ -87,21 +48,23 @@ function getStepState(stepIndex: number, activeStepIndex: number): StepState {
 
 interface StepFactsProps {
   step: PipelineStep;
+  locale: Locale;
 }
 
-function StepFacts({ step }: StepFactsProps) {
+function StepFacts({ step, locale }: StepFactsProps) {
+  const messages = visualMessages[locale].pipeline;
   return (
     <dl className="pipeline-step-facts">
       <div>
-        <dt>Entrées</dt>
+        <dt>{messages.input}</dt>
         <dd>{step.input}</dd>
       </div>
       <div>
-        <dt>Intervention</dt>
+        <dt>{messages.action}</dt>
         <dd>{step.action}</dd>
       </div>
       <div>
-        <dt>Résultat</dt>
+        <dt>{messages.output}</dt>
         <dd>{step.output}</dd>
       </div>
     </dl>
@@ -111,10 +74,12 @@ function StepFacts({ step }: StepFactsProps) {
 interface ActiveStepProps {
   step: PipelineStep;
   stepIndex: number;
+  locale: Locale;
 }
 
-function ActiveStep({ step, stepIndex }: ActiveStepProps) {
+function ActiveStep({ step, stepIndex, locale }: ActiveStepProps) {
   const StepIcon = step.icon;
+  const messages = visualMessages[locale].pipeline;
 
   return (
     <article className="pipeline-active-step" data-testid="pipeline-active-step">
@@ -124,17 +89,19 @@ function ActiveStep({ step, stepIndex }: ActiveStepProps) {
         </span>
         <div>
           <small>
-            Étape {stepIndex + 1} sur {pipelineSteps.length} · {step.code}
+            {messages.step} {stepIndex + 1} {messages.of} {messages.steps.length} · {step.code}
           </small>
           <h3>{step.title}</h3>
         </div>
       </header>
-      <StepFacts step={step} />
+      <StepFacts step={step} locale={locale} />
     </article>
   );
 }
 
-export function DecisionPipeline() {
+export function DecisionPipeline({ locale = "fr" }: { locale?: Locale }) {
+  const messages = visualMessages[locale].pipeline;
+  const pipelineSteps = stepsByLocale[locale];
   const sectionRef = useRef<HTMLElement>(null);
   const reducedMotion = useReducedMotion() ?? false;
   const [activeStepIndex, setActiveStepIndex] = useState(0);
@@ -177,24 +144,23 @@ export function DecisionPipeline() {
       <div className="pipeline-story__stage">
         <Container className="pipeline-story__layout">
           <div className="pipeline-story__copy">
-            <p className="eyebrow">Méthode / 4 étapes concrètes</p>
+            <p className="eyebrow">{messages.eyebrow}</p>
             <h2 className="section-title" id="decision-title">
-              De vos sources à une information fiable et exploitable.
+              {messages.title}
             </h2>
             <p className="pipeline-story__intro">
-              Faites défiler : chaque étape précise ce qui entre, ce qui est
-              réalisé et ce que les équipes obtiennent.
+              {messages.intro}
             </p>
             <ol
               className="sr-only"
-              aria-label="Détail complet des quatre étapes du processus Data et BI"
+              aria-label={messages.fullDescription}
             >
               {pipelineSteps.map((step, stepIndex) => (
                 <li key={step.code}>
                   <h3>
-                    Étape {stepIndex + 1} : {step.title}
+                    {messages.step} {stepIndex + 1} : {step.title}
                   </h3>
-                  <StepFacts step={step} />
+                  <StepFacts step={step} locale={locale} />
                 </li>
               ))}
             </ol>
@@ -229,10 +195,10 @@ export function DecisionPipeline() {
           >
             <div className="pipeline-console__head">
               <span>
-                <i aria-hidden="true" /> PROCESSUS DATA &amp; BI · 4 ÉTAPES
+                <i aria-hidden="true" /> {messages.consoleTitle}
               </span>
               <strong>
-                ÉTAPE {activeStepIndex + 1} SUR {pipelineSteps.length}
+                {messages.step.toUpperCase()} {activeStepIndex + 1} {messages.of.toUpperCase()} {pipelineSteps.length}
               </strong>
             </div>
 
@@ -266,18 +232,18 @@ export function DecisionPipeline() {
             </div>
 
             <div className="pipeline-console__detail">
-              <ActiveStep step={activeStep} stepIndex={activeStepIndex} />
+              <ActiveStep step={activeStep} stepIndex={activeStepIndex} locale={locale} />
             </div>
 
             <div className="pipeline-console__foot">
-              <span>Progression globale</span>
+              <span>{messages.progress}</span>
               <span className="pipeline-progress" aria-hidden="true">
                 <motion.i style={{ scaleX: reducedMotion ? 1 : progress }} />
               </span>
               <span>
                 {activeStepIndex === pipelineSteps.length - 1
-                  ? "Prêt à piloter"
-                  : "Continuez à faire défiler"}
+                  ? messages.ready
+                  : messages.keepScrolling}
               </span>
             </div>
           </div>
@@ -300,7 +266,7 @@ export function DecisionPipeline() {
                       <h3>{step.title}</h3>
                     </div>
                   </header>
-                  <StepFacts step={step} />
+                  <StepFacts step={step} locale={locale} />
                 </article>
               );
             })}

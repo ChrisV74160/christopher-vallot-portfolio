@@ -1,3 +1,9 @@
+import { localizedHref } from "@/i18n/config";
+import { requireLocale, type LocalePageProps } from "@/i18n/server";
+import { pageMetadata } from "@/i18n/metadata";
+import { metaMessages } from "@/i18n/messages/meta";
+import { pageMessages } from "@/i18n/messages/pages";
+import { getContent } from "@/i18n/content";
 import type { Metadata } from "next";
 import {
   ArrowDownToLine,
@@ -14,64 +20,30 @@ import { ButtonLink } from "@/components/ui/button-link";
 import { Container } from "@/components/ui/container";
 import { ProfilePortrait } from "@/components/ui/profile-portrait";
 import { SectionHeading } from "@/components/ui/section-heading";
-import {
-  education,
-  experiences,
-  languages,
-  profile,
-  softSkills,
-} from "@/data/profile";
-import { siteName } from "@/lib/site-config";
 
-export const metadata: Metadata = {
-  title: "À propos",
-  description:
-    "Parcours de Christopher Vallot, Consultant Data & BI Freelance spécialisé en transformation, Data Quality, automatisation et Business Intelligence.",
-  alternates: { canonical: "/a-propos" },
-  openGraph: {
-    title: "À propos de Christopher Vallot, Consultant Data & BI Freelance",
-    description:
-      "Un parcours entre analyse, fiabilisation, automatisation et restitution de données.",
-    url: "/a-propos",
-    siteName,
-    locale: "fr_FR",
-    type: "website",
-    images: [
-      {
-        url: "/opengraph-image",
-        width: 1200,
-        height: 630,
-        alt: "À propos de Christopher Vallot, Consultant Data & BI Freelance",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "À propos de Christopher Vallot, Consultant Data & BI Freelance",
-    description:
-      "Un parcours entre analyse, fiabilisation, automatisation et restitution de données.",
-    images: ["/opengraph-image"],
-  },
-};
 
-export default function AboutPage() {
+
+export async function generateMetadata({ params }: LocalePageProps): Promise<Metadata> {
+  const locale = requireLocale((await params).locale);
+  return pageMetadata(locale, { ...metaMessages[locale].about, path: "/a-propos" });
+}
+
+export default async function AboutPage({ params }: LocalePageProps) {
+  const locale = requireLocale((await params).locale);
+  const t = pageMessages[locale].about;
+  const { education, experiences, languages, profile, softSkills } = getContent(locale);
   return (
     <div className="about-page">
       <section className="page-hero" aria-labelledby="about-page-title">
         <Container className="page-hero-grid">
           <div>
-            <p className="eyebrow">À propos</p>
+            <p className="eyebrow">{t.label}</p>
             <h1 className="page-title" id="about-page-title">
-              Relier la donnée, la technique et l’usage.
-            </h1>
+              {t.title}</h1>
           </div>
           <div>
             <p className="section-intro">
-              Consultant Data &amp; BI Freelance issu du développement
-              informatique, j’interviens sur les sujets où les données doivent
-              être intégrées, transformées, fiabilisées ou automatisées avant de
-              devenir une information réellement exploitable.
-            </p>
+              {t.intro}</p>
             <div className="page-meta">
               <span className="badge badge--accent">{profile.location}</span>
               {profile.workModes.map((mode) => (
@@ -86,30 +58,21 @@ export default function AboutPage() {
         <Container>
           <div className="about-panel">
             <div className="about-grid">
-              <ProfilePortrait />
+              <ProfilePortrait locale={locale} />
               <div className="about-copy">
-                <p className="eyebrow">Mon approche</p>
-                <h2 id="approach-title">Fiabiliser avant d’accélérer.</h2>
+                <p className="eyebrow">{t.approach}</p>
+                <h2 id="approach-title">{t.approachTitle}</h2>
                 <p>
-                  Une analyse ou un dashboard n’est solide que si les sources,
-                  les règles et les contrôles le sont aussi. Je pars du besoin
-                  métier, identifie ce qui fragilise la donnée et automatise les
-                  transformations qui doivent pouvoir être rejouées et maintenues.
-                </p>
+                  {t.approachFirst}</p>
                 <p>
-                  De l’intégration des flux au reporting Power BI, mes expériences
-                  à la CNAV, chez Harmonie Mutuelle, Apside et Banque de France
-                  m’ont appris à relier contraintes techniques et usages métier.
-                </p>
+                  {t.approachSecond}</p>
                 <div className="button-row">
                   <ButtonLink href={profile.contact.linkedinUrl} variant="accent" target="_blank" rel="noreferrer">
-                    Profil LinkedIn
-                    <span className="sr-only"> (nouvel onglet)</span>
+                    {t.linkedin}<span className="sr-only"> {t.newTab}</span>
                     <ArrowUpRight aria-hidden="true" size={17} />
                   </ButtonLink>
                   <a className="button-link button-link--secondary" href={profile.contact.cvUrl} download>
-                    <ArrowDownToLine aria-hidden="true" size={17} /> Télécharger mon CV
-                  </a>
+                    <ArrowDownToLine aria-hidden="true" size={17} /> {t.cv}</a>
                 </div>
               </div>
             </div>
@@ -120,10 +83,10 @@ export default function AboutPage() {
       <section className="section-shell" aria-labelledby="career-title">
         <Container>
           <SectionHeading
-            eyebrow="Parcours"
+            eyebrow={t.career}
             headingId="career-title"
-            title="Des missions où la fiabilité compte."
-            description="Migration, intégration, qualité, automatisation, reporting et modélisation : chaque expérience a renforcé une partie de la chaîne data."
+            title={t.careerTitle}
+            description={t.careerDescription}
           />
           <div className="timeline">
             {experiences.map((experience, index) => (
@@ -145,10 +108,9 @@ export default function AboutPage() {
                   {experience.caseStudySlug ? (
                     <Link
                       className="timeline-case-link"
-                      href={`/projets/${experience.caseStudySlug}`}
+                      href={localizedHref(`/projets/${experience.caseStudySlug}`, locale)}
                     >
-                      Voir l’étude de cas
-                      <ArrowRight aria-hidden="true" size={15} />
+                      {t.caseLink}<ArrowRight aria-hidden="true" size={15} />
                     </Link>
                   ) : null}
                 </div>
@@ -161,10 +123,10 @@ export default function AboutPage() {
       <section className="section-shell" aria-labelledby="qualities-title">
         <Container>
           <SectionHeading
-            eyebrow="Façon de travailler"
+            eyebrow={t.qualities}
             headingId="qualities-title"
-            title="Les qualités qui structurent ma façon de travailler."
-            description="Esprit analytique, rigueur, autonomie, adaptabilité, synthèse et communication : six repères directement issus de mon parcours professionnel."
+            title={t.qualitiesTitle}
+            description={t.qualitiesDescription}
           />
           <div className="problem-grid">
             {softSkills.map((skill, index) => (
@@ -183,9 +145,9 @@ export default function AboutPage() {
       <section className="section-shell section-shell--compact" aria-labelledby="education-title">
         <Container>
           <SectionHeading
-            eyebrow="Formation"
+            eyebrow={t.education}
             headingId="education-title"
-            title="Des bases informatiques solides au service de la Data."
+            title={t.educationTitle}
           />
           <div className="education-grid">
             {education.map((item) => (
@@ -214,10 +176,11 @@ export default function AboutPage() {
       <section className="section-shell section-shell--compact about-final-contact">
         <Container>
           <ContactCta
-            description="Intégration de données, Data Quality, automatisation ou reporting : échangeons sur votre contexte et le périmètre de votre mission."
-            eyebrow="Travaillons ensemble"
+            locale={locale}
+            description={t.contactDescription}
+            eyebrow={t.contactLabel}
             headingId="about-contact-title"
-            title="Un besoin Data ou BI à cadrer ?"
+            title={t.contactTitle}
           />
         </Container>
       </section>

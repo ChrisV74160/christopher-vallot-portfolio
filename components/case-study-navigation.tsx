@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type { Locale } from "@/i18n/config";
+import { projectMessages } from "@/i18n/messages/projects";
 
 export interface CaseNavigationItem {
   id: string;
@@ -10,6 +12,7 @@ export interface CaseNavigationItem {
 
 interface CaseStudyNavigationProps {
   items: readonly CaseNavigationItem[];
+  locale?: Locale;
 }
 
 /**
@@ -17,7 +20,7 @@ interface CaseStudyNavigationProps {
  * requestAnimationFrame per scroll frame keep the state accurate during smooth
  * anchor navigation without introducing a scroll-animation dependency.
  */
-export function CaseStudyNavigation({ items }: CaseStudyNavigationProps) {
+export function CaseStudyNavigation({ items, locale = "fr" }: CaseStudyNavigationProps) {
   const [activeId, setActiveId] = useState(items[0]?.id ?? "");
 
   useEffect(() => {
@@ -105,7 +108,7 @@ export function CaseStudyNavigation({ items }: CaseStudyNavigationProps) {
   }, [items]);
 
   return (
-    <nav className="case-study-nav" aria-label="Sommaire de l’étude de cas">
+    <nav className="case-study-nav" aria-label={projectMessages[locale].caseNavigation}>
       {items.map(({ id, index, label }) => {
         const active = id === activeId;
 

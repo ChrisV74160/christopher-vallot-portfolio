@@ -1,4 +1,4 @@
-export type WorkMode = "À distance" | "Hybride" | "Sur site";
+export type WorkMode = "À distance" | "Hybride" | "Sur site" | "Remote" | "Hybrid" | "On site";
 
 export interface ProfileContact {
   email: string;
@@ -90,7 +90,11 @@ export type ProjectStatus =
   | "Expérience professionnelle"
   | "Projet public"
   | "Projet personnel"
-  | "Cas pratique";
+  | "Cas pratique"
+  | "Professional experience"
+  | "Public project"
+  | "Personal project"
+  | "Practice case";
 
 export type ProjectVisualVariant =
   | "data-pipeline"

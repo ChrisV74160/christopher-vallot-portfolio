@@ -1,17 +1,20 @@
+import { type Locale } from "@/i18n/config";
+import { sectionMessages } from "@/i18n/messages/sections";
+import { getContent } from "@/i18n/content";
 import { Container } from "@/components/ui/container";
-import { faqItems } from "@/data/faq";
 
-export function FaqSection() {
+export function FaqSection({ locale = "fr" }: { locale?: Locale }) {
+  const t = sectionMessages[locale].faq;
+  const { faqItems } = getContent(locale);
+
   return (
     <section className="section-shell" aria-labelledby="faq-title">
       <Container className="faq-layout">
         <div>
-          <p className="eyebrow">Questions fréquentes</p>
-          <h2 className="section-title" id="faq-title">Avant de démarrer.</h2>
+          <p className="eyebrow">{t.label}</p>
+          <h2 className="section-title" id="faq-title">{t.title}</h2>
           <p className="section-intro">
-            Quelques repères sur les missions, les outils et la manière de cadrer
-            une première intervention.
-          </p>
+            {t.description}</p>
         </div>
         <div className="faq-list">
           {faqItems.map((item, index) => (

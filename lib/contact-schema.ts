@@ -1,50 +1,39 @@
 import { z } from "zod";
 
+import type { Locale } from "@/i18n/config";
+import { contactMessages } from "@/i18n/messages/contact";
 import { CONTACT_NEEDS } from "@/lib/contact-contract";
 
-const emailSchema = z
-  .string({ error: "L’adresse e-mail est requise." })
-  .trim()
-  .max(254, "L’adresse e-mail est trop longue.")
-  .pipe(z.email({ error: "Saisissez une adresse e-mail valide." }))
-  .transform((email) => email.toLowerCase());
+function createContactFormSchema(locale: Locale) {
+  const messages = contactMessages[locale].validation;
 
-export const contactFormSchema = z
-  .object({
-    name: z
-      .string({ error: "Le nom est requis." })
-      .trim()
-      .min(2, "Le nom doit contenir au moins 2 caractères.")
-      .max(80, "Le nom ne peut pas dépasser 80 caractères."),
-    company: z
-      .string({ error: "Le nom de l’entreprise doit être du texte." })
-      .trim()
-      .max(120, "Le nom de l’entreprise ne peut pas dépasser 120 caractères.")
-      .optional()
+  return z.object({
+    name: z.string({ error: messages.nameRequired }).trim()
+      .min(2, messages.nameMin).max(80, messages.nameMax),
+    company: z.string({ error: messages.companyType }).trim()
+      .max(120, messages.companyMax).optional()
       .transform((company) => company || undefined),
-    email: emailSchema,
-    need: z.enum(CONTACT_NEEDS, {
-      error: "Sélectionnez un type de besoin valide.",
-    }),
-    message: z
-      .string({ error: "Le message est requis." })
-      .trim()
-      .min(20, "Le message doit contenir au moins 20 caractères.")
-      .max(3_000, "Le message ne peut pas dépasser 3 000 caractères."),
-    website: z
-      .string({ error: "Le champ antispam est invalide." })
-      .trim()
-      .max(200, "Le champ antispam est invalide.")
-      .optional()
-      .default(""),
-    formStartedAt: z
-      .number({ error: "L’horodatage du formulaire est invalide." })
-      .int("L’horodatage du formulaire est invalide.")
-      .positive("L’horodatage du formulaire est invalide."),
-  })
-  .strict();
+    email: z.string({ error: messages.emailRequired }).trim()
+      .max(254, messages.emailMax)
+      .pipe(z.email({ error: messages.emailInvalid }))
+      .transform((email) => email.toLowerCase()),
+    need: z.enum(CONTACT_NEEDS, { error: messages.needInvalid }),
+    message: z.string({ error: messages.messageRequired }).trim()
+      .min(20, messages.messageMin).max(3_000, messages.messageMax),
+    website: z.string({ error: messages.spamInvalid }).trim()
+      .max(200, messages.spamInvalid).optional().default(""),
+    formStartedAt: z.number({ error: messages.timeInvalid })
+      .int(messages.timeInvalid).positive(messages.timeInvalid),
+    locale: z.enum(["fr", "en"], { error: messages.localeInvalid }).optional().default("fr"),
+  }).strict();
+}
 
-// Alias kept concise for server-side consumers.
+// Build once per locale; the legacy French export keeps existing callers compatible.
+const schemas = { fr: createContactFormSchema("fr"), en: createContactFormSchema("en") };
+export function getContactFormSchema(locale: Locale = "fr") {
+  return schemas[locale];
+}
+
+export const contactFormSchema = schemas.fr;
 export const contactSchema = contactFormSchema;
-
 export type ContactFormData = z.output<typeof contactFormSchema>;

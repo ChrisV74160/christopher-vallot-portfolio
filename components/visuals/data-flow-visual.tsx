@@ -2,6 +2,8 @@
 
 import { motion, useInView, useReducedMotion } from "motion/react";
 import { useRef } from "react";
+import type { Locale } from "@/i18n/config";
+import { visualMessages } from "@/i18n/messages/visuals";
 
 const sources = ["SQL", "CSV", "API"];
 
@@ -47,7 +49,8 @@ function RelayLink({ active, delay = 0 }: RelayLinkProps) {
  * uses DOM and CSS primitives instead of a canvas/WebGL scene, keeping the
  * animation crisp and inexpensive on both desktop and mobile devices.
  */
-export function DataFlowVisual() {
+export function DataFlowVisual({ locale = "fr" }: { locale?: Locale }) {
+  const messages = visualMessages[locale].flow;
   const visualRef = useRef<HTMLDivElement>(null);
   const reducedMotion = useReducedMotion();
   const isInView = useInView(visualRef, { amount: 0.35 });
@@ -63,19 +66,19 @@ export function DataFlowVisual() {
       animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
       role="img"
-      aria-label="Chaîne Data et BI : des sources SQL, CSV et API sont contrôlées et fiabilisées avant d'être restituées dans Power BI pour faciliter la décision."
+      aria-label={messages.description}
     >
       <header className="data-relay__header">
         <span className="data-relay__identity">
           <i aria-hidden="true" />
-          Chaîne Data &amp; BI / vue d’ensemble
+          {messages.title}
         </span>
-        <span className="data-relay__status">Flux actif</span>
+        <span className="data-relay__status">{messages.status}</span>
       </header>
 
       <div className="data-relay__scene" aria-hidden="true">
         <div className="data-relay__stage data-relay__sources">
-          <small>Sources</small>
+          <small>{messages.sources}</small>
           <div>
             {sources.map((source) => (
               <span key={source}>{source}</span>
@@ -108,8 +111,8 @@ export function DataFlowVisual() {
             <i />
             <i />
           </span>
-          <small>Contrôlé</small>
-          <strong>Données fiables</strong>
+          <small>{messages.checked}</small>
+          <strong>{messages.reliableData}</strong>
         </div>
 
         <RelayLink active={isAnimated} delay={0.85} />
@@ -122,14 +125,12 @@ export function DataFlowVisual() {
             <span />
             <span />
           </div>
-          <strong>Prêt à décider</strong>
+          <strong>{messages.ready}</strong>
         </div>
       </div>
 
       <footer className="data-relay__steps" aria-hidden="true">
-        <span>01 · Collecter</span>
-        <span>02 · Fiabiliser</span>
-        <span>03 · Piloter</span>
+        {messages.steps.map((step) => <span key={step}>{step}</span>)}
       </footer>
     </motion.div>
   );

@@ -17,6 +17,8 @@ confidentielles.
 - parcours professionnel et études de cas détaillées.
 - interface responsive avec animations adaptées au défilement.
 - navigation clavier et prise en charge de `prefers-reduced-motion`.
+- versions française et anglaise, avec choix de langue conservé pendant la navigation.
+- mode couleurs accessibles mémorisé dans le navigateur.
 - formulaire de contact avec validation serveur, protection antispam et envoi
   par Resend.
 - métadonnées, sitemap, `robots.txt`, manifeste et image Open Graph.
@@ -32,6 +34,37 @@ confidentielles.
 
 Les versions exactes sont définies dans `package.json` et verrouillées dans
 `package-lock.json`.
+
+## Langues et couleurs accessibles
+
+Le sélecteur **FR / EN** reste disponible sur ordinateur et dans le menu mobile.
+Il ouvre la même page dans l’autre langue en conservant les paramètres et l’ancre.
+Les deux versions partagent les mêmes pages et les mêmes slugs d’études de cas,
+avec un contenu traduit et un préfixe de langue : `/fr/projets` et `/en/projets`,
+par exemple. Les liens vers le CV et les services externes ne sont pas modifiés.
+Le CV téléchargeable reste le PDF français fourni.
+
+Les anciennes URL sans préfixe redirigent vers leur version française avec un
+statut **308**. L’accueil `/` utilise une redirection **307** vers la langue
+mémorisée, ou vers `/fr` sans préférence. La langue du navigateur n’impose aucune
+redirection automatique. Chaque page localisée possède ses métadonnées, son
+URL canonique et ses liens `hreflang`.
+
+Le réglage **Couleurs accessibles** conserve l’identité sombre du site et renforce
+les contrastes, les contours, les soulignements et les indications textuelles.
+Les états actifs, erreurs et confirmations restent compréhensibles autrement
+que par la couleur. Il s’agit d’une palette et de repères d’interface adaptés,
+sans filtre appliqué à toute la page.
+
+| Préférence | Mémorisation |
+| --- | --- |
+| Langue | Cookie `portfolio-locale`, enregistré lors d’un choix explicite, pendant un an. |
+| Couleurs | Stockage local `portfolio-colors`, valeur `default` ou `accessible`, jusqu’à son effacement dans le navigateur. |
+
+Le mode de couleurs enregistré est restauré avant le premier affichage pour
+éviter un changement de palette visible. Ces réglages ne servent ni à la mesure
+d’audience ni au suivi publicitaire. Leur fonctionnement est décrit dans la
+politique de confidentialité.
 
 ## Installation locale
 
@@ -95,6 +128,7 @@ préfixe `NEXT_PUBLIC_`.
 | `npm run dev` | Démarre le serveur de développement. |
 | `npm run lint` | Vérifie le code avec ESLint. |
 | `npm run typecheck` | Vérifie les types TypeScript. |
+| `npm test` | Lance les tests automatisés avec le moteur de test de Node.js. |
 | `npm run build` | Génère le build de production. |
 | `npm start` | Démarre le build de production. |
 
@@ -109,11 +143,25 @@ Les principales sources de contenu sont centralisées :
 | `data/services.ts` | Services et formats de mission. |
 | `data/faq.ts` | Questions fréquentes. |
 | `data/legal-config.ts` | Informations légales et de confidentialité centralisées. |
+| `i18n/content.ts` | Sélection des données françaises ou anglaises avec `getContent(locale)`. |
+| `i18n/content/en/` et `i18n/content/en.ts` | Traductions anglaises du profil, des services, de la FAQ et des études de cas. |
+| `i18n/messages/` | Textes FR/EN de l’interface, des métadonnées, du formulaire et des pages légales. |
 | `public/cv-christopher-vallot.pdf` | CV proposé au téléchargement. |
 | `assets/photo-profil-christopher-vallot.webp` | Portrait affiché sur le site. |
 
 Les routes des études de cas sont générées à partir des slugs déclarés dans
 `data/projects.ts`.
+
+Les pages partagent leurs composants dans `app/[locale]/`. Les règles d’URL
+sont centralisées dans `i18n/config.ts` et les redirections dans `proxy.ts`.
+Le registre `i18n/routes.ts` alimente le sitemap et distingue les pages existantes
+des URL inconnues, qui conservent un statut HTTP 404 et un affichage traduit.
+Lors de l’ajout d’une page, mettre ce registre à jour. Les nouvelles études de cas
+y sont ajoutées automatiquement depuis `data/projects.ts`.
+Pour modifier un texte, conserver la version française dans sa source puis
+mettre à jour son équivalent anglais. Les noms propres, technologies et slugs
+doivent rester identiques dans les deux langues. Les styles du mode couleurs
+accessibles se trouvent dans `styles/accessibility.css`.
 
 ## Déploiement Netlify
 
@@ -175,6 +223,7 @@ Les Deploy Previews et Branch Deploys restent non indexables grâce à
 npm ci
 npm run lint
 npm run typecheck
+npm test
 npm run build
 ```
 
@@ -185,6 +234,8 @@ Avant la mise en ligne publique :
 - vérifier le CV, les liens LinkedIn et les cinq études de cas.
 - configurer puis tester l’envoi Resend avec un domaine vérifié.
 - contrôler le formulaire, `/robots.txt` et `/sitemap.xml` sur le domaine final.
+- parcourir les pages en FR et EN, dans les modes normal et couleurs accessibles,
+  et vérifier les deux réglages au clavier et sur mobile.
 - relire les pages légales et la politique de confidentialité avant publication.
 
 La limitation de débit du formulaire est stockée en mémoire. Pour un déploiement

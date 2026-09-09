@@ -1,7 +1,6 @@
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 
 import {
@@ -11,11 +10,17 @@ import {
 import { ContactCta } from "@/components/contact-cta";
 import { ProjectVisual } from "@/components/project-visual";
 import { TechnologyIcon } from "@/components/ui/technology-icon";
-import { getProjectBySlug, projects } from "@/data/projects";
-import { siteName } from "@/lib/site-config";
+import { projects } from "@/data/projects";
+import { getContent, getLocalizedProjectBySlug } from "@/i18n/content";
+import { localizedHref } from "@/i18n/config";
+import { requireLocale } from "@/i18n/server";
+import { pageMetadata } from "@/i18n/metadata";
+import { localizedNotFoundMetadata } from "@/i18n/not-found";
+import { NotFoundContent } from "@/components/not-found-content";
+import { pageMessages } from "@/i18n/messages/pages";
 
 interface ProjectPageProps {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ locale: string; slug: string }>;
 }
 
 interface CaseBlockProps {
@@ -25,62 +30,18 @@ interface CaseBlockProps {
   title: string;
 }
 
-const caseNavigation = [
-  { index: "01", label: "Contexte & enjeu", id: "contexte-enjeu" },
-  { index: "02", label: "Objectifs", id: "objectifs" },
-  { index: "03", label: "Sources & données", id: "sources-donnees" },
-  { index: "04", label: "Intervention", id: "intervention" },
-  { index: "05", label: "Résultat", id: "resultat" },
-  { index: "06", label: "Technologies", id: "technologies" },
-] as const satisfies readonly CaseNavigationItem[];
+
 
 export function generateStaticParams() {
   return projects.map(({ slug }) => ({ slug }));
 }
 
-export async function generateMetadata({
-  params,
-}: ProjectPageProps): Promise<Metadata> {
-  const { slug } = await params;
-  const project = getProjectBySlug(slug);
-
-  if (!project) {
-    return {
-      title: "Étude de cas introuvable",
-      robots: { index: false, follow: false },
-    };
-  }
-
-  const url = `/projets/${project.slug}`;
-  const socialTitle = `${project.title} | Christopher Vallot`;
-
-  return {
-    title: project.title,
-    description: project.seoDescription,
-    alternates: { canonical: url },
-    openGraph: {
-      title: socialTitle,
-      description: project.seoDescription,
-      url,
-      siteName,
-      locale: "fr_FR",
-      type: "article",
-      images: [
-        {
-          url: "/opengraph-image",
-          width: 1200,
-          height: 630,
-          alt: `${project.title} — étude de cas Data & BI`,
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: socialTitle,
-      description: project.seoDescription,
-      images: ["/opengraph-image"],
-    },
-  };
+export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
+  const { slug, locale: requestedLocale } = await params;
+  const locale = requireLocale(requestedLocale);
+  const project = getLocalizedProjectBySlug(locale, slug);
+  if (!project) return localizedNotFoundMetadata({ params });
+  return pageMetadata(locale, { title: project.title, description: project.seoDescription, path: `/projets/${project.slug}`, type: "article" });
 }
 
 function CaseBlock({ children, id, index, title }: CaseBlockProps) {
@@ -106,11 +67,22 @@ function CaseList({ items }: { items: readonly string[] }) {
 }
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
-  const { slug } = await params;
-  const project = getProjectBySlug(slug);
+  const { slug, locale: requestedLocale } = await params;
+  const locale = requireLocale(requestedLocale);
+  const t = pageMessages[locale].project;
+const caseNavigation = [
+  { index: "01", label: t.context, id: "contexte-enjeu" },
+  { index: "02", label: t.objectives, id: "objectifs" },
+  { index: "03", label: t.sources, id: "sources-donnees" },
+  { index: "04", label: t.intervention, id: "intervention" },
+  { index: "05", label: t.result, id: "resultat" },
+  { index: "06", label: t.technologies, id: "technologies" },
+] as const satisfies readonly CaseNavigationItem[];
+  const { projects } = getContent(locale);
+  const project = getLocalizedProjectBySlug(locale, slug);
 
   if (!project) {
-    notFound();
+    return <NotFoundContent locale={locale} />;
   }
 
   const projectIndex = projects.findIndex((item) => item.slug === project.slug);
@@ -122,6 +94,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     "@context": "https://schema.org",
     "@type": "CreativeWork",
     name: project.title,
+    inLanguage: locale,
     description: project.seoDescription,
     about: project.sector,
     keywords: project.technologies,
@@ -143,10 +116,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       <header className="project-detail-hero">
         <div className="container-shell project-detail-hero__grid">
           <div className="project-detail-hero__copy">
-            <Link className="badge" href="/projets">
+            <Link className="badge" href={localizedHref("/projets", locale)}>
               <ArrowLeft size={14} aria-hidden="true" />
-              Toutes les réalisations
-            </Link>
+              {t.all}</Link>
             <h1>{project.title}</h1>
             <p className="project-detail-summary">{project.shortSummary}</p>
             <div className="project-detail-meta">
@@ -158,7 +130,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             </div>
           </div>
 
-          <dl className="project-hero-facts" aria-label="Synthèse de l’étude">
+          <dl className="project-hero-facts" aria-label={t.summary}>
             {project.heroMeta.map(({ label, value }) => (
               <div key={label}>
                 <dt>{label}</dt>
@@ -170,30 +142,29 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       </header>
 
       <div className="container-shell case-study">
-        <CaseStudyNavigation items={caseNavigation} />
+        <CaseStudyNavigation items={caseNavigation} locale={locale} />
 
         <article className="case-study-content">
           <figure className="case-visual-wrap">
             <ProjectVisual
+              locale={locale}
               diagram={project.diagram}
               variant={project.visualVariant}
             />
             <figcaption className="case-visual-caption">
-              Illustration abstraite du flux principal — aucune donnée interne
-              ou confidentielle n’est représentée.
-            </figcaption>
+              {t.caption}</figcaption>
           </figure>
 
-          <CaseBlock id="contexte-enjeu" index="01" title="Contexte & enjeu">
+          <CaseBlock id="contexte-enjeu" index="01" title={t.context}>
             <p>{project.context}</p>
             <p>{project.problem}</p>
           </CaseBlock>
 
-          <CaseBlock id="objectifs" index="02" title="Objectifs">
+          <CaseBlock id="objectifs" index="02" title={t.objectives}>
             <CaseList items={project.objectives} />
           </CaseBlock>
 
-          <CaseBlock id="sources-donnees" index="03" title="Sources & données">
+          <CaseBlock id="sources-donnees" index="03" title={t.sources}>
             {project.dataGroups ? (
               <div className="case-data-groups">
                 {project.dataGroups.map((group) => (
@@ -208,12 +179,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             )}
           </CaseBlock>
 
-          <CaseBlock id="intervention" index="04" title="Intervention">
+          <CaseBlock id="intervention" index="04" title={t.intervention}>
             <p>{project.intervention}</p>
             <CaseList items={project.method} />
           </CaseBlock>
 
-          <CaseBlock id="resultat" index="05" title="Résultat">
+          <CaseBlock id="resultat" index="05" title={t.result}>
             <p>{project.result}</p>
             {project.resultHighlights ? (
               <div className="case-result-highlights">
@@ -227,8 +198,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             ) : null}
           </CaseBlock>
 
-          <CaseBlock id="technologies" index="06" title="Technologies">
-            <ul className="project-stack" aria-label="Technologies utilisées">
+          <CaseBlock id="technologies" index="06" title={t.technologies}>
+            <ul className="project-stack" aria-label={t.technologiesUsed}>
               {project.technologies.map((technology) => (
                 <li key={technology}>
                   <TechnologyIcon name={technology} size={16} />
@@ -240,38 +211,36 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
           <div className="case-study-closing">
             <ContactCta
-              description="Échangeons sur vos données, vos traitements et le résultat attendu pour définir une intervention adaptée à votre contexte."
-              eyebrow="Besoin similaire ?"
+              locale={locale}
+              description={t.contactDescription}
+              eyebrow={t.contactLabel}
               headingId={`project-contact-${project.slug}`}
-              title="Vous avez un sujet Data ou BI à fiabiliser ?"
+              title={t.contactTitle}
             />
 
             <nav
               className="case-pagination"
-              aria-label="Navigation entre les études de cas"
+              aria-label={t.navigation}
             >
               <div>
                 {previousProject ? (
-                  <Link href={`/projets/${previousProject.slug}`}>
+                  <Link href={localizedHref(`/projets/${previousProject.slug}`, locale)}>
                     <span>
                       <ArrowLeft aria-hidden="true" size={14} />
-                      Étude précédente
-                    </span>
+                      {t.previous}</span>
                     <strong>{previousProject.title}</strong>
                   </Link>
                 ) : null}
               </div>
 
-              <Link className="case-pagination__all" href="/projets">
-                Toutes les réalisations
-              </Link>
+              <Link className="case-pagination__all" href={localizedHref("/projets", locale)}>
+                {t.all}</Link>
 
               <div>
                 {nextProject ? (
-                  <Link href={`/projets/${nextProject.slug}`}>
+                  <Link href={localizedHref(`/projets/${nextProject.slug}`, locale)}>
                     <span>
-                      Étude suivante
-                      <ArrowRight aria-hidden="true" size={14} />
+                      {t.next}<ArrowRight aria-hidden="true" size={14} />
                     </span>
                     <strong>{nextProject.title}</strong>
                   </Link>

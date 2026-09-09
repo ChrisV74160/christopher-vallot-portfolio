@@ -1,0 +1,144 @@
+/* Compact, keyboard-accessible controls share the existing header typography. */
+.site-header--preferences .nav-shell { gap: clamp(0.5rem, 1.1vw, 1rem); }
+.site-header--preferences .wordmark,
+.site-header--preferences .mobile-menu-button,
+.site-header--preferences .nav-cta { flex-shrink: 0; }
+.site-header--preferences .desktop-nav { gap: clamp(0.7rem, 1.2vw, 1.05rem); }
+.site-header--preferences .nav-link { white-space: nowrap; }
+.site-header--preferences .wordmark:focus-visible { outline: 2px solid var(--electric); outline-offset: 4px; }
+.site-preferences { display: flex; flex: 0 0 auto; align-items: center; gap: 0.5rem; color: var(--ink-soft); }
+.site-languages, .site-language-item { display: flex; align-items: center; }
+.site-language-divider { color: var(--ink-faint); font-size: 0.72rem; pointer-events: none; }
+.site-preferences .site-language-link {
+  display: inline-flex;
+  min-width: 2rem;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 0.3rem;
+  padding: 0.35rem 0.3rem;
+  color: var(--ink-soft);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  line-height: 1.2;
+  text-decoration: none;
+}
+.site-preferences .site-language-link:hover { color: var(--electric); }
+.site-preferences .site-language-link[aria-current="page"] {
+  color: var(--ink);
+  font-weight: 750;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.4em;
+}
+.site-color-toggle {
+  position: relative;
+  display: inline-flex;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 0.55rem;
+  background: var(--paper-strong);
+  color: var(--ink-soft);
+  padding: 0.5rem;
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.35;
+  cursor: pointer;
+}
+.site-color-toggle:hover { border-color: var(--electric); color: var(--ink); }
+.site-color-toggle[aria-pressed="true"] { border-color: var(--electric); outline: 1px solid var(--electric); outline-offset: -4px; }
+.site-color-label, .site-color-state-label { display: none; }
+.site-color-state { position: absolute; right: 1px; bottom: 1px; display: grid; width: 0.8rem; height: 0.8rem; place-items: center; border-radius: 2px; background: var(--paper-strong); color: var(--ink); }
+.site-color-state__empty { width: 0.3rem; height: 0.3rem; border: 1px solid currentColor; border-radius: 50%; }
+.site-preferences--expanded { flex-wrap: wrap; gap: 0.8rem; border-top: 1px solid var(--line); margin-top: 1rem; padding-top: 1rem; }
+.site-preferences--expanded .site-color-toggle { flex-wrap: wrap; justify-content: flex-start; padding-inline: 0.8rem; }
+.site-preferences--expanded .site-color-label { display: inline; }
+.site-preferences--expanded .site-color-state { position: static; }
+.site-preferences--expanded .site-color-state-label { display: inline; font-size: 0.68rem; }
+
+@media (min-width: 90rem) {
+  .site-preferences--compact .site-color-label { display: inline; }
+  .site-preferences--compact .site-color-toggle { padding-inline: 0.75rem 1.1rem; }
+}
+
+@media (max-width: 70rem) {
+  .site-header--preferences .site-preferences--compact { margin-left: auto; }
+}
+
+@media (max-width: 32rem) {
+  .site-preferences--expanded { align-items: flex-start; flex-direction: column; }
+  .site-preferences--expanded .site-color-toggle { max-width: 100%; }
+  .site-header--preferences .nav-shell { gap: 0.5rem; }
+  .site-header--preferences .wordmark { gap: 0.45rem; font-size: 0.76rem; }
+  .site-header--preferences .wordmark-icon { width: 2rem; height: 2rem; }
+}
+
+/* This opt-in palette changes colour tokens, not layout, typography or images.
+   Opaque surfaces provide predictable contrast without a global colour filter. */
+:root[data-color-mode="accessible"] {
+  --void: #020812;
+  --paper: #05131e;
+  --paper-strong: #081c29;
+  --paper-muted: #102937;
+  --ink: #f6fbff;
+  --ink-soft: #d2e1ea;
+  --ink-faint: #b7ccd8;
+  --night: #020812;
+  --night-soft: #081c29;
+  --accent: #8deaff;
+  --accent-strong: #8deaff;
+  --electric: #8deaff;
+  --accent-pale: #163441;
+  --violet: #d0c6ff;
+  --plasma: #ffccdd;
+  --line: #729db4;
+  --line-strong: #8cb3c9;
+  --white-line: #729db4;
+  --panel: #081c29;
+  --panel-solid: #081c29;
+}
+:root[data-color-mode="accessible"] body { background: var(--void); }
+:root[data-color-mode="accessible"] :is(body, .page-hero, .contact-panel)::before { background-image: none; }
+:root[data-color-mode="accessible"] :is(.site-header, .site-header[data-scrolled="true"], .site-header[data-menu-open="true"], .footer) { border-color: var(--line); background: var(--void); }
+:root[data-color-mode="accessible"] :is(.problem-card, .service-card, .project-card, .about-panel, .contact-panel, .contact-form, .mission-formats, .journey-cta__panel, .contact-cta, .expertise-domain, .pipeline-console, .pipeline-flow li, .pipeline-step-card) { border-color: var(--line); background: var(--panel-solid); }
+:root[data-color-mode="accessible"] :is(.display-title span, .proof-rail-value) { background: none; color: var(--electric); text-shadow: none; }
+:root[data-color-mode="accessible"] a { color: var(--electric); text-decoration: underline; text-decoration-thickness: 1px; text-decoration-color: currentColor; text-underline-offset: 0.25em; }
+:root[data-color-mode="accessible"] :is(a, button, input, select, textarea, summary):focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 4px;
+  box-shadow: 0 0 0 2px #020812;
+}
+:root[data-color-mode="accessible"] :is(.button-link--accent, .button-link--accent:hover) { border-color: #8deaff; background: #8deaff; color: #020812; box-shadow: none; }
+:root[data-color-mode="accessible"] :is(.button-link--primary, .button-link--secondary) { border-color: var(--line-strong); background: var(--panel-solid); color: var(--ink); }
+:root[data-color-mode="accessible"] :is(.nav-link[aria-current], .site-language-link[aria-current]) { color: var(--ink); font-weight: 750; text-decoration-thickness: 3px; }
+:root[data-color-mode="accessible"] :is(.badge, .hero-stack-item, .service-deliverables li, .expertise-domain__tools li, .project-stack li) { border-color: var(--line); background: var(--paper-strong); color: var(--ink-soft); }
+:root[data-color-mode="accessible"] :is(.technology-icon, .expertise-domain__signal, .expertise-domain__signal small) { border-color: var(--line-strong); background: var(--paper-strong); color: var(--electric); box-shadow: none; }
+:root[data-color-mode="accessible"] :is(.expertise-domain__label, .expertise-domain__outcome span, .expertise-domain__tools > span, .project-visual-label, .visual-micro-label, .concept-flow__stage > span) { color: var(--electric); }
+:root[data-color-mode="accessible"] :is(.pipeline-markers li, .pipeline-flow li) { opacity: 1; }
+:root[data-color-mode="accessible"] :is(.pipeline-markers li[data-state="active"], .pipeline-flow li[data-state="active"]) { outline: 2px solid var(--electric); outline-offset: -3px; }
+:root[data-color-mode="accessible"] .pipeline-markers li[data-state="complete"] { border-bottom-style: double; border-bottom-width: 3px; }
+:root[data-color-mode="accessible"] .pipeline-flow li[data-state="complete"] { border-style: double; border-width: 3px; }
+:root[data-color-mode="accessible"] .form-field :is(input, select, textarea) { border: 2px solid var(--line-strong); background: #081c29; color: var(--ink); }
+:root[data-color-mode="accessible"] .form-field :is(input, textarea)::placeholder { color: var(--ink-faint); opacity: 1; }
+:root[data-color-mode="accessible"] .form-field [aria-invalid="true"] { border: 3px double #ffccdd; }
+:root[data-color-mode="accessible"] :is(.form-error, .form-status[data-status="error"]) { color: #ffccdd; }
+:root[data-color-mode="accessible"] .form-status[data-status="success"] { color: var(--electric); }
+:root[data-color-mode="accessible"] .form-status[data-status]::before { display: inline-grid; width: 1.1rem; height: 1.1rem; place-items: center; border: 1px solid currentColor; border-radius: 2px; margin-right: 0.45rem; font-weight: 750; line-height: 1; }
+:root[data-color-mode="accessible"] .form-status[data-status="error"]::before { content: "!"; }
+:root[data-color-mode="accessible"] .form-status[data-status="success"]::before { content: "✓"; }
+:root[data-color-mode="accessible"] :is(button, input, select, textarea):disabled { border-style: dashed; opacity: 1; cursor: not-allowed; }
+:root[data-color-mode="accessible"] summary { text-decoration: underline; text-underline-offset: 0.25em; }
+:root[data-color-mode="accessible"] details[open] > summary { text-decoration-thickness: 2px; }
+
+@media (forced-colors: active) {
+  .site-language-link[aria-current="page"], .site-color-toggle[aria-pressed="true"] { outline: 2px solid Highlight; outline-offset: -3px; }
+  .site-color-toggle, .site-color-state { border-color: ButtonText; background: ButtonFace; color: ButtonText; }
+}

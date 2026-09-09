@@ -1,9 +1,12 @@
 import Image from "next/image";
 
 import profilePhoto from "@/assets/photo-profil-christopher-vallot.webp";
+import type { Locale } from "@/i18n/config";
+import { projectMessages } from "@/i18n/messages/projects";
 
 interface ProfilePortraitProps {
   className?: string;
+  locale?: Locale;
 }
 
 /**
@@ -12,14 +15,16 @@ interface ProfilePortraitProps {
  */
 export function ProfilePortrait({
   className,
+  locale = "fr",
 }: ProfilePortraitProps) {
+  const messages = projectMessages[locale];
   const classes = ["profile-portrait", className].filter(Boolean).join(" ");
 
   return (
     <div className={classes}>
       <div className="profile-portrait-frame">
         <Image
-          alt="Portrait de Christopher Vallot"
+          alt={messages.portraitAlt}
           className="profile-portrait-image"
           fill
           placeholder="blur"
@@ -29,10 +34,10 @@ export function ProfilePortrait({
         />
         <div className="profile-portrait-caption" aria-hidden="true">
           <span>
-            <i aria-hidden="true" /> Profil / Data
+            <i aria-hidden="true" /> {messages.portraitLabel}
           </span>
           <strong>Christopher Vallot</strong>
-          <small>Consultant Data &amp; BI Freelance · Tours</small>
+          <small>{messages.portraitRole}</small>
         </div>
       </div>
     </div>
