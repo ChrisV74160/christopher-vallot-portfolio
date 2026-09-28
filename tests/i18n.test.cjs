@@ -8,14 +8,15 @@ const { isLocale, stripLocale, localizedHref, languageAlternates } = load("i18n/
 const { getContent, getLocalizedProjectBySlug } = load("i18n/content.ts");
 const { contactMessages } = load("i18n/messages/contact.ts");
 const { projectMessages } = load("i18n/messages/projects.ts");
-const { visualMessages } = load("i18n/messages/visuals.ts");
+const { sectionMessages } = load("i18n/messages/sections.ts");
+const { pageMessages } = load("i18n/messages/pages.ts");
 const french = getContent("fr");
 const english = getContent("en");
 const { pageRoutes, isKnownPagePath } = load("i18n/routes.ts");
 
 test("The page registry includes every case and keeps unknown routes distinct", () => {
   assert.equal(new Set(pageRoutes.map(({ path }) => path)).size, pageRoutes.length);
-  assert.equal(pageRoutes.filter(({ indexable }) => indexable).length, 9);
+  assert.equal(pageRoutes.filter(({ indexable }) => indexable).length, french.projects.length + 4);
   for (const { path } of pageRoutes) assert.equal(isKnownPagePath(path), true, path);
   for (const { slug } of french.projects) assert.equal(isKnownPagePath(`/projets/${slug}`), true);
   for (const path of ["/missing", "/projets/missing", "/contact/extra", "/api/contact", "/icon.png"]) {
@@ -75,8 +76,8 @@ test("Every translated content collection preserves the French structure", () =>
   assert.deepEqual(structure(english), structure(french));
 });
 
-test("Both languages expose the same five projects, technologies and featured cases", () => {
-  assert.equal(french.projects.length, 5);
+test("Both languages expose the same six projects, technologies and featured cases", () => {
+  assert.equal(french.projects.length, 6);
   assert.deepEqual(english.projects.map((item) => item.slug), french.projects.map((item) => item.slug));
   assert.deepEqual(english.featuredProjects.map((item) => item.slug), french.featuredProjects.map((item) => item.slug));
   for (const project of french.projects) {
@@ -101,15 +102,12 @@ test("Translation preserves identity, links, organisations and experience identi
   }
 });
 
-test("Service, FAQ and engagement identifiers stay language-independent", () => {
-  for (const key of ["services", "faqItems", "interventionCases", "missionFormats"]) {
+test("Service identifiers stay language-independent", () => {
+  for (const key of ["services"]) {
     assert.deepEqual(english[key].map((item) => item.id), french[key].map((item) => item.id));
   }
 });
 
 test("Shared form, case and visual dictionaries have matching keys and counts", () => {
-  for (const dictionary of [contactMessages, projectMessages, visualMessages]) assert.deepEqual(structure(dictionary.fr), structure(dictionary.en));
-  assert.equal(visualMessages.fr.pipeline.steps.length, 4);
-  assert.equal(visualMessages.en.pipeline.steps.length, 4);
-  assert.equal(visualMessages.en.expertise.domains.length, 4);
+  for (const dictionary of [contactMessages, projectMessages, sectionMessages, pageMessages]) assert.deepEqual(structure(dictionary.fr), structure(dictionary.en));
 });

@@ -10,12 +10,12 @@ export default function manifest(): MetadataRoute.Manifest {
       "Intégration et fiabilisation des données, automatisation de traitements, Data Quality, Python, SQL et Power BI.",
     start_url: "/",
     display: "standalone",
-    background_color: "#020812",
-    theme_color: "#020812",
+    background_color: "#ffffff",
+    theme_color: "#003f5c",
     lang: "fr",
     icons: [
       {
-        src: "/icon.png",
+        src: icon.src,
         sizes: `${icon.width}x${icon.height}`,
         type: "image/png",
       },

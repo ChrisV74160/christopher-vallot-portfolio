@@ -1,14 +1,17 @@
-import { DataBrandIcon } from "./data-brand-icon";
+import Image from "next/image";
 
-/**
- * Compact code-native identity used in navigation areas. The surrounding link
- * already carries the accessible name, so the glyph is intentionally
- * decorative.
- */
-export function IdentityMark() {
+/** Shared header/footer mark, generated from the corrected brand master. */
+export function IdentityMark({ priority = false }: { priority?: boolean }) {
   return (
-    <span aria-hidden="true" className="wordmark-mark">
-      <DataBrandIcon className="identity-glyph" />
-    </span>
+    <Image
+      src="/brand/owl.webp"
+      alt=""
+      aria-hidden="true"
+      className="wordmark-icon"
+      width={48}
+      height={48}
+      priority={priority}
+      unoptimized
+    />
   );
 }

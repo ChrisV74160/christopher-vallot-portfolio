@@ -23,20 +23,22 @@ export function ProfilePortrait({
   return (
     <div className={classes}>
       <div className="profile-portrait-frame">
-        <Image
-          alt={messages.portraitAlt}
-          className="profile-portrait-image"
-          fill
-          placeholder="blur"
-          quality={90}
-          sizes="(max-width: 48rem) 17rem, 21rem"
-          src={profilePhoto}
-        />
+        <div className="profile-portrait-photo">
+          <Image
+            alt={messages.portraitAlt}
+            className="profile-portrait-image"
+            fill
+            placeholder="blur"
+            quality={90}
+            sizes="(max-width: 48rem) 17rem, 21rem"
+            src={profilePhoto}
+          />
+        </div>
         <div className="profile-portrait-caption" aria-hidden="true">
           <span>
             <i aria-hidden="true" /> {messages.portraitLabel}
           </span>
-          <strong>Christopher Vallot</strong>
+          <strong>Christopher VALLOT</strong>
           <small>{messages.portraitRole}</small>
         </div>
       </div>

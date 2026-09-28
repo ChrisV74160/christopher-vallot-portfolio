@@ -3,10 +3,10 @@ import { sectionMessages } from "@/i18n/messages/sections";
 import { getContent } from "@/i18n/content";
 import { ArrowDownToLine, ArrowUpRight } from "lucide-react";
 
-import { Reveal } from "@/components/animations/reveal";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Container } from "@/components/ui/container";
 import { ProfilePortrait } from "@/components/ui/profile-portrait";
+import { AlignmentArtwork } from "@/components/visuals/data-artwork";
 
 export function AboutSection({ locale = "fr" }: { locale?: Locale }) {
   const t = sectionMessages[locale].about;
@@ -15,7 +15,7 @@ export function AboutSection({ locale = "fr" }: { locale?: Locale }) {
   return (
     <section className="section-shell section-shell--compact" id="a-propos" aria-labelledby="about-title">
       <Container>
-        <Reveal className="about-panel">
+        <div className="about-panel">
           <div className="about-grid">
             <ProfilePortrait locale={locale} />
             <div className="about-copy">
@@ -26,6 +26,7 @@ export function AboutSection({ locale = "fr" }: { locale?: Locale }) {
                 {t.description}</p>
               <p>
                 {t.approach}</p>
+              <AlignmentArtwork locale={locale} />
               <div className="button-row">
                 <ButtonLink
                   href={profile.contact.linkedinUrl}
@@ -41,7 +42,7 @@ export function AboutSection({ locale = "fr" }: { locale?: Locale }) {
               </div>
             </div>
           </div>
-        </Reveal>
+        </div>
       </Container>
     </section>
   );

@@ -1,4 +1,3 @@
-import { localizedHref } from "@/i18n/config";
 import { requireLocale, type LocalePageProps } from "@/i18n/server";
 import { pageMetadata } from "@/i18n/metadata";
 import { metaMessages } from "@/i18n/messages/meta";
@@ -7,14 +6,12 @@ import { getContent } from "@/i18n/content";
 import type { Metadata } from "next";
 import {
   ArrowDownToLine,
-  ArrowRight,
   ArrowUpRight,
   GraduationCap,
   Languages,
 } from "lucide-react";
-import Link from "next/link";
 
-import { Reveal } from "@/components/animations/reveal";
+import { ExperienceItem } from "@/components/experience-item";
 import { ContactCta } from "@/components/contact-cta";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Container } from "@/components/ui/container";
@@ -31,7 +28,8 @@ export async function generateMetadata({ params }: LocalePageProps): Promise<Met
 export default async function AboutPage({ params }: LocalePageProps) {
   const locale = requireLocale((await params).locale);
   const t = pageMessages[locale].about;
-  const { education, experiences, languages, profile, softSkills } = getContent(locale);
+  const contact = pageMessages[locale].project;
+  const { education, experiences, languages, profile, workPrinciples } = getContent(locale);
   return (
     <div className="about-page">
       <section className="page-hero" aria-labelledby="about-page-title">
@@ -89,32 +87,8 @@ export default async function AboutPage({ params }: LocalePageProps) {
             description={t.careerDescription}
           />
           <div className="timeline">
-            {experiences.map((experience, index) => (
-              <Reveal className="timeline-item" delay={index * 0.04} key={experience.id}>
-                <time>{experience.period}<br />{experience.location}</time>
-                <div>
-                  <h3>{experience.role} · {experience.company}</h3>
-                  <p>{experience.summary}</p>
-                  <ul className="case-list">
-                    {experience.highlights.map((highlight) => (
-                      <li key={highlight}>{highlight}</li>
-                    ))}
-                  </ul>
-                  <div className="timeline-tags">
-                    {experience.technologies.map((technology) => (
-                      <span className="badge" key={technology}>{technology}</span>
-                    ))}
-                  </div>
-                  {experience.caseStudySlug ? (
-                    <Link
-                      className="timeline-case-link"
-                      href={localizedHref(`/projets/${experience.caseStudySlug}`, locale)}
-                    >
-                      {t.caseLink}<ArrowRight aria-hidden="true" size={15} />
-                    </Link>
-                  ) : null}
-                </div>
-              </Reveal>
+            {experiences.map((experience) => (
+              <ExperienceItem key={experience.id} experience={experience} locale={locale} />
             ))}
           </div>
         </Container>
@@ -128,15 +102,14 @@ export default async function AboutPage({ params }: LocalePageProps) {
             title={t.qualitiesTitle}
             description={t.qualitiesDescription}
           />
-          <div className="problem-grid">
-            {softSkills.map((skill, index) => (
-              <Reveal className="problem-card" delay={index * 0.04} key={skill.name}>
-                <span className="card-index">0{index + 1}</span>
+          <div className="work-principles">
+            {workPrinciples.map((skill) => (
+              <div className="work-principle" key={skill.name}>
                 <div>
-                  <h3>{skill.name}</h3>
+                  <strong>{skill.name}</strong>
                   <p>{skill.description}</p>
                 </div>
-              </Reveal>
+              </div>
             ))}
           </div>
         </Container>
@@ -154,9 +127,8 @@ export default async function AboutPage({ params }: LocalePageProps) {
               <div className="problem-card" key={item.degree}>
                 <span className="service-icon"><GraduationCap aria-hidden="true" size={20} /></span>
                 <div>
-                  <h3>{item.degree} · {item.institution}</h3>
+                  <strong>{item.degree} · {item.institution}</strong>
                   <p>{item.period} · {item.location}</p>
-                  <p>{item.description}</p>
                 </div>
               </div>
             ))}
@@ -164,7 +136,7 @@ export default async function AboutPage({ params }: LocalePageProps) {
               <div className="problem-card" key={language.name}>
                 <span className="service-icon"><Languages aria-hidden="true" size={20} /></span>
                 <div>
-                  <h3>{language.name}</h3>
+                  <strong>{language.name}</strong>
                   <p>{language.description}</p>
                 </div>
               </div>
@@ -176,11 +148,12 @@ export default async function AboutPage({ params }: LocalePageProps) {
       <section className="section-shell section-shell--compact about-final-contact">
         <Container>
           <ContactCta
+            variant="similar"
             locale={locale}
-            description={t.contactDescription}
-            eyebrow={t.contactLabel}
+            description={contact.contactDescription}
+            eyebrow={contact.contactLabel}
             headingId="about-contact-title"
-            title={t.contactTitle}
+            title={contact.contactTitle}
           />
         </Container>
       </section>

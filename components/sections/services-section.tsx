@@ -1,87 +1,47 @@
-import { localizedHref, type Locale } from "@/i18n/config";
+import { type Locale } from "@/i18n/config";
 import { sectionMessages } from "@/i18n/messages/sections";
 import { getContent } from "@/i18n/content";
-import {
-  BarChart3,
-  DatabaseZap,
-  ScanSearch,
-  ShieldCheck,
-  Workflow,
-  type LucideIcon,
-} from "lucide-react";
-
-import { Reveal } from "@/components/animations/reveal";
-import { ButtonLink } from "@/components/ui/button-link";
+import { ChartNoAxesCombined, Combine, ShieldCheck, Workflow, type LucideIcon } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { SectionHeading } from "@/components/ui/section-heading";
+import { TechnologyIcon } from "@/components/ui/technology-icon";
 import type { ServiceId } from "@/types/content";
+import { ServicesArtwork } from "@/components/visuals/data-artwork";
 
 const icons = {
-  "business-intelligence": BarChart3,
-  "analyse-donnees": ScanSearch,
+  "business-intelligence": ChartNoAxesCombined,
   "data-quality": ShieldCheck,
   automatisation: Workflow,
-  "integration-consolidation": DatabaseZap,
+  "integration-consolidation": Combine,
 } satisfies Record<ServiceId, LucideIcon>;
 
 export function ServicesSection({ locale = "fr" }: { locale?: Locale }) {
   const t = sectionMessages[locale].services;
-  const { missionFormats, services } = getContent(locale);
-
+  const { services } = getContent(locale);
   return (
     <section className="section-shell" id="services" aria-labelledby="services-title">
       <Container>
-        <SectionHeading
-          eyebrow={t.label}
-          headingId="services-title"
-          title={t.title}
-          description={t.description}
-        />
+        <SectionHeading eyebrow={t.label} headingId="services-title" title={t.title} description={t.description} />
+        <ServicesArtwork locale={locale} />
         <div className="service-grid">
-          {services.map((service, index) => {
+          {services.map((service) => {
             const Icon = icons[service.id];
             return (
-              <Reveal className="service-card" delay={index * 0.05} key={service.id}>
-                <div className="service-icon">
-                  <Icon aria-hidden="true" size={20} strokeWidth={1.8} />
-                </div>
+              <article className="service-card" key={service.id}>
+                <div className="service-icon"><Icon aria-hidden="true" size={32} strokeWidth={1.65} /></div>
                 <h3>{service.title}</h3>
-                <div className="service-block">
-                  <span className="service-block-label">{t.problem}</span>
-                  <p>{service.problem}</p>
-                </div>
-                <div className="service-block">
-                  <span className="service-block-label">{t.intervention}</span>
-                  <p>{service.intervention}</p>
-                </div>
-                <ul className="service-deliverables" aria-label={t.deliverables}>
-                  {service.deliverables.map((deliverable) => (
-                    <li key={deliverable}>{deliverable}</li>
+                <p className="service-problem">{service.problem}</p>
+                <p>{service.intervention}</p>
+                <p className="service-outcome"><strong>{t.outcome}</strong>{service.outcome}</p>
+                <ul className="service-deliverables" aria-label={t.technologies}>
+                  {service.technologies.map((technology) => (
+                    <li key={technology}><TechnologyIcon name={technology} size={18} />{technology}</li>
                   ))}
                 </ul>
-              </Reveal>
+              </article>
             );
           })}
         </div>
-        <Reveal className="mission-formats">
-          <div className="mission-formats__heading">
-            <div>
-              <p className="eyebrow">{t.formats}</p>
-              <h3>{t.formatsTitle}</h3>
-            </div>
-            <ButtonLink href={localizedHref("/contact", locale)} variant="secondary">
-              {t.contact}</ButtonLink>
-          </div>
-          <ol className="mission-format-list">
-            {missionFormats.map((format, index) => (
-              <li className="mission-format-item" key={format.id}>
-                <span>0{index + 1}</span>
-                <strong>{format.title}</strong>
-                <p>{format.description}</p>
-              </li>
-            ))}
-          </ol>
-        </Reveal>
       </Container>
     </section>
   );

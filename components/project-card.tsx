@@ -18,12 +18,8 @@ export function ProjectCard({ project, locale = "fr" }: ProjectCardProps) {
 
   return (
     <article className="project-card">
-      <Link
-        className="project-card-link"
-        href={localizedHref(`/projets/${project.slug}`, locale)}
-        aria-labelledby={titleId}
-      >
-        <ProjectVisual variant={project.visualVariant} locale={locale} />
+      <div className="project-card-body">
+        <ProjectVisual variant={project.visualVariant} />
 
         <div className="project-card-content">
           <div className="project-card-topline">
@@ -36,23 +32,10 @@ export function ProjectCard({ project, locale = "fr" }: ProjectCardProps) {
 
           <h3 id={titleId}>{project.title}</h3>
 
-          <dl className="project-card-evidence">
-            <div>
-              <dt>{messages.context}</dt>
-              <dd>{project.context}</dd>
-            </div>
-            <div>
-              <dt>{messages.intervention}</dt>
-              <dd>{project.shortSummary}</dd>
-            </div>
-            <div>
-              <dt>{messages.result}</dt>
-              <dd>{project.result}</dd>
-            </div>
-          </dl>
+          <p className="project-card-summary">{project.shortSummary}</p>
 
           <ul className="project-stack" aria-label={messages.technologies}>
-            {project.technologies.map((technology) => (
+            {project.technologies.slice(0, 4).map((technology) => (
               <li key={technology}>
                 <TechnologyIcon name={technology} size={14} />
                 <span>{technology}</span>
@@ -60,12 +43,16 @@ export function ProjectCard({ project, locale = "fr" }: ProjectCardProps) {
             ))}
           </ul>
 
-          <span className="project-link-label">
+          <Link
+            className="project-link-label project-card-link"
+            href={localizedHref(`/projets/${project.slug}`, locale)}
+          >
             {messages.viewCase}
+            <span className="sr-only"> — {project.title}</span>
             <ArrowUpRight size={18} strokeWidth={1.8} aria-hidden="true" />
-          </span>
+          </Link>
         </div>
-      </Link>
+      </div>
     </article>
   );
 }

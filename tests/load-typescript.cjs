@@ -16,7 +16,7 @@ function createTypeScriptLoader({ mocks = {} } = {}) {
   const cache = new Map();
 
   function resolveSource(sourcePath) {
-    const candidates = [sourcePath, `${sourcePath}.ts`, path.join(sourcePath, "index.ts")];
+    const candidates = [sourcePath, `${sourcePath}.ts`, `${sourcePath}.tsx`, path.join(sourcePath, "index.ts")];
     const filename = candidates.find((candidate) => fs.existsSync(candidate) && fs.statSync(candidate).isFile());
     if (!filename) throw new Error(`Test source not found: ${sourcePath}`);
     return filename;
@@ -31,6 +31,7 @@ function createTypeScriptLoader({ mocks = {} } = {}) {
       compilerOptions: {
         module: ts.ModuleKind.CommonJS,
         target: ts.ScriptTarget.ES2022,
+        jsx: ts.JsxEmit.ReactJSX,
         esModuleInterop: true,
       },
     });

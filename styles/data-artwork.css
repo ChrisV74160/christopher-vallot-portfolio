@@ -1,0 +1,107 @@
+/* Flat data illustrations: shared primitives, no motion, no client state. */
+.data-artwork { display: block; width: 100%; height: auto; overflow: visible; pointer-events: none; }
+.hero-grid { display: grid; width: 100%; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); align-items: center; gap: clamp(2rem, 4vw, 4rem); }
+.hero-copy { text-align: left; }
+.hero-positioning, .hero-lead, .hero-proof, .hero-tagline { margin-inline: 0; }
+.hero-proof-list, .hero-actions, .hero-meta { justify-content: flex-start; }
+.hero-artwork { max-width: 35rem; justify-self: end; }
+
+.services-artwork { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
+.pipeline-tile { position: relative; display: flex; min-width: 0; flex-direction: column; align-items: center; justify-content: space-between; gap: 1rem; border: 1px solid var(--brand-secondary); border-radius: var(--radius-md); padding: 1.2rem 0.5rem; background: var(--surface); color: var(--brand-primary); }
+.pipeline-tile > span { font-size: 0.8125rem; font-weight: 650; text-align: center; overflow-wrap: anywhere; }
+.pipeline-tile > svg { width: 5.6rem; max-width: 100%; height: 3.2rem; color: var(--brand-secondary); }
+.pipeline-tile:not(:last-child)::after { position: absolute; top: 55%; left: calc(100% + 0.35rem); width: 0.65rem; height: 0.65rem; border-top: 2px solid var(--brand-tertiary); border-right: 2px solid var(--brand-tertiary); rotate: 45deg; content: ""; }
+
+/* Compact cards, full-width panoramic case banners; SVG diagrams keep their proportions. */
+.case-visual-wrap { width: 100%; margin-inline: 0; }
+.project-card .project-visual:has(.case-illustration) { min-height: 0; aspect-ratio: 25 / 17; }
+.case-visual-wrap .project-visual--case { min-height: 0; aspect-ratio: 5 / 2; }
+.project-visual:has(.case-illustration)::before { content: none; }
+.case-illustration { position: absolute; inset: 0; }
+.mission-artwork { position: absolute; inset: 0; z-index: 1; display: block; width: 100%; height: 100%; pointer-events: none; }
+.project-visual--case::before { content: none; }
+/* Homepage geometry (500 x 340), scaled by height, not by panoramic banner width.
+   Only the central teal space grows wider; corner circles never zoom or stretch. */
+.case-scene-background { position: absolute; inset: 0; container-type: size; overflow: hidden; background: var(--brand-secondary); pointer-events: none; }
+.case-scene-background > span { position: absolute; aspect-ratio: 1; border-radius: 50%; transform: translate(-50%, -50%); }
+.case-scene-background__top { left: 0; top: -8.823529%; width: 97.058824cqh; background: var(--brand-primary); }
+.case-scene-background__orange { left: calc(100% - 5.882353cqh); top: 37.647059%; width: 37.647059cqh; background: var(--brand-action); }
+.case-scene-background__bottom { left: calc(100% - 11.764706cqh); top: 127.941176%; width: 126.470588cqh; background: var(--brand-primary); }
+.case-scene-background__green { left: -4.411765cqh; top: 105.882353%; width: 73.529412cqh; background: var(--brand-quality); }
+.case-scene-background__lime { left: 12.352941cqh; top: 114.705882%; width: 55.882353cqh; background: var(--brand-tertiary); }
+.alignment-artwork { display: block; width: min(100%, 28rem); height: auto; margin-block: 1.4rem; color: var(--ink); }
+
+.contact-panel { grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr); column-gap: clamp(2rem, 4vw, 3.5rem); row-gap: 0.5rem; padding: clamp(1.5rem, 3vw, 2.75rem); }
+.contact-panel::before { inset: -19rem -21rem auto auto; width: 42rem; height: 42rem; transform: none; }
+.contact-panel::after { inset: -18rem -23rem auto auto; width: 42rem; height: 42rem; transform: none; }
+.contact-panel > .contact-copy { grid-column: 1; grid-row: 1; }
+.contact-panel .contact-copy :is(h1, h2) { max-width: 22ch; font-size: clamp(2rem, 3vw, 3rem); line-height: 1.12; }
+.contact-title-accent { color: var(--brand-tertiary); white-space: nowrap; }
+.contact-panel .contact-copy .eyebrow { margin-bottom: 1rem; }
+.contact-panel .contact-copy p { margin-top: 1rem; line-height: 1.6; }
+.contact-panel .contact-direct { display: grid; gap: 0.25rem; margin-top: 1.25rem; padding-top: 0.75rem; }
+.contact-panel .contact-direct a { display: grid; grid-template-columns: 1.25rem minmax(0, 1fr) 1rem; gap: 0.75rem; width: fit-content; min-height: 2.75rem; text-decoration: none; }
+.contact-panel .contact-direct a span { overflow-wrap: anywhere; text-decoration: underline; text-decoration-color: var(--brand-secondary); text-underline-offset: 0.3em; }
+.contact-panel .contact-direct a:hover span { text-decoration-color: var(--brand-action); }
+.contact-panel .contact-direct a > svg:first-child { color: var(--brand-action); }
+.contact-panel > .contact-artwork { grid-column: 1; grid-row: 2; align-self: end; max-width: 29rem; margin-inline: auto; }
+.contact-panel > .contact-form { grid-column: 2; grid-row: 1 / 3; align-self: start; }
+.contact-panel .contact-form { grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); padding: clamp(1rem, 2vw, 1.75rem); gap: 1.3rem 1.2rem; }
+.contact-panel .form-field { min-width: 0; }
+.contact-panel :is(.form-field--full, .form-submit-row) { grid-column: 1 / -1; }
+.contact-control { position: relative; min-width: 0; }
+.contact-control > svg { position: absolute; top: 1rem; left: 0.9rem; color: var(--brand-secondary); pointer-events: none; }
+.contact-control :is(input, select, textarea) { display: block; padding-left: 2.65rem; }
+.contact-control :is(input, select) { min-height: 3.3rem; }
+.contact-control select { padding-right: 2rem; }
+.contact-panel .form-field textarea { min-height: 11rem; }
+.contact-panel .form-submit-row { flex-direction: column; align-items: flex-start; gap: 1.25rem; }
+.contact-panel .form-note { max-width: none; margin: 0; }
+.contact-cta { grid-template-columns: minmax(0, 1fr) minmax(15rem, 0.65fr); row-gap: 1.5rem; }
+.contact-cta__copy { grid-column: 1; grid-row: 1; }
+.contact-cta > .button-link { grid-column: 1; grid-row: 2; justify-self: start; }
+.contact-cta .cta-artwork { grid-column: 2; grid-row: 1 / 3; max-width: 24rem; justify-self: end; }
+.contact-cta--similar { isolation: isolate; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); column-gap: 1rem; row-gap: 1.25rem; padding: clamp(1.5rem, 3vw, 2.5rem); }
+.contact-cta--similar h2 { max-width: 21ch; font-size: clamp(1.9rem, 3vw, 2.75rem); line-height: 1.12; text-wrap: pretty; }
+.contact-cta__accent { color: var(--brand-tertiary); }
+.contact-cta--similar .cta-artwork { width: 100%; max-width: 34rem; align-self: center; }
+.contact-cta--similar .contact-cta__copy > p:last-child { max-width: 48ch; font-size: 0.9375rem; }
+
+@media (min-width: 70.001rem) {
+  .contact-panel { grid-template-rows: auto 1fr; }
+  .contact-panel > .contact-artwork { align-self: start; }
+}
+
+@media (max-width: 70rem) {
+  .contact-panel { grid-template-columns: minmax(0, 1fr) minmax(12rem, 0.65fr); row-gap: 1.5rem; }
+  .contact-panel > .contact-artwork { grid-column: 2; grid-row: 1; align-self: center; }
+  .contact-panel > .contact-form { grid-column: 1 / -1; grid-row: 2; }
+}
+@media (max-width: 64rem) {
+  .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
+  .hero-artwork { justify-self: center; max-width: 25rem; }
+  .services-artwork { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .pipeline-tile:nth-child(3)::after { content: none; }
+}
+@media (max-width: 48rem) {
+  .case-visual-wrap .project-visual--case { aspect-ratio: 16 / 10; }
+  .contact-panel { grid-template-columns: minmax(0, 1fr); padding: 1.25rem; }
+  .contact-panel > .contact-form { grid-column: 1; grid-row: 2; }
+  .contact-panel > .contact-artwork { grid-column: 1; grid-row: 3; max-width: 22rem; margin-top: 0.5rem; }
+  .hero-artwork { max-width: 21rem; }
+  .services-artwork { gap: 1rem; margin-bottom: 1.5rem; }
+  .pipeline-tile { padding: 0.9rem 0.4rem; border-radius: var(--radius-sm); }
+  .pipeline-tile > span { font-size: 0.75rem; }
+  .pipeline-tile > svg { width: 4.4rem; height: 2.5rem; }
+  .pipeline-tile:not(:last-child)::after { left: calc(100% + 0.15rem); width: 0.5rem; height: 0.5rem; }
+  .contact-cta { grid-template-columns: minmax(0, 1fr); }
+  .contact-cta .cta-artwork { grid-column: 1; grid-row: 3; max-width: 18rem; justify-self: center; }
+  .contact-cta--similar { grid-template-columns: minmax(0, 1fr); }
+  .contact-cta--similar .cta-artwork { max-width: 26rem; }
+}
+
+@media (max-width: 30rem) {
+  .contact-panel { padding-inline: 0.75rem; }
+  .contact-control > svg { display: none; }
+  .contact-control :is(input, select, textarea) { padding-left: 0.75rem; }
+}

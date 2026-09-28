@@ -28,12 +28,10 @@ function createContactFormSchema(locale: Locale) {
   }).strict();
 }
 
-// Build once per locale; the legacy French export keeps existing callers compatible.
+// Build once per locale; the French schema also validates the delivery address.
 const schemas = { fr: createContactFormSchema("fr"), en: createContactFormSchema("en") };
 export function getContactFormSchema(locale: Locale = "fr") {
   return schemas[locale];
 }
 
 export const contactFormSchema = schemas.fr;
-export const contactSchema = contactFormSchema;
-export type ContactFormData = z.output<typeof contactFormSchema>;

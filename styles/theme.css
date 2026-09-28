@@ -1,0 +1,75 @@
+/* Exact brand palette: opaque colours only, no mixed or translucent surfaces. */
+:root {
+  color-scheme: light;
+  --brand-primary: #003f5c;
+  --brand-secondary: #006572;
+  --brand-quality: #008b56;
+  --brand-tertiary: #78a50a;
+  --brand-action: #ffa600;
+  --surface: #ffffff;
+  --radius-sm: 0.7rem;
+  --radius-md: 1.25rem;
+  --radius-lg: 1.75rem;
+  --surface-soft: var(--surface);
+  --text-secondary: var(--brand-primary);
+  --text-muted: var(--brand-secondary);
+  --border: var(--brand-secondary);
+  --border-strong: var(--brand-secondary);
+  --border-input: var(--brand-secondary);
+  --on-dark: var(--surface);
+  --focus: var(--brand-secondary);
+
+  /* Shared semantic aliases keep colour contrast consistent across components. */
+  --void: var(--surface);
+  --paper: var(--surface);
+  --paper-strong: var(--surface);
+  --ink: var(--brand-primary);
+  --ink-soft: var(--text-secondary);
+  --ink-faint: var(--text-muted);
+  --accent: var(--brand-secondary);
+  --accent-strong: var(--brand-secondary);
+  --electric: var(--brand-secondary);
+  --line: var(--border);
+  --line-strong: var(--border-strong);
+  --panel: var(--surface);
+  --panel-solid: var(--surface);
+}
+
+/* White text is reserved for navy/teal surfaces (not small text on green/lime). */
+#services,
+.about-panel,
+.contact-panel,
+.contact-cta,
+.project-visual,
+.footer,
+.profile-portrait-caption {
+  --ink: var(--surface);
+  --ink-soft: var(--surface);
+  --ink-faint: var(--surface);
+  --accent: var(--surface);
+  --accent-strong: var(--surface);
+  --electric: var(--surface);
+  --line: var(--brand-quality);
+  --line-strong: var(--surface);
+  --paper-strong: var(--brand-primary);
+  --panel-solid: var(--brand-primary);
+  --focus: var(--brand-action);
+  color: var(--ink);
+}
+
+/* Nested light cards reset the text palette. */
+.service-card,
+.contact-form {
+  --ink: var(--brand-primary);
+  --ink-soft: var(--brand-primary);
+  --ink-faint: var(--brand-secondary);
+  --accent: var(--brand-secondary);
+  --accent-strong: var(--brand-secondary);
+  --electric: var(--brand-secondary);
+  --line: var(--brand-secondary);
+  --line-strong: var(--brand-secondary);
+  --paper-strong: var(--surface);
+  --panel-solid: var(--surface);
+  --focus: var(--brand-secondary);
+  color: var(--ink);
+}

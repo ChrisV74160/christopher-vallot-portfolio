@@ -3,10 +3,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-import {
-  CaseStudyNavigation,
-  type CaseNavigationItem,
-} from "@/components/case-study-navigation";
 import { ContactCta } from "@/components/contact-cta";
 import { ProjectVisual } from "@/components/project-visual";
 import { TechnologyIcon } from "@/components/ui/technology-icon";
@@ -26,7 +22,6 @@ interface ProjectPageProps {
 interface CaseBlockProps {
   children: ReactNode;
   id: string;
-  index: string;
   title: string;
 }
 
@@ -44,12 +39,9 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   return pageMetadata(locale, { title: project.title, description: project.seoDescription, path: `/projets/${project.slug}`, type: "article" });
 }
 
-function CaseBlock({ children, id, index, title }: CaseBlockProps) {
+function CaseBlock({ children, id, title }: CaseBlockProps) {
   return (
     <section className="case-block" id={id} aria-labelledby={`${id}-title`}>
-      <span className="case-block-label">
-        {index} — {title}
-      </span>
       <h2 id={`${id}-title`}>{title}</h2>
       {children}
     </section>
@@ -70,14 +62,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const { slug, locale: requestedLocale } = await params;
   const locale = requireLocale(requestedLocale);
   const t = pageMessages[locale].project;
-const caseNavigation = [
-  { index: "01", label: t.context, id: "contexte-enjeu" },
-  { index: "02", label: t.objectives, id: "objectifs" },
-  { index: "03", label: t.sources, id: "sources-donnees" },
-  { index: "04", label: t.intervention, id: "intervention" },
-  { index: "05", label: t.result, id: "resultat" },
-  { index: "06", label: t.technologies, id: "technologies" },
-] as const satisfies readonly CaseNavigationItem[];
   const { projects } = getContent(locale);
   const project = getLocalizedProjectBySlug(locale, slug);
 
@@ -100,7 +84,7 @@ const caseNavigation = [
     keywords: project.technologies,
     creator: {
       "@type": "Person",
-      name: "Christopher Vallot",
+      name: "Christopher VALLOT",
     },
   };
 
@@ -130,75 +114,46 @@ const caseNavigation = [
             </div>
           </div>
 
-          <dl className="project-hero-facts" aria-label={t.summary}>
-            {project.heroMeta.map(({ label, value }) => (
-              <div key={label}>
-                <dt>{label}</dt>
-                <dd>{value}</dd>
-              </div>
-            ))}
-          </dl>
+          <p className="project-disclosure">{t.disclosure}</p>
         </div>
       </header>
 
       <div className="container-shell case-study">
-        <CaseStudyNavigation items={caseNavigation} locale={locale} />
 
         <article className="case-study-content">
           <figure className="case-visual-wrap">
             <ProjectVisual
-              locale={locale}
-              diagram={project.diagram}
+              detail
               variant={project.visualVariant}
             />
             <figcaption className="case-visual-caption">
               {t.caption}</figcaption>
           </figure>
 
-          <CaseBlock id="contexte-enjeu" index="01" title={t.context}>
+          <CaseBlock id="contexte-enjeu" title={t.context}>
             <p>{project.context}</p>
+            <div id="sources-donnees"><CaseList items={project.data} /></div>
+          </CaseBlock>
+
+          <CaseBlock id="enjeu" title={t.problem}>
             <p>{project.problem}</p>
           </CaseBlock>
 
-          <CaseBlock id="objectifs" index="02" title={t.objectives}>
+          <CaseBlock id="objectifs" title={t.objectives}>
             <CaseList items={project.objectives} />
           </CaseBlock>
 
-          <CaseBlock id="sources-donnees" index="03" title={t.sources}>
-            {project.dataGroups ? (
-              <div className="case-data-groups">
-                {project.dataGroups.map((group) => (
-                  <div key={group.label}>
-                    <h3>{group.label}</h3>
-                    <CaseList items={group.items} />
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <CaseList items={project.data} />
-            )}
-          </CaseBlock>
 
-          <CaseBlock id="intervention" index="04" title={t.intervention}>
+          <CaseBlock id="intervention" title={t.intervention}>
             <p>{project.intervention}</p>
             <CaseList items={project.method} />
           </CaseBlock>
 
-          <CaseBlock id="resultat" index="05" title={t.result}>
+          <CaseBlock id="resultat" title={t.result}>
             <p>{project.result}</p>
-            {project.resultHighlights ? (
-              <div className="case-result-highlights">
-                {project.resultHighlights.slice(0, 3).map((highlight) => (
-                  <div key={highlight.title}>
-                    <h3>{highlight.title}</h3>
-                    <p>{highlight.description}</p>
-                  </div>
-                ))}
-              </div>
-            ) : null}
           </CaseBlock>
 
-          <CaseBlock id="technologies" index="06" title={t.technologies}>
+          <CaseBlock id="technologies" title={t.technologies}>
             <ul className="project-stack" aria-label={t.technologiesUsed}>
               {project.technologies.map((technology) => (
                 <li key={technology}>
@@ -211,6 +166,7 @@ const caseNavigation = [
 
           <div className="case-study-closing">
             <ContactCta
+              variant="similar"
               locale={locale}
               description={t.contactDescription}
               eyebrow={t.contactLabel}

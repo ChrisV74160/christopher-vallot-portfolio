@@ -1,242 +1,199 @@
-import type {
-  Education,
-  Experience,
-  Language,
-  Profile,
-  SkillGroup,
-  SoftSkill,
-} from "@/types/content";
+import type { Education, Experience, Language, Profile, WorkPrinciple } from "@/types/content";
+import { identity } from "./identity";
+import { formatExperiencePeriod } from "@/i18n/format-period";
 
-/**
- * Professional content mirrors the supplied CV and the positioning explicitly
- * provided for LinkedIn. Keeping it centralised prevents pages and metadata
- * from drifting away from those reference sources.
- */
-export const experiences = [
+/** Facts checked against the supplied two-page CV. Organisations are professional assignments, not freelance client references. */
+const experienceFacts = [
   {
-    id: "cnav-data-analyst",
-    company: "CNAV",
-    role: "Data Analyst",
-    period: "Depuis juillet 2025",
-    location: "Tours",
-    summary:
-      "Migration, préparation, intégration et fiabilisation de données multi-sources.",
-    highlights: [
-      "Migration, préparation et intégration de données vers Cloudera et Teradata.",
-      "Développement et optimisation de traitements analytiques en Python, PySpark et SQL.",
-      "Mise en place de contrôles de Data Quality et de règles de détection d’anomalies.",
-      "Croisement, consolidation et fiabilisation de données multi-sources pour les besoins métier.",
+    "id": "cnav-data-analyst",
+    "company": "CNAV",
+    "employer": "Apside",
+    "startDate": "2025-07",
+    "endDate": null,
+    "role": "Data Analyst",
+    "location": "Tours",
+    "summary": "Au sein de la Data Factory de la CNAV, j’interviens sur des données multi-sources à intégrer et à migrer entre différents environnements.",
+    "interventions": [
+      "Traduction des règles métier et adaptation des traitements lors des migrations.",
+      "Développement d’un traitement de pseudonymisation et de rapprochement de données.",
+      "Création d’un outil de collecte automatisée de données publiques."
     ],
-    technologies: [
+    "technologies": [
       "Python",
       "PySpark",
       "SQL",
+      "Shell",
       "Cloudera",
       "Teradata",
       "Jenkins",
-      "GitLab",
+      "GitLab"
     ],
-    caseStudySlug: "migration-integration-donnees",
+    "caseStudySlug": "migration-integration-donnees"
   },
   {
-    id: "apside-ingenieur-etudes",
-    company: "Apside",
-    role: "Ingénieur d’études et de développement",
-    period: "Avril 2025 — juillet 2025",
-    location: "Saint-Pierre-des-Corps",
-    summary:
-      "Développement de solutions d’automatisation, de collecte et de structuration de données.",
-    highlights: [
-      "Développement de solutions d’automatisation et de collecte de données avec Python, Playwright et Web Scraping.",
-      "Structuration et transformation de données issues de sources hétérogènes, notamment CRM et contenus non structurés, vers JSON.",
-      "Conception d’un système de comparaison sémantique basé sur des LLM et d’une architecture modulaire et évolutive.",
+    "id": "apside-ingenieur-etudes",
+    "company": "Apside",
+    "employer": "Apside",
+    "startDate": "2025-04",
+    "endDate": "2025-06",
+    "role": "Ingénieur d’études et de développement",
+    "location": "Saint-Pierre-des-Corps",
+    "summary": "Au Pôle Innovation d’Apside, j’ai participé à des projets exploratoires autour de la collecte de données, de l’automatisation et de l’intelligence artificielle.",
+    "interventions": [
+      "Collecte documentaire sur des plateformes de marchés publics et structuration de contenus non structurés.",
+      "Exploitation de données CRM pour automatiser certaines affectations.",
+      "Développement d’un système de comparaison sémantique et d’une architecture modulaire pour faciliter les évolutions."
     ],
-    technologies: [
+    "technologies": [
       "Python",
       "Playwright",
-      "Web Scraping",
       "LLaMA",
       "JSON",
-      "GitLab",
+      "GitLab"
     ],
-    caseStudySlug: "automatisation-collecte-donnees",
+    "caseStudySlug": "automatisation-collecte-donnees"
   },
   {
-    id: "harmonie-mutuelle-data-analyst-2024",
-    company: "Harmonie Mutuelle",
-    role: "Data Analyst",
-    period: "Février 2024 — mars 2025",
-    location: "Angers",
-    summary:
-      "Intégration, automatisation, consolidation et contrôle de flux de données métier.",
-    highlights: [
-      "Développement et automatisation de traitements d’intégration de données en SAS, Python et PowerShell.",
-      "Extraction, transformation, consolidation et reconstitution de données issues de plusieurs flux métier.",
-      "Mise en place de contrôles de Data Quality et de rapprochements de données avec Power BI.",
-      "Automatisation des processus d’extraction et d’alimentation afin de fiabiliser et structurer les flux décisionnels.",
+    "id": "harmonie-mutuelle-data-analyst-2024",
+    "company": "Harmonie Mutuelle",
+    "employer": "Apside",
+    "startDate": "2024-02",
+    "endDate": "2025-03",
+    "role": "Data Analyst",
+    "location": "Angers",
+    "summary": "Au pôle décisionnel d’Harmonie Mutuelle, j’intervenais sur la fiabilité des flux de données liés à la santé et à la prévoyance.",
+    "interventions": [
+      "Évolution des traitements d’intégration, extraction, transformation et consolidation de plusieurs sources.",
+      "Contrôles de cohérence et rapprochement des données traitées.",
+      "Automatisation de la reconstitution de données et de l’alimentation du système décisionnel."
     ],
-    technologies: ["SAS", "Python", "SQL", "PowerShell", "Power BI"],
-    caseStudySlug: "integration-fiabilisation-flux-metier",
+    "technologies": [
+      "SAS",
+      "Python",
+      "SQL",
+      "PowerShell",
+      "Power BI"
+    ],
+    "caseStudySlug": "integration-fiabilisation-flux-metier"
   },
   {
-    id: "harmonie-mutuelle-data-analyst-datalab",
-    company: "Harmonie Mutuelle",
-    role: "Data Analyst",
-    period: "Mars 2022 — juillet 2023",
-    location: "Saint-Pierre-des-Corps",
-    summary:
-      "Analyse, préparation, intégration et restitution de données métier dans un Datalab.",
-    highlights: [
-      "Analyse, préparation et intégration de données métier dans un Datalab.",
-      "Création de datasets, analyse d’anomalies et fiabilisation des données.",
-      "Conception de rapports et dashboards Power BI avec DAX et Power Query.",
-      "Automatisation de reportings et amélioration de processus avec Power Automate.",
+    "id": "harmonie-mutuelle-data-analyst-datalab",
+    "company": "Harmonie Mutuelle",
+    "employer": "Apside",
+    "startDate": "2022-03",
+    "endDate": "2023-07",
+    "role": "Data Analyst",
+    "location": "Saint-Pierre-des-Corps",
+    "summary": "Chez Harmonie Mutuelle, j’intervenais dans un Datalab sur les besoins métier d’analyse, de reporting et de qualité des données.",
+    "interventions": [
+      "Analyse, intégration et structuration de jeux de données adaptés aux besoins métier.",
+      "Identification et correction d’anomalies dans les données.",
+      "Création de rapports et de tableaux de bord, puis automatisation de leur diffusion."
     ],
-    technologies: [
+    "technologies": [
       "Power BI",
       "DAX",
       "Power Query",
       "Power Automate",
       "SQL",
-      "Python",
+      "Python"
     ],
-    caseStudySlug: "reporting-power-bi-datalab",
+    "caseStudySlug": "reporting-power-bi-datalab"
   },
   {
-    id: "banque-de-france-ingenieur-etudes",
-    company: "Banque de France",
-    role: "Ingénieur d’études et développement",
-    period: "Novembre 2019 — juin 2021",
-    location: "Poitiers",
-    summary:
-      "Industrialisation et évolution d’un modèle de cotation d’entreprises appliqué au risque de crédit.",
-    highlights: [
-      "Contribution à l’industrialisation et à l’évolution d’un modèle de cotation d’entreprises appliqué à l’évaluation du risque de crédit.",
-      "Analyse, préparation et modélisation de données avec Python, Pandas, NumPy et Scikit-learn.",
-      "Développement de solutions de restitution et d’exploitation des modèles : webservice, visualisation et collecte automatisée de données.",
+    "id": "banque-de-france-ingenieur-etudes",
+    "company": "Banque de France",
+    "employer": "Apside",
+    "startDate": "2019-11",
+    "endDate": "2021-06",
+    "role": "Ingénieur d’études et développement",
+    "location": "Poitiers",
+    "summary": "Au pôle Intelligence Artificielle de la Banque de France, j’ai contribué à l’industrialisation d’un modèle de cotation d’entreprises pour l’évaluation du risque de crédit.",
+    "interventions": [
+      "Adaptation du modèle aux contraintes techniques et évolution des traitements associés.",
+      "Préparation et analyse des données nécessaires au fonctionnement du modèle.",
+      "Développement d’un webservice pour exposer le modèle."
     ],
-    technologies: [
+    "technologies": [
       "Python",
       "Pandas",
       "NumPy",
       "Scikit-learn",
       "Matplotlib",
-      "ONNX",
-      "Web Scraping",
+      "ONNX"
     ],
-    caseStudySlug: "industrialisation-modele-cotation",
+    "caseStudySlug": "industrialisation-modele-cotation"
   },
-] as const satisfies readonly Experience[];
+  {
+    "id": "dstny-developpeur-python",
+    "company": "Dstny",
+    "employer": "Dstny",
+    "startDate": "2018-11",
+    "endDate": "2019-03",
+    "role": "Développeur Python",
+    "location": "Saint-Avertin",
+    "summary": "Chez Dstny, j’intervenais sur la centralisation, le traitement et le contrôle de données provenant de plusieurs sources.",
+    "interventions": [
+      "Échanges avec les bases de données, récupération automatisée d’informations externes et génération de PDF.",
+      "Contrôles de cohérence et alertes sur les modifications de données.",
+      "Optimisation de certains traitements par exécution parallèle."
+    ],
+    "technologies": [
+      "Python",
+      "API",
+      "SQL",
+      "JSON"
+    ],
+    "caseStudySlug": "developpement-api-python-automatisation"
+  }
+] as const satisfies readonly Omit<Experience, "period">[];
+export type ExperienceId = (typeof experienceFacts)[number]["id"];
+export const experiences = experienceFacts.map((experience) => ({
+  ...experience, period: formatExperiencePeriod(experience.startDate, experience.endDate, "fr"),
+})) satisfies readonly Experience[];
+
+/** Case studies reuse the technical environment of their documented experience. */
+export function getExperienceById(id: ExperienceId): Experience {
+  const experience = experiences.find((item) => item.id === id);
+  if (!experience) throw new Error(`Unknown professional experience: ${id}`);
+  return experience;
+}
 
 export const education = [
   {
-    institution: "Université de Tours",
-    degree: "Licence Informatique",
-    period: "2015 — 2018",
-    location: "Tours",
-    description:
-      "Formation généraliste en informatique avec développement, bases de données, algorithmique et systèmes.",
-  },
+    "institution": "Université de Tours",
+    "degree": "Licence Informatique",
+    "period": "2015 — 2018",
+    "location": "Tours",
+    "description": "Formation généraliste en informatique avec développement, bases de données, algorithmique et systèmes."
+  }
 ] as const satisfies readonly Education[];
-
-export const skillGroups = [
+export const workPrinciples = [
   {
-    title: "Analyse & traitement",
-    skills: ["Python", "SQL", "SAS", "PySpark", "Pandas", "NumPy"],
+    "name": "Cadrer avant de construire",
+    "description": "Je pars du besoin métier, des sources disponibles et du résultat attendu pour définir ce qui est utile."
   },
   {
-    title: "BI & reporting",
-    skills: ["Power BI", "DAX", "Power Query", "Power Automate"],
+    "name": "Construire pour durer",
+    "description": "Je privilégie des traitements lisibles, reproductibles et simples à maintenir."
   },
   {
-    title: "Plateformes & qualité",
-    skills: [
-      "Cloudera",
-      "Teradata",
-      "Data Quality",
-      "Consolidation",
-      "Détection d’anomalies",
-    ],
-  },
-  {
-    title: "Automatisation & collecte",
-    skills: ["Playwright", "PowerShell", "Web Scraping", "JSON"],
-  },
-  {
-    title: "Modélisation & outillage",
-    skills: [
-      "Scikit-learn",
-      "Matplotlib",
-      "ONNX",
-      "LLaMA",
-      "GitLab",
-      "GitHub",
-      "Jenkins",
-    ],
-  },
-] as const satisfies readonly SkillGroup[];
-
-export const softSkills = [
-  {
-    name: "Esprit analytique",
-    description:
-      "Comprendre, structurer et résoudre des problématiques complexes.",
-  },
-  {
-    name: "Rigueur",
-    description:
-      "Veiller à la qualité, à la cohérence et à la fiabilité des données.",
-  },
-  {
-    name: "Autonomie",
-    description:
-      "Prendre en charge un sujet de l’analyse du besoin jusqu’à sa réalisation.",
-  },
-  {
-    name: "Adaptabilité",
-    description:
-      "Évoluer dans des environnements, outils et contextes métier variés.",
-  },
-  {
-    name: "Esprit de synthèse",
-    description:
-      "Transformer des données complexes en informations claires et exploitables.",
-  },
-  {
-    name: "Communication",
-    description:
-      "Échanger avec aisance avec les équipes techniques et métier.",
-  },
-] as const satisfies readonly SoftSkill[];
-
+    "name": "Rendre la donnée compréhensible",
+    "description": "Je documente les traitements et restitue l’information pour que les équipes puissent la comprendre et la reprendre."
+  }
+] as const satisfies readonly WorkPrinciple[];
 export const languages = [
   {
-    name: "Anglais",
-    description:
-      "Excellente compréhension écrite et orale, avec une expression orale de niveau intermédiaire.",
-  },
+    "name": "Anglais",
+    "description": "Très bonne compréhension écrite, expression orale intermédiaire."
+  }
 ] as const satisfies readonly Language[];
-
 export const profile = {
-  firstName: "Christopher",
-  lastName: "VALLOT",
-  fullName: "Christopher VALLOT",
-  role: "Consultant Data & BI Freelance",
-  headline: "Python • SQL • Power BI • Data Quality • Automatisation",
-  summary:
-    "Consultant Data & BI Freelance, j’aide les entreprises à fiabiliser leurs données, automatiser leurs traitements et construire des reportings exploitables. J’interviens de l’intégration et la consolidation des sources jusqu’à Power BI, avec Python, SQL et la Data Quality comme fil rouge.",
-  shortSummary:
-    "Consultant Data & BI Freelance à Tours. Je fiabilise les données, automatise les traitements et rends l’information exploitable avec Python, SQL et Power BI.",
-  location: "Tours",
+  ...identity,
+  role: "Consultant Data & BI freelance",
+  experienceLabel: "Plus de 6 ans d’expérience",
+  summary: "J’intègre, fiabilise et automatise vos données pour les rendre réellement exploitables.",
+  shortSummary: "Consultant Data & BI freelance à Tours. Intégration, Data Quality, automatisation et reporting Power BI, avec SQL et Python.",
   workModes: ["À distance", "Hybride", "Sur site"],
-  contact: {
-    email: "christopher.vallot@outlook.com",
-    linkedinUrl: "https://www.linkedin.com/in/christopher-vallot/",
-    cvUrl: "/cv-christopher-vallot.pdf",
-  },
-  experiences,
-  education,
-  languages,
-  skillGroups,
-  softSkills,
+  experiences, education, languages, workPrinciples,
 } as const satisfies Profile;

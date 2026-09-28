@@ -1,249 +1,145 @@
-# Portfolio Consultant Data & BI Freelance — Christopher Vallot
+# Christopher VALLOT — Consultant Data & BI freelance
 
-Portfolio professionnel de Christopher Vallot, Consultant Data & BI freelance
-spécialisé dans la transformation, la fiabilisation et l’automatisation des
-données avec Python, SQL et Power BI.
+Portfolio professionnel de [Christopher VALLOT](https://christophervallot.fr),
+basé à Tours. Le site présente mes services, six études de cas issues de mon
+parcours professionnel et un formulaire pour discuter d’un besoin Data & BI.
 
-Le site présente mes services, mon parcours et cinq études de cas issues de mes
-expériences professionnelles, sans divulguer de données internes ou
-confidentielles.
+## Objectif
 
-- [Profil LinkedIn](https://www.linkedin.com/in/christopher-vallot/)
-- [Dépôt GitHub](https://github.com/ChrisV74160/christopher-vallot-portfolio)
+Expliquer clairement mon accompagnement en intégration, Data Quality,
+automatisation et reporting Power BI. L’accueil met en avant quatre services,
+trois réalisations et la prise de contact, sans présenter les employeurs ou
+missions du parcours comme des clients freelance.
 
-## Fonctionnalités
+## Stack
 
-- présentation des expertises et services Data & BI.
-- parcours professionnel et études de cas détaillées.
-- interface responsive avec animations adaptées au défilement.
-- navigation clavier et prise en charge de `prefers-reduced-motion`.
-- versions française et anglaise, avec choix de langue conservé pendant la navigation.
-- mode couleurs accessibles mémorisé dans le navigateur.
-- formulaire de contact avec validation serveur, protection antispam et envoi
-  par Resend.
-- métadonnées, sitemap, `robots.txt`, manifeste et image Open Graph.
-
-## Stack technique
-
-- Next.js 16 avec App Router.
-- React 19 et TypeScript.
-- Motion pour les animations.
-- Zod pour la validation serveur.
-- Resend pour les e-mails.
-- CSS et Tailwind CSS 4.
-
-Les versions exactes sont définies dans `package.json` et verrouillées dans
-`package-lock.json`.
-
-## Langues et couleurs accessibles
-
-Le sélecteur **FR / EN** reste disponible sur ordinateur et dans le menu mobile.
-Il ouvre la même page dans l’autre langue en conservant les paramètres et l’ancre.
-Les deux versions partagent les mêmes pages et les mêmes slugs d’études de cas,
-avec un contenu traduit et un préfixe de langue : `/fr/projets` et `/en/projets`,
-par exemple. Les liens vers le CV et les services externes ne sont pas modifiés.
-Le CV téléchargeable reste le PDF français fourni.
-
-Les anciennes URL sans préfixe redirigent vers leur version française avec un
-statut **308**. L’accueil `/` utilise une redirection **307** vers la langue
-mémorisée, ou vers `/fr` sans préférence. La langue du navigateur n’impose aucune
-redirection automatique. Chaque page localisée possède ses métadonnées, son
-URL canonique et ses liens `hreflang`.
-
-Le réglage **Couleurs accessibles** conserve l’identité sombre du site et renforce
-les contrastes, les contours, les soulignements et les indications textuelles.
-Les états actifs, erreurs et confirmations restent compréhensibles autrement
-que par la couleur. Il s’agit d’une palette et de repères d’interface adaptés,
-sans filtre appliqué à toute la page.
-
-| Préférence | Mémorisation |
-| --- | --- |
-| Langue | Cookie `portfolio-locale`, enregistré lors d’un choix explicite, pendant un an. |
-| Couleurs | Stockage local `portfolio-colors`, valeur `default` ou `accessible`, jusqu’à son effacement dans le navigateur. |
-
-Le mode de couleurs enregistré est restauré avant le premier affichage pour
-éviter un changement de palette visible. Ces réglages ne servent ni à la mesure
-d’audience ni au suivi publicitaire. Leur fonctionnement est décrit dans la
-politique de confidentialité.
+Next.js 16 (App Router), React 19, TypeScript, CSS et Tailwind CSS 4.
+Lucide et React Icons pour les icônes, Zod pour la validation serveur,
+Resend pour les e-mails. Versions verrouillées dans `package-lock.json`.
 
 ## Installation locale
 
-### Prérequis
-
-- Node.js 20.9 ou plus récent.
-- npm.
-
-### Démarrage
+Node.js 20.9 minimum et npm.
 
 ```bash
-git clone https://github.com/ChrisV74160/christopher-vallot-portfolio.git
-cd christopher-vallot-portfolio
 npm ci
-```
-
-Créer ensuite le fichier d’environnement local.
-
-Sous Windows PowerShell :
-
-```powershell
-Copy-Item .env.example .env.local
-```
-
-Sous macOS ou Linux :
-
-```bash
 cp .env.example .env.local
-```
-
-Lancer le serveur :
-
-```bash
 npm run dev
 ```
 
-Le site est alors disponible sur <http://localhost:3000>.
+Sous PowerShell, remplacer la commande `cp` par
+`Copy-Item .env.example .env.local`. Ne pas écraser un `.env.local` existant.
+Ouvrir <http://localhost:3000> ; les pages sont disponibles en `/fr` et `/en`.
 
-Sans configuration Resend, le formulaire peut être validé en développement,
-mais aucun e-mail n’est envoyé.
+`.env.example` décrit les variables nécessaires. Sans Resend, le formulaire
+valide les données en développement mais n’envoie aucun e-mail. Les secrets
+restent côté serveur et les fichiers `.env.local` ne sont pas suivis.
 
-## Variables d’environnement
+## Commandes utiles
 
-Les valeurs locales d’exemple sont documentées dans `.env.example`.
-
-| Variable | Utilisation |
+| Commande | Usage |
 | --- | --- |
-| `NEXT_PUBLIC_SITE_URL` | Origine HTTPS utilisée pour les URL canoniques, le sitemap et `robots.txt`. |
-| `SITE_ENV` | Active l’indexation uniquement avec la valeur `production`. Toute preview doit utiliser `preview`. |
-| `RESEND_API_KEY` | Clé privée Resend utilisée uniquement par la route serveur de contact. |
-| `CONTACT_EMAIL` | Adresse destinataire des demandes. |
-| `CONTACT_FROM_EMAIL` | Expéditeur associé à un domaine vérifié dans Resend. |
+| `npm run dev` | Développement local |
+| `npm run lint` | ESLint |
+| `npm run typecheck` | Vérification TypeScript |
+| `npm test` | Tests du formulaire, des contenus, de l’i18n, des icônes et de l’indexation |
+| `npm run build` | Build de production |
+| `npm start` | Exécution du build |
+| `npm run icons:generate` | Régénération des icônes depuis le PNG maître |
 
-Ne jamais committer `.env.local`. Les secrets serveur ne doivent pas utiliser le
-préfixe `NEXT_PUBLIC_`.
+Les polices sont des piles système : aucun téléchargement externe de police.
+Les fichiers maîtres de marque et leurs scripts sont conservés dans `assets/`
+et `scripts/` ; seuls les dérivés utiles sont servis depuis `public/` et `app/`.
+Ne pas supprimer une source au seul motif qu’elle n’apparaît pas directement
+dans une page : les scripts et tests peuvent en dépendre.
 
-## Scripts disponibles
+Un build exige `NEXT_PUBLIC_SITE_URL` avec l’origine HTTPS publique.
+L’indexation est activée uniquement avec `SITE_ENV=production`, hors preview.
 
-| Commande | Description |
-| --- | --- |
-| `npm run dev` | Démarre le serveur de développement. |
-| `npm run lint` | Vérifie le code avec ESLint. |
-| `npm run typecheck` | Vérifie les types TypeScript. |
-| `npm test` | Lance les tests automatisés avec le moteur de test de Node.js. |
-| `npm run build` | Génère le build de production. |
-| `npm start` | Démarre le build de production. |
+## Architecture
 
-## Modifier le contenu
+- `app/[locale]/` : pages partagées FR/EN, métadonnées et layouts.
+- `app/api/contact/` : validation, antispam et envoi serveur.
+- `components/` : navigation, formulaire, sections et illustrations statiques.
+- `data/identity.ts` : identité et liens publics.
+- `data/profile.ts` : expériences, dates, technologies et formation.
+- `data/projects.ts` : six études de cas liées aux expériences par identifiant.
+- `data/services.ts` : quatre domaines d’intervention.
+- `data/legal-config.ts` : informations légales et de confidentialité.
+- `i18n/` : traductions, URLs, registre des pages et métadonnées.
+- `styles/` : palette centralisée dans `theme.css`, styles et responsive.
+- `public/` : CV, logos des technologies et déclinaisons du hibou.
+- `tests/` : tests automatisés avec le moteur de test Node.js.
 
-Les principales sources de contenu sont centralisées :
+Les faits communs du parcours ne sont pas recopiés dans les traductions.
+Les études de cas réutilisent les technologies de leur expérience source.
+Le CV français téléchargeable est `public/cv-christopher-vallot.pdf`.
+Les mentions d’attribution des logos sont dans `public/technologies/LICENSE.txt`.
 
-| Fichier | Contenu |
-| --- | --- |
-| `data/profile.ts` | Profil, coordonnées, parcours et compétences. |
-| `data/projects.ts` | Études de cas. |
-| `data/services.ts` | Services et formats de mission. |
-| `data/faq.ts` | Questions fréquentes. |
-| `data/legal-config.ts` | Informations légales et de confidentialité centralisées. |
-| `i18n/content.ts` | Sélection des données françaises ou anglaises avec `getContent(locale)`. |
-| `i18n/content/en/` et `i18n/content/en.ts` | Traductions anglaises du profil, des services, de la FAQ et des études de cas. |
-| `i18n/messages/` | Textes FR/EN de l’interface, des métadonnées, du formulaire et des pages légales. |
-| `public/cv-christopher-vallot.pdf` | CV proposé au téléchargement. |
-| `assets/photo-profil-christopher-vallot.webp` | Portrait affiché sur le site. |
+## FR / EN et accessibilité
 
-Les routes des études de cas sont générées à partir des slugs déclarés dans
-`data/projects.ts`.
+Les URLs canoniques utilisent `/fr` et `/en`. Le sélecteur conserve la page,
+les paramètres et l’ancre. Les anciennes URLs sans préfixe redirigent en 308
+vers le français. L’accueil `/` redirige en 307 selon la préférence mémorisée,
+ou vers `/fr`. Le registre `i18n/routes.ts` alimente le sitemap.
 
-Les pages partagent leurs composants dans `app/[locale]/`. Les règles d’URL
-sont centralisées dans `i18n/config.ts` et les redirections dans `proxy.ts`.
-Le registre `i18n/routes.ts` alimente le sitemap et distingue les pages existantes
-des URL inconnues, qui conservent un statut HTTP 404 et un affichage traduit.
-Lors de l’ajout d’une page, mettre ce registre à jour. Les nouvelles études de cas
-y sont ajoutées automatiquement depuis `data/projects.ts`.
-Pour modifier un texte, conserver la version française dans sa source puis
-mettre à jour son équivalent anglais. Les noms propres, technologies et slugs
-doivent rester identiques dans les deux langues. Les styles du mode couleurs
-accessibles se trouvent dans `styles/accessibility.css`.
+L’interface propose des focus visibles, des erreurs de formulaire associées
+aux champs et le respect de `prefers-reduced-motion`. Aucun mode de couleurs
+alternatif n’est nécessaire. Le cookie de langue dure un an. Aucun outil
+d’analytics n’est intégré.
 
-## Déploiement Netlify
+## Formulaire
 
-Netlify détecte automatiquement Next.js. Le projet utilise le rendu Next.js
-standard et la route serveur `/api/contact`, il ne doit donc pas être converti
-en export statique.
+Validation client et serveur, champ antispam invisible et non focalisable,
+contrôle de durée, limite de taille et limitation de débit en mémoire.
+Cette dernière n’est pas partagée entre instances. Aucun envoi réussi n’est
+annoncé lorsque le service d’e-mail est indisponible.
 
-### 1. Relier le dépôt
+Laisser les variables d’e-mail vides en développement pour tester sans envoi.
+En production, une configuration manquante renvoie une indisponibilité (503).
+Un test visuel avec réponse simulée ne valide pas la livraison réelle d’un e-mail.
 
-1. Dans Netlify, choisir **Add new site**, puis **Import an existing project**.
-2. Relier GitHub et sélectionner ce dépôt.
-3. Conserver la détection Next.js avec les réglages suivants.
+## Déploiement
 
-| Réglage | Valeur |
-| --- | --- |
-| Branche de production | `main` |
-| Base directory | vide |
-| Build command | `npm run build` |
-| Publish directory | `.next` |
-| Version de Node.js | version Netlify compatible avec la contrainte `>=20.9.0` de `package.json` |
+Le site est déployé automatiquement via Netlify à partir de la branche de
+production. L’intégration Next.js et la route serveur de contact sont conservées.
 
-Aucun plugin Next.js ni fichier `netlify.toml` n’est nécessaire pour cette
-configuration.
+Avant publication : exécuter lint, typecheck, tests et build ; configurer
+`NEXT_PUBLIC_SITE_URL` (origine HTTPS) et `SITE_ENV=production` au build.
+En preview, conserver `SITE_ENV=preview`. Côté serveur, renseigner
+`RESEND_API_KEY`, `CONTACT_EMAIL` et `CONTACT_FROM_EMAIL` avec un domaine
+d’envoi vérifié. Ne jamais préfixer ces secrets par `NEXT_PUBLIC_`.
+Valider un envoi réel sur l’hébergement et confirmer les informations légales
+dans `data/legal-config.ts` avant l’ouverture commerciale.
 
-### 2. Configurer les variables Netlify
-
-Ajouter les variables dans **Site configuration > Environment variables**.
-Ne jamais saisir de secret dans le dépôt ou dans `netlify.toml`.
-
-| Variable | Valeur attendue | Contextes | Scope |
-| --- | --- | --- | --- |
-| `NEXT_PUBLIC_SITE_URL` | URL principale du site, d’abord `https://<nom-du-site>.netlify.app`, puis le domaine personnalisé | Tous | Builds |
-| `SITE_ENV` | `production` | Production uniquement | Builds |
-| `SITE_ENV` | `preview` | Deploy Previews et Branch Deploys | Builds |
-| `RESEND_API_KEY` | Clé privée Resend | Production uniquement | Functions |
-| `CONTACT_EMAIL` | Adresse destinataire réelle | Production uniquement | Functions |
-| `CONTACT_FROM_EMAIL` | Expéditeur sur un domaine vérifié dans Resend | Production uniquement | Functions |
-
-`NEXT_PUBLIC_SITE_URL` doit toujours contenir l’URL publique principale, y
-compris pendant les builds de preview. Ne pas utiliser `DEPLOY_PRIME_URL`, qui
-produirait des URL canoniques temporaires.
-
-### 3. Publier puis raccorder le domaine
-
-1. Lancer le premier déploiement et vérifier l’URL principale en `.netlify.app`.
-2. Tester les routes, le formulaire, `/robots.txt` et `/sitemap.xml`.
-3. Ajouter le domaine personnalisé dans **Domain management** et configurer le
-   DNS selon les instructions de Netlify.
-4. Remplacer `NEXT_PUBLIC_SITE_URL` par le domaine HTTPS final.
-5. Relancer un déploiement de production, puis vérifier les URL canoniques,
-   Open Graph, `robots.txt` et le sitemap sur ce domaine.
-
-Les Deploy Previews et Branch Deploys restent non indexables grâce à
-`SITE_ENV=preview` et au contrôle du contexte Netlify dans l’application.
-
-### Vérifications avant publication
+## Vérification avant publication
 
 ```bash
-npm ci
 npm run lint
 npm run typecheck
 npm test
 npm run build
 ```
 
-Avant la mise en ligne publique :
+Pour vérifier le build localement sous PowerShell :
 
-- confirmer les coordonnées légales requises pour l’éditeur et l’hébergeur.
-- définir la règle de conservation appliquée aux e-mails reçus.
-- vérifier le CV, les liens LinkedIn et les cinq études de cas.
-- configurer puis tester l’envoi Resend avec un domaine vérifié.
-- contrôler le formulaire, `/robots.txt` et `/sitemap.xml` sur le domaine final.
-- parcourir les pages en FR et EN, dans les modes normal et couleurs accessibles,
-  et vérifier les deux réglages au clavier et sur mobile.
-- relire les pages légales et la politique de confidentialité avant publication.
+```powershell
+$env:NEXT_PUBLIC_SITE_URL = 'https://christophervallot.fr'
+$env:SITE_ENV = 'preview'
+npm run build
+npm start
+```
 
-La limitation de débit du formulaire est stockée en mémoire. Pour un déploiement
-sur plusieurs instances, prévoir une limitation distribuée ou une règle WAF.
+Le domaine canonique doit rester public et en HTTPS, même pour ce test local
+du build. `SITE_ENV=preview` garde ce build hors indexation.
+
+Contrôler les deux langues sur mobile et ordinateur : images, menus,
+liens des réalisations, formulaire, changements de langue et page 404.
+La compilation seule ne détecte pas une image publique manquante.
+Les dossiers `.next/` et `node_modules/` sont générés et ignorés par Git ;
+ils ne constituent pas du vieux code à publier.
 
 ## Licence
 
-Le code source est distribué sous licence MIT. Voir `LICENSE`.
-
-Cette licence ne transfère pas les droits relatifs aux contenus personnels, au
-CV, à la photographie ou aux éléments de marque présents dans ce dépôt.
+Code sous licence MIT, voir `LICENSE`. Les contenus personnels, le CV,
+le portrait et les éléments de marque conservent leurs droits propres.

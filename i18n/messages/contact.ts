@@ -10,6 +10,7 @@ interface ContactMessages {
   submit: string;
   pending: string;
   note: string;
+  privacy: string;
   configurationRequired: string;
   unexpectedResponse: string;
   timeout: string;
@@ -52,12 +53,13 @@ export const contactMessages: Record<Locale, ContactMessages> = {
   fr: {
     formLabel: "Formulaire de contact",
     fields: { name: "Nom *", company: "Société (facultatif)", email: "E-mail *", need: "Type de besoin *", message: "Message *", website: "Votre site web" },
-    placeholders: { name: "Votre nom", company: "Votre entreprise (facultatif)", email: "vous@entreprise.fr", message: "Décrivez votre contexte, vos données et le résultat attendu." },
+    placeholders: { name: "Votre nom", company: "Votre entreprise", email: "vous@entreprise.fr", message: "Décrivez votre contexte, vos données et le résultat attendu." },
     selectNeed: "Sélectionnez un besoin",
     needLabels: { "power-bi-reporting": "Power BI / Reporting", "data-quality": "Data Quality", automatisation: "Automatisation", "integration-consolidation": "Intégration / consolidation", "analyse-donnees": "Analyse de données", autre: "Autre" },
     submit: "Envoyer ma demande",
     pending: "Envoi en cours…",
     note: "Les champs marqués d’un astérisque sont obligatoires. N’indiquez pas de données sensibles dans votre message.",
+    privacy: "Utilisation de vos données",
     configurationRequired: "Configuration requise — ",
     unexpectedResponse: "Réponse inattendue du service de contact.",
     timeout: "L’envoi prend trop de temps. Réessayez ou utilisez l’adresse e-mail indiquée à côté du formulaire.",
@@ -79,18 +81,19 @@ export const contactMessages: Record<Locale, ContactMessages> = {
       emailNotConfigured: "Message validé en mode développement, mais aucun e-mail n’a été envoyé. Configurez RESEND_API_KEY et CONTACT_EMAIL pour activer l’envoi.",
       serviceUnavailable: "Le service de contact est temporairement indisponible. Réessayez plus tard.",
       deliveryFailed: "Le message n’a pas pu être envoyé. Réessayez dans quelques instants.",
-      success: "Merci, votre message a bien été envoyé. Je vous répondrai rapidement.",
+      success: "Merci, votre message a bien été envoyé.",
     },
   },
   en: {
     formLabel: "Contact form",
     fields: { name: "Name *", company: "Company (optional)", email: "Email *", need: "How can I help? *", message: "Message *", website: "Your website" },
-    placeholders: { name: "Your name", company: "Your company (optional)", email: "you@company.com", message: "Tell me about your context, your data and what you would like to achieve." },
+    placeholders: { name: "Your name", company: "Your company", email: "you@company.com", message: "Tell me about your context, your data and what you would like to achieve." },
     selectNeed: "Select a requirement",
     needLabels: { "power-bi-reporting": "Power BI / Reporting", "data-quality": "Data Quality", automatisation: "Automation", "integration-consolidation": "Integration / consolidation", "analyse-donnees": "Data analysis", autre: "Other" },
     submit: "Send my enquiry",
     pending: "Sending…",
     note: "Fields marked with an asterisk are required. Please do not include sensitive data in your message.",
+    privacy: "How your data is used",
     configurationRequired: "Configuration required — ",
     unexpectedResponse: "Unexpected response from the contact service.",
     timeout: "Sending is taking too long. Please try again or use the email address shown next to the form.",
@@ -112,7 +115,7 @@ export const contactMessages: Record<Locale, ContactMessages> = {
       emailNotConfigured: "The message was validated in development mode, but no email was sent. Configure RESEND_API_KEY and CONTACT_EMAIL to enable delivery.",
       serviceUnavailable: "The contact service is temporarily unavailable. Please try again later.",
       deliveryFailed: "Your message could not be sent. Please try again shortly.",
-      success: "Thank you, your message has been sent. I will get back to you shortly.",
+      success: "Thank you, your message has been sent.",
     },
   },
 };

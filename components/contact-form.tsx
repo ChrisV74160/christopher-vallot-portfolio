@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent, type InvalidEvent } from "react";
+import { ArrowRight, Building2, FileText, List, Mail, UserRound } from "lucide-react";
 
-import type { Locale } from "@/i18n/config";
+import { localizedHref, type Locale } from "@/i18n/config";
 import { contactMessages } from "@/i18n/messages/contact";
 
 import {
@@ -220,6 +221,8 @@ export function ContactForm({ locale = "fr" }: { locale?: Locale }) {
     >
       <div className="form-field">
         <label htmlFor="contact-name">{messages.fields.name}</label>
+        <div className="contact-control">
+        <UserRound aria-hidden="true" size={19} />
         <input
           id="contact-name"
           name="name"
@@ -233,6 +236,7 @@ export function ContactForm({ locale = "fr" }: { locale?: Locale }) {
           aria-describedby={nameError ? "contact-name-error" : undefined}
           onChange={() => clearFieldError("name")}
         />
+        </div>
         {nameError ? (
           <p id="contact-name-error" className="form-error">
             {nameError}
@@ -242,6 +246,8 @@ export function ContactForm({ locale = "fr" }: { locale?: Locale }) {
 
       <div className="form-field">
         <label htmlFor="contact-company">{messages.fields.company}</label>
+        <div className="contact-control">
+        <Building2 aria-hidden="true" size={19} />
         <input
           id="contact-company"
           name="company"
@@ -253,6 +259,7 @@ export function ContactForm({ locale = "fr" }: { locale?: Locale }) {
           aria-describedby={companyError ? "contact-company-error" : undefined}
           onChange={() => clearFieldError("company")}
         />
+        </div>
         {companyError ? (
           <p id="contact-company-error" className="form-error">
             {companyError}
@@ -262,6 +269,8 @@ export function ContactForm({ locale = "fr" }: { locale?: Locale }) {
 
       <div className="form-field">
         <label htmlFor="contact-email">{messages.fields.email}</label>
+        <div className="contact-control">
+        <Mail aria-hidden="true" size={19} />
         <input
           id="contact-email"
           name="email"
@@ -275,6 +284,7 @@ export function ContactForm({ locale = "fr" }: { locale?: Locale }) {
           aria-describedby={emailError ? "contact-email-error" : undefined}
           onChange={() => clearFieldError("email")}
         />
+        </div>
         {emailError ? (
           <p id="contact-email-error" className="form-error">
             {emailError}
@@ -284,6 +294,8 @@ export function ContactForm({ locale = "fr" }: { locale?: Locale }) {
 
       <div className="form-field">
         <label htmlFor="contact-need">{messages.fields.need}</label>
+        <div className="contact-control">
+        <List aria-hidden="true" size={19} />
         <select
           id="contact-need"
           name="need"
@@ -302,6 +314,7 @@ export function ContactForm({ locale = "fr" }: { locale?: Locale }) {
             </option>
           ))}
         </select>
+        </div>
         {needError ? (
           <p id="contact-need-error" className="form-error">
             {needError}
@@ -311,6 +324,8 @@ export function ContactForm({ locale = "fr" }: { locale?: Locale }) {
 
       <div className="form-field form-field--full">
         <label htmlFor="contact-message">{messages.fields.message}</label>
+        <div className="contact-control">
+        <FileText aria-hidden="true" size={19} />
         <textarea
           id="contact-message"
           name="message"
@@ -323,6 +338,7 @@ export function ContactForm({ locale = "fr" }: { locale?: Locale }) {
           aria-describedby={messageError ? "contact-message-error" : undefined}
           onChange={() => clearFieldError("message")}
         />
+        </div>
         {messageError ? (
           <p id="contact-message-error" className="form-error">
             {messageError}
@@ -349,9 +365,11 @@ export function ContactForm({ locale = "fr" }: { locale?: Locale }) {
           disabled={isSubmitting}
         >
           {isSubmitting ? messages.pending : messages.submit}
+          <ArrowRight aria-hidden="true" size={19} />
         </button>
         <p className="form-note">
-          {messages.note}
+          {messages.note}{" "}
+          <a href={localizedHref("/politique-confidentialite", locale)}>{messages.privacy}</a>
         </p>
       </div>
 

@@ -19,11 +19,6 @@ export type ContactNeed = (typeof CONTACT_NEEDS)[number];
 
 export const CONTACT_NEED_LABELS = contactMessages.fr.needLabels;
 
-export const CONTACT_NEED_OPTIONS = CONTACT_NEEDS.map((value) => ({
-  value,
-  label: CONTACT_NEED_LABELS[value],
-}));
-
 export interface ContactFormInput {
   name: string;
   company?: string;

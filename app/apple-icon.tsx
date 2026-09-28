@@ -1,6 +1,6 @@
 import { getSiteUrl } from "@/lib/site-config";
 
-export const size = { width: 1254, height: 1254 };
+export const size = { width: 180, height: 180 };
 export const contentType = "image/png";
 
 /**

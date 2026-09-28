@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ComponentPropsWithoutRef } from "react";
 
-import { profile } from "@/data/profile";
+import { getContent } from "@/i18n/content";
 import { localizedHref, type Locale } from "@/i18n/config";
 import { chromeMessages } from "@/i18n/messages/chrome";
 
@@ -12,7 +12,6 @@ const navigationLinks = [
   { labelKey: "home", href: "/" },
   { labelKey: "services", href: "/#services" },
   { labelKey: "projects", href: "/#realisations" },
-  { labelKey: "expertise", href: "/#expertise" },
   { labelKey: "about", href: "/a-propos" },
   { labelKey: "contact", href: "/contact" },
 ] as const;
@@ -23,6 +22,7 @@ export type SiteFooterProps = Omit<
 > & { locale: Locale };
 
 export function SiteFooter({ locale, className, ...props }: SiteFooterProps) {
+  const { profile } = getContent(locale);
   const currentYear = new Date().getFullYear();
   const footerClasses = ["footer", className].filter(Boolean).join(" ");
   const messages = chromeMessages[locale];
@@ -36,7 +36,7 @@ export function SiteFooter({ locale, className, ...props }: SiteFooterProps) {
               <IdentityMark />
               <span className="wordmark-label">{profile.fullName}</span>
             </Link>
-            <p>{messages.summary}</p>
+            <p>{profile.shortSummary}</p>
           </div>
 
           <nav aria-label={messages.footerNavigation} className="footer-column">

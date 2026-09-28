@@ -18,9 +18,9 @@ export async function GET(_request: Request, { params }: LocalePageProps) {
     start_url: `/${locale}`,
     scope: "/",
     display: "standalone",
-    background_color: "#020812",
-    theme_color: "#020812",
+    background_color: "#ffffff",
+    theme_color: "#003f5c",
     lang: locale,
-    icons: [{ src: "/icon.png", sizes: `${icon.width}x${icon.height}`, type: "image/png" }],
+    icons: [{ src: icon.src, sizes: `${icon.width}x${icon.height}`, type: "image/png" }],
   }, { headers: { "Content-Type": "application/manifest+json" } });
 }

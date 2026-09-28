@@ -8,7 +8,7 @@ const transientHostnames = [
 ] as const;
 
 export const siteName =
-  "Christopher Vallot | Consultant Data & BI Freelance";
+  "Christopher VALLOT | Consultant Data & BI freelance";
 export const siteDescription =
   "Consultant Data & BI Freelance à Tours. Intégration et fiabilisation des données, automatisation de traitements, Data Quality, Python, SQL et Power BI.";
 

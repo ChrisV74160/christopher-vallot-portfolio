@@ -1,25 +1,23 @@
 "use client";
 
-import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ComponentPropsWithoutRef } from "react";
 import { useEffect, useRef, useState } from "react";
 
-import icon from "@/app/icon.png";
-import { profile } from "@/data/profile";
+import { identity as profile } from "@/data/identity";
 import { localizedHref, stripLocale, type Locale } from "@/i18n/config";
 import { chromeMessages } from "@/i18n/messages/chrome";
 
 import { SitePreferences } from "./site-preferences";
 import { ButtonLink } from "./ui/button-link";
 import { Container } from "./ui/container";
+import { IdentityMark } from "./ui/identity-mark";
 
 const sectionLinks = [
   { labelKey: "services", sectionId: "services" },
   { labelKey: "projects", sectionId: "realisations" },
-  { labelKey: "expertise", sectionId: "expertise" },
 ] as const;
 
 const pageLinks = [
@@ -39,54 +37,9 @@ export function SiteHeader({ locale, className, ...props }: SiteHeaderProps) {
   const routePath = stripLocale(pathname);
   const messages = chromeMessages[locale];
   const menuButtonRef = useRef<HTMLButtonElement>(null);
-  const [scrolled, setScrolled] = useState(false);
-  const [observedSection, setObservedSection] = useState<SectionId | null>(null);
   const [menuState, setMenuState] = useState({ open: false, pathname });
 
   const menuOpen = menuState.pathname === pathname && menuState.open;
-
-  useEffect(() => {
-    const updateScrolledState = () => setScrolled(window.scrollY > 12);
-
-    updateScrolledState();
-    window.addEventListener("scroll", updateScrolledState, { passive: true });
-    return () => window.removeEventListener("scroll", updateScrolledState);
-  }, []);
-
-  useEffect(() => {
-    if (routePath !== "/" || !("IntersectionObserver" in window)) return;
-
-    const sections = sectionLinks
-      .map(({ sectionId }) => document.getElementById(sectionId))
-      .filter((section): section is HTMLElement => section !== null);
-
-    if (sections.length === 0) return;
-
-    const visibility = new Map<string, number>();
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          visibility.set(entry.target.id, entry.isIntersecting ? entry.intersectionRatio : 0);
-        }
-
-        const nextSection = sections.reduce<HTMLElement | null>(
-          (mostVisible, section) => {
-            if (!mostVisible) return visibility.get(section.id) ? section : null;
-            return (visibility.get(section.id) ?? 0) > (visibility.get(mostVisible.id) ?? 0)
-              ? section
-              : mostVisible;
-          },
-          null,
-        );
-
-        setObservedSection((nextSection?.id as SectionId | undefined) ?? null);
-      },
-      { rootMargin: "-18% 0px -55% 0px", threshold: [0, 0.1, 0.25, 0.5, 0.75, 1] },
-    );
-
-    sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
-  }, [pathname, routePath]);
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -116,10 +69,10 @@ export function SiteHeader({ locale, className, ...props }: SiteHeaderProps) {
 
   const navigationLinks = (
     <>
+      <Link className="nav-link" href={localizedHref("/", locale)} aria-current={routePath === "/" ? "page" : undefined} onClick={closeMenu}>{messages.home}</Link>
       {sectionLinks.map(({ labelKey, sectionId }) => (
         <Link
           key={sectionId}
-          aria-current={routePath === "/" && observedSection === sectionId ? "true" : undefined}
           className="nav-link"
           href={sectionHref(sectionId)}
           onClick={closeMenu}
@@ -142,7 +95,7 @@ export function SiteHeader({ locale, className, ...props }: SiteHeaderProps) {
   );
 
   return (
-    <header className={headerClasses} data-menu-open={menuOpen} data-scrolled={scrolled} {...props}>
+    <header className={headerClasses} data-menu-open={menuOpen} {...props}>
       <Container>
         <div className="nav-shell">
           <Link
@@ -151,7 +104,7 @@ export function SiteHeader({ locale, className, ...props }: SiteHeaderProps) {
             href={localizedHref("/", locale)}
             onClick={closeMenu}
           >
-            <Image src={icon} alt="" aria-hidden="true" className="wordmark-icon" width={40} height={40} priority />
+            <IdentityMark priority />
             <span className="wordmark-label">{profile.fullName}</span>
           </Link>
 

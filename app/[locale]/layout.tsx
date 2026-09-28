@@ -28,18 +28,17 @@ export async function generateMetadata({ params }: LocalePageProps): Promise<Met
     publisher: profile.fullName,
     keywords: [...t.keywords],
     icons: {
-      icon: [{ url: "/icon.png", sizes: `${icon.width}x${icon.height}`, type: "image/png" }],
-      shortcut: "/favicon.ico",
-      apple: [{ url: "/apple-icon.png", sizes: `${appleIcon.width}x${appleIcon.height}`, type: "image/png" }],
+      icon: [
+        { url: icon.src, sizes: `${icon.width}x${icon.height}`, type: "image/png" },
+      ],
+      shortcut: icon.src,
+      apple: [{ url: appleIcon.src, sizes: `${appleIcon.width}x${appleIcon.height}`, type: "image/png" }],
     },
     manifest: `/${locale}/manifest.webmanifest`,
   };
 }
 
-export const viewport: Viewport = { colorScheme: "dark", themeColor: "#020812" };
-
-// Runs before paint; no storage access during server rendering and no colour flash.
-const restoreColors = `try{document.documentElement.dataset.colorMode=localStorage.getItem('portfolio-colors')==='accessible'?'accessible':'default'}catch{}`;
+export const viewport: Viewport = { colorScheme: "light", themeColor: "#003f5c" };
 
 export default async function LocaleLayout({ children, params }: LocalePageProps & { children: React.ReactNode }) {
   const locale = requireLocale((await params).locale);
@@ -57,9 +56,8 @@ export default async function LocaleLayout({ children, params }: LocalePageProps
   };
 
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={locale}>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: restoreColors }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
       </head>
       <body>

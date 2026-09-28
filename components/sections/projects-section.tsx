@@ -27,7 +27,7 @@ export function ProjectsSection({ locale = "fr" }: { locale?: Locale }) {
             {t.description}</p>
         </div>
 
-        <div className="project-grid">
+        <div className="project-grid project-grid--featured">
           {featuredProjects.map((project) => (
             <ProjectCard key={project.slug} project={project} locale={locale} />
           ))}

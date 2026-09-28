@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
-export type ButtonLinkVariant = "primary" | "accent" | "secondary" | "text";
+export type ButtonLinkVariant = "primary" | "accent" | "secondary";
 
 export interface ButtonLinkProps
   extends Omit<ComponentPropsWithoutRef<typeof Link>, "children" | "className"> {
