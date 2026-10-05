@@ -1,4 +1,4 @@
-import { projects as source } from "@/data/projects";
+import { projects as source, type ProjectSlug } from "@/data/projects";
 import type { ProjectCaseStudy } from "@/types/content";
 
 const copy = {
@@ -162,8 +162,11 @@ const copy = {
     "result": "A model adapted to the technical environment, maintained data processing workflows and a web service giving other components access to the model.",
     "sector": "Credit risk",
   }
-};
+} satisfies Record<ProjectSlug, Pick<ProjectCaseStudy,
+  "title" | "shortSummary" | "seoDescription" | "context" | "problem" |
+  "objectives" | "data" | "method" | "intervention" | "result" | "sector"
+>>;
 /** Slugs, source experience, technologies and featured selection are shared with French. */
 export const projects: readonly ProjectCaseStudy[] = source.map((project) => ({
-  ...project, ...copy[project.slug as keyof typeof copy], status: "Professional experience",
+  ...project, ...copy[project.slug], status: "Professional experience",
 }));

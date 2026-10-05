@@ -195,7 +195,9 @@ const caseStudies = [
   }
 ] as const satisfies readonly Omit<ProjectCaseStudy, "technologies">[];
 
-export const projects: readonly ProjectCaseStudy[] = caseStudies.map((project) => ({
+export type ProjectSlug = (typeof caseStudies)[number]["slug"];
+
+export const projects: readonly (ProjectCaseStudy & { slug: ProjectSlug })[] = caseStudies.map((project) => ({
   ...project,
   technologies: getExperienceById(project.experienceId).technologies,
 }));

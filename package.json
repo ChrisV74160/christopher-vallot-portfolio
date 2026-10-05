@@ -4,7 +4,7 @@
   "private": true,
   "license": "MIT",
   "engines": {
-    "node": ">=20.9.0"
+    "node": "^22.13.0 || >=24.0.0"
   },
   "scripts": {
     "dev": "next dev",
@@ -12,13 +12,16 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "test": "node --test tests/contact.test.cjs tests/i18n.test.cjs tests/brand-icon.test.mjs tests/professional-content.test.cjs tests/site-config.test.cjs",
+    "test": "node --test tests/*.test.cjs tests/*.test.mjs",
+    "test:http": "node --test tests/integration/*.test.cjs",
+    "check": "npm run lint && npm run typecheck && npm test && npm run assets:check",
+    "assets:check": "node scripts/generate-brand-icons.mjs --check && node scripts/build-owl-vector.mjs --check",
     "icons:generate": "node scripts/generate-brand-icons.mjs",
     "illustrations:generate": "node scripts/build-owl-vector.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.37.0",
-    "next": "16.3.3",
+    "next": "16.3.8",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "react-icons": "^5.7.0",
@@ -27,11 +30,11 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
+    "@types/node": "^22.20.5",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.3.3",
+    "eslint-config-next": "16.3.8",
     "sharp": "0.35.4",
     "svgo": "4.1.0",
     "tailwindcss": "^4",

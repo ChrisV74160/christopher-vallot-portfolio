@@ -45,6 +45,31 @@ test("Locale stripping respects complete path segments", () => {
   }
 });
 
+test("Encoded locale prefixes are recognized without decoding the remaining URL", () => {
+  for (const [input, expected] of [
+    ["/%65n/projets?x#y", "/projets?x#y"],
+    ["/%66r/contact", "/contact"],
+    ["/%65n/projets/%6Digration-integration-donnees?file=brief%2Epdf#resultats", "/projets/%6Digration-integration-donnees?file=brief%2Epdf#resultats"],
+    ["/%65n#services", "#services"],
+    ["/%66r", "/"],
+  ]) assert.equal(stripLocale(input), expected, input);
+
+  for (const [href, locale, expected] of [
+    ["/%65n/projets?x#y", "fr", "/fr/projets?x#y"],
+    ["/%66r/contact", "en", "/en/contact"],
+    ["/%65n/projets/unknown.case", "fr", "/fr/projets/unknown.case"],
+    ["/%65n/projets/%6Digration-integration-donnees?file=brief%2Epdf#resultats", "fr", "/fr/projets/%6Digration-integration-donnees?file=brief%2Epdf#resultats"],
+    ["/%66r?source=home#services", "en", "/en?source=home#services"],
+  ]) assert.equal(localizedHref(href, locale), expected, href);
+});
+
+test("Malformed or separator escapes do not create a locale prefix", () => {
+  for (const path of ["/%E0/contact", "/%65n%2Fcontact", "/%66r%5Ccontact", "/%2565n/contact", "/%65nglish/contact"]) {
+    assert.equal(stripLocale(path), path, path);
+    assert.equal(localizedHref(path, "fr"), `/fr${path}`, path);
+  }
+});
+
 test("Internal links get one locale prefix and retain anchors and queries", () => {
   for (const [href, locale, expected] of [
     ["/", "en", "/en"], ["/contact", "fr", "/fr/contact"], ["/en/projets/example", "fr", "/fr/projets/example"],

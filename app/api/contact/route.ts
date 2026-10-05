@@ -4,35 +4,24 @@ import type { ZodError } from "zod";
 import type { Locale } from "@/i18n/config";
 import { contactMessages } from "@/i18n/messages/contact";
 import {
-  CONTACT_NEED_LABELS,
   type ContactApiResponse,
   type ContactFieldErrors,
 } from "@/lib/contact-contract";
+import { buildContactEmail } from "@/lib/contact-email";
+import {
+  checkRateLimit,
+  getClientKey,
+  PayloadTooLargeError,
+  readBodyWithinLimit,
+} from "@/lib/contact-request";
 import { contactFormSchema, getContactFormSchema } from "@/lib/contact-schema";
 
 export const runtime = "nodejs";
 
-const MAX_BODY_BYTES = 16 * 1024;
 const MIN_FORM_DURATION_MS = 3_000;
 const MAX_FORM_AGE_MS = 24 * 60 * 60 * 1_000;
-const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1_000;
-const RATE_LIMIT_MAX_REQUESTS = 5;
-const MAX_RATE_LIMIT_ENTRIES = 10_000;
 const DEFAULT_FROM_EMAIL =
   "Portfolio Christopher Vallot <onboarding@resend.dev>";
-
-type RateLimitEntry = {
-  count: number;
-  resetAt: number;
-};
-
-// This limiter is deliberately lightweight: counters are local to one Node process,
-// disappear on restart/cold start, and are not shared between serverless instances.
-// Use a durable distributed limiter or a platform WAF for strict production limits.
-const rateLimitEntries = new Map<string, RateLimitEntry>();
-let rateLimitChecks = 0;
-
-class PayloadTooLargeError extends Error {}
 
 function jsonResponse(
   body: ContactApiResponse,
@@ -44,103 +33,6 @@ function jsonResponse(
   headers.set("X-Content-Type-Options", "nosniff");
 
   return Response.json(body, { status, headers });
-}
-
-function getClientKey(request: Request) {
-  // These headers are trustworthy only when the deployment proxy overwrites them.
-  const forwardedFor = request.headers.get("x-forwarded-for");
-  const candidate =
-    forwardedFor?.split(",")[0]?.trim() ||
-    request.headers.get("x-real-ip")?.trim() ||
-    "unknown";
-
-  return candidate.slice(0, 128);
-}
-
-function checkRateLimit(key: string, now: number) {
-  rateLimitChecks += 1;
-
-  if (
-    rateLimitChecks % 100 === 0 ||
-    rateLimitEntries.size >= MAX_RATE_LIMIT_ENTRIES
-  ) {
-    for (const [entryKey, entry] of rateLimitEntries) {
-      if (entry.resetAt <= now) {
-        rateLimitEntries.delete(entryKey);
-      }
-    }
-  }
-
-  const existing = rateLimitEntries.get(key);
-
-  if (!existing || existing.resetAt <= now) {
-    if (rateLimitEntries.size >= MAX_RATE_LIMIT_ENTRIES) {
-      const oldestKey = rateLimitEntries.keys().next().value;
-      if (typeof oldestKey === "string") {
-        rateLimitEntries.delete(oldestKey);
-      }
-    }
-
-    rateLimitEntries.set(key, {
-      count: 1,
-      resetAt: now + RATE_LIMIT_WINDOW_MS,
-    });
-
-    return { allowed: true as const, retryAfterSeconds: 0 };
-  }
-
-  if (existing.count >= RATE_LIMIT_MAX_REQUESTS) {
-    return {
-      allowed: false as const,
-      retryAfterSeconds: Math.max(
-        1,
-        Math.ceil((existing.resetAt - now) / 1_000),
-      ),
-    };
-  }
-
-  existing.count += 1;
-  return { allowed: true as const, retryAfterSeconds: 0 };
-}
-
-async function readBodyWithinLimit(request: Request) {
-  const declaredLength = Number(request.headers.get("content-length"));
-
-  if (Number.isFinite(declaredLength) && declaredLength > MAX_BODY_BYTES) {
-    throw new PayloadTooLargeError();
-  }
-
-  if (!request.body) {
-    return "";
-  }
-
-  const reader = request.body.getReader();
-  const decoder = new TextDecoder("utf-8", { fatal: true });
-  let totalBytes = 0;
-  let body = "";
-
-  try {
-    while (true) {
-      const { done, value } = await reader.read();
-
-      if (done) {
-        break;
-      }
-
-      totalBytes += value.byteLength;
-      if (totalBytes > MAX_BODY_BYTES) {
-        await reader.cancel().catch(() => undefined);
-        throw new PayloadTooLargeError();
-      }
-
-      body += decoder.decode(value, { stream: true });
-    }
-
-    body += decoder.decode();
-    return body;
-  } finally {
-    reader.releaseLock();
-  }
 }
 
 function getFieldErrors(error: ZodError): ContactFieldErrors {
@@ -159,20 +51,6 @@ function getFieldErrors(error: ZodError): ContactFieldErrors {
   }
 
   return fieldErrors;
-}
-
-function escapeHtml(value: string) {
-  return value.replace(/[&<>'"]/g, (character) => {
-    const entities: Record<string, string> = {
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      "'": "&#39;",
-      '"': "&quot;",
-    };
-
-    return entities[character];
-  });
 }
 
 export async function POST(request: Request) {
@@ -331,41 +209,18 @@ export async function POST(request: Request) {
     );
   }
 
-  const needLabel = CONTACT_NEED_LABELS[data.need];
-  const company = data.company ?? "Non renseignée";
   const fromEmail =
     process.env.CONTACT_FROM_EMAIL?.trim() || DEFAULT_FROM_EMAIL;
 
   try {
     // Instantiated only after all required server configuration is validated.
     const resend = new Resend(resendApiKey);
-    const { error } = await resend.emails.send({
-      from: fromEmail,
-      to: contactEmail.data,
-      replyTo: data.email,
-      subject: `Nouvelle demande portfolio — ${needLabel}`,
-      text: [
-        `Nom : ${data.name}`,
-        `Entreprise : ${company}`,
-        `E-mail : ${data.email}`,
-        `Poste ou besoin : ${needLabel}`,
-        "",
-        "Message :",
-        data.message,
-      ].join("\n"),
-      html: `
-        <h1>Nouvelle demande depuis le portfolio</h1>
-        <p><strong>Nom :</strong> ${escapeHtml(data.name)}</p>
-        <p><strong>Entreprise :</strong> ${escapeHtml(company)}</p>
-        <p><strong>E-mail :</strong> ${escapeHtml(data.email)}</p>
-        <p><strong>Poste ou besoin :</strong> ${escapeHtml(needLabel)}</p>
-        <h2>Message</h2>
-        <p style="white-space: pre-wrap;">${escapeHtml(data.message)}</p>
-      `,
-    });
+    const { data: delivery, error } = await resend.emails.send(
+      buildContactEmail(data, { from: fromEmail, to: contactEmail.data }),
+    );
 
-    if (error) {
-      console.error("[contact] Resend a refusé l’envoi :", error.name);
+    if (error || typeof delivery?.id !== "string" || delivery.id.trim().length === 0) {
+      console.error("[contact] Resend a refusé l’envoi :", error?.name ?? "missing_email_id");
       return jsonResponse(
         {
           ok: false,

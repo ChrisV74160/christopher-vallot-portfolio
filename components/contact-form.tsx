@@ -8,7 +8,7 @@ import { contactMessages } from "@/i18n/messages/contact";
 
 import {
   CONTACT_NEEDS,
-  type ContactApiResponse,
+  isContactApiResponse,
   type ContactFieldErrors,
   type ContactFormInput,
   type ContactNeed,
@@ -32,24 +32,6 @@ const VISIBLE_FIELDS = [
   "need",
   "message",
 ] as const satisfies readonly (keyof ContactFieldErrors)[];
-
-function isContactApiResponse(value: unknown): value is ContactApiResponse {
-  if (typeof value !== "object" || value === null) {
-    return false;
-  }
-
-  const response = value as Record<string, unknown>;
-
-  if (typeof response.message !== "string") {
-    return false;
-  }
-
-  if (response.ok === true) {
-    return typeof response.sent === "boolean";
-  }
-
-  return response.ok === false && typeof response.code === "string";
-}
 
 function focusFirstInvalidField(
   form: HTMLFormElement,
@@ -153,7 +135,7 @@ export function ContactForm({ locale = "fr" }: { locale?: Locale }) {
       });
       const result: unknown = await response.json();
 
-      if (!isContactApiResponse(result)) {
+      if (!isContactApiResponse(result) || response.ok !== result.ok) {
         throw new Error(messages.unexpectedResponse);
       }
 

@@ -7,15 +7,18 @@ const { createTypeScriptLoader } = require("./load-typescript.cjs");
 // node:test isolates each file in its own process. Never read credentials:
 // replace the configuration, mock Resend and reject any network call.
 globalThis.fetch = async () => { throw new Error("Network calls are forbidden in contact unit tests."); };
-let deliveryResult = { error: null };
+const simulatedSuccess = () => ({ data: { id: "simulated-email-id" }, error: null, headers: {} });
+let deliveryResult = simulatedSuccess();
 let deliveryCount = 0;
+let deliveryPayload;
 const load = createTypeScriptLoader({
   mocks: {
     resend: {
       Resend: class {
         emails = {
-          send: async () => {
+          send: async (payload) => {
             deliveryCount += 1;
+            deliveryPayload = payload;
             if (deliveryResult instanceof Error) throw deliveryResult;
             return deliveryResult;
           },
@@ -34,8 +37,11 @@ beforeEach(() => {
   delete process.env.RESEND_API_KEY;
   delete process.env.CONTACT_EMAIL;
   delete process.env.CONTACT_FROM_EMAIL;
-  deliveryResult = { error: null };
+  delete process.env.NETLIFY;
+  delete process.env.SITE_ID;
+  deliveryResult = simulatedSuccess();
   deliveryCount = 0;
+  deliveryPayload = undefined;
 });
 
 function validForm() {
@@ -54,6 +60,7 @@ function request(locale, body = validForm(), overrides = {}) {
       "x-forwarded-for": `unit-test-${++requestIndex}`, ...overrides.headers,
     },
     body: overrides.raw ?? JSON.stringify({ ...body, locale }),
+    ...(overrides.raw instanceof ReadableStream ? { duplex: "half" } : {}),
   }));
 }
 
@@ -151,7 +158,11 @@ for (const locale of ["fr", "en"]) {
   test(`${locale}: handles a simulated provider rejection`, async (context) => {
     context.mock.method(console, "error", () => {});
     configureMockDelivery();
-    deliveryResult = { error: { name: "simulated" } };
+    deliveryResult = {
+      data: null,
+      error: { name: "simulated", message: "Simulated provider rejection", statusCode: 422 },
+      headers: {},
+    };
     await expectError(locale, validForm(), "DELIVERY_FAILED", 502, "deliveryFailed");
     assert.equal(deliveryCount, 1);
   });
@@ -196,3 +207,162 @@ test("Unsupported locales and unknown fields are rejected by the schema", () => 
   assert.equal(contactFormSchema.safeParse({ ...validForm(), locale: "de" }).success, false);
   assert.equal(contactFormSchema.safeParse({ ...validForm(), unexpected: true }).success, false);
 });
+
+for (const [label, data] of [
+  ["null data", null],
+  ["missing ID", {}],
+  ["empty ID", { id: "" }],
+  ["blank ID", { id: "   " }],
+  ["non-string ID", { id: 42 }],
+]) {
+  test(`A provider response with ${label} cannot claim delivery`, async (context) => {
+    context.mock.method(console, "error", () => {});
+    configureMockDelivery();
+    deliveryResult = { data, error: null, headers: {} };
+    const { payload } = await expectError("en", validForm(), "DELIVERY_FAILED", 502, "deliveryFailed");
+    assert.equal(payload.ok, false);
+    assert.equal(deliveryCount, 1);
+  });
+}
+
+test("Email delivery preserves routing, normalized values and escaped message content", async () => {
+  configureMockDelivery();
+  process.env.CONTACT_FROM_EMAIL = "Portfolio QA <portfolio@example.com>";
+  process.env.CONTACT_EMAIL = " OWNER@EXAMPLE.COM ";
+  const response = await request("en", {
+    ...validForm(),
+    name: "  Élodie <QA>  ",
+    company: " Example & \"Company\" ",
+    message: "A sufficiently long enquiry.\n<script>alert('test')</script>",
+  });
+  assert.equal(response.status, 200);
+  assert.equal((await response.json()).sent, true);
+  assert.equal(deliveryPayload.from, "Portfolio QA <portfolio@example.com>");
+  assert.equal(deliveryPayload.to, "owner@example.com");
+  assert.equal(deliveryPayload.replyTo, "qa@example.com");
+  assert.equal(deliveryPayload.subject, "Nouvelle demande portfolio — Data Quality");
+  assert.match(deliveryPayload.text, /Nom : Élodie <QA>\nEntreprise : Example & "Company"/);
+  assert.match(deliveryPayload.text, /A sufficiently long enquiry\.\n<script>alert\('test'\)<\/script>/);
+  assert.match(deliveryPayload.html, /Élodie &lt;QA&gt;/);
+  assert.match(deliveryPayload.html, /Example &amp; &quot;Company&quot;/);
+  assert.match(deliveryPayload.html, /&lt;script&gt;alert\(&#39;test&#39;\)&lt;\/script&gt;/);
+  assert.doesNotMatch(deliveryPayload.html, /<script>/);
+});
+
+for (const [marker, address] of [["NETLIFY", "198.51.100.10"], ["SITE_ID", "198.51.100.20"]]) {
+  test(`${marker}: rotating forwarded headers cannot bypass one Netlify client quota`, async () => {
+    process.env[marker] = marker === "NETLIFY" ? "true" : "simulated-netlify-site";
+    for (let index = 0; index < 5; index += 1) {
+      const response = await request("en", { ...validForm(), website: "bot" }, {
+        headers: { "x-nf-client-connection-ip": address },
+      });
+      assert.equal(response.status, 400);
+    }
+    await expectError("en", validForm(), "RATE_LIMITED", 429, "rateLimited", {
+      headers: { "x-nf-client-connection-ip": address },
+    });
+    assert.equal(deliveryCount, 0);
+  });
+}
+
+test("Distinct Netlify client IPs receive independent quotas without generic forwarding headers", async () => {
+  process.env.SITE_ID = "simulated-netlify-runtime-site";
+  const headers = { "x-forwarded-for": "", "x-real-ip": "" };
+  for (let index = 0; index < 5; index += 1) {
+    const response = await request("fr", { ...validForm(), website: "bot" }, {
+      headers: { ...headers, "x-nf-client-connection-ip": "2001:db8::30" },
+    });
+    assert.equal(response.status, 400);
+  }
+  await expectError("fr", validForm(), "RATE_LIMITED", 429, "rateLimited", {
+    headers: { ...headers, "x-nf-client-connection-ip": "2001:db8::30" },
+  });
+  const independentResponse = await request("fr", { ...validForm(), website: "bot" }, {
+    headers: { ...headers, "x-nf-client-connection-ip": "2001:db8::31" },
+  });
+  assert.equal(independentResponse.status, 400);
+});
+
+test("Missing or invalid Netlify IPs do not fall back to caller-controlled forwarded headers", async () => {
+  process.env.NETLIFY = "true";
+  for (const address of ["", "invalid", "198.51.100.42, 198.51.100.43", "not-an-ip", ""]) {
+    const response = await request("en", { ...validForm(), website: "bot" }, {
+      headers: { "x-nf-client-connection-ip": address },
+    });
+    assert.equal(response.status, 400);
+  }
+  await expectError("en", validForm(), "RATE_LIMITED", 429, "rateLimited", {
+    headers: { "x-nf-client-connection-ip": "invalid" },
+  });
+});
+
+test("An oversized declared body is rejected before the stream is read", async () => {
+  const stream = new ReadableStream({ pull() { throw new Error("An oversized declared body must not be read."); } });
+  await expectError("en", validForm(), "PAYLOAD_TOO_LARGE", 413, "payloadTooLarge", {
+    raw: stream,
+    headers: { "content-length": "16385" },
+  });
+  assert.equal(deliveryCount, 0);
+});
+
+test("A chunked body is bounded by its actual bytes and cancels overflow", async () => {
+  let cancelled = false;
+  const stream = new ReadableStream({
+    pull(controller) { controller.enqueue(new Uint8Array(8_000)); },
+    cancel() { cancelled = true; },
+  });
+  await expectError("en", validForm(), "PAYLOAD_TOO_LARGE", 413, "payloadTooLarge", {
+    raw: stream,
+    headers: { "content-length": "1" },
+  });
+  assert.equal(cancelled, true);
+  assert.equal(deliveryCount, 0);
+});
+
+test("A valid request at the exact body byte limit is accepted", async () => {
+  configureMockDelivery();
+  const raw = JSON.stringify({ ...validForm(), locale: "en" }).padEnd(16_384, " ");
+  const response = await request("en", validForm(), { raw });
+  assert.equal(response.status, 200);
+  assert.equal((await response.json()).sent, true);
+});
+
+test("The client quota resets when its ten-minute window expires", async (context) => {
+  let now = Date.now();
+  context.mock.method(Date, "now", () => now);
+  const overrides = { headers: { "x-forwarded-for": "rate-window-expiry" } };
+  for (let index = 0; index < 5; index += 1) {
+    const response = await request("en", { ...validForm(), website: "bot" }, overrides);
+    assert.equal(response.status, 400);
+  }
+  const { response } = await expectError("en", validForm(), "RATE_LIMITED", 429, "rateLimited", overrides);
+  assert.equal(response.headers.get("retry-after"), "600");
+  now += 600_000;
+  const expiredWindowResponse = await request("en", { ...validForm(), website: "bot" }, overrides);
+  assert.equal(expiredWindowResponse.status, 400);
+});
+
+test("Valid UTF-8 split across chunks is preserved during email delivery", async () => {
+  configureMockDelivery();
+  const encoded = new TextEncoder().encode(JSON.stringify({ ...validForm(), name: "Élodie QA", locale: "en" }));
+  const splitIndex = encoded.indexOf(0xc3) + 1;
+  const stream = new ReadableStream({
+    start(controller) {
+      controller.enqueue(encoded.subarray(0, splitIndex));
+      controller.enqueue(encoded.subarray(splitIndex));
+      controller.close();
+    },
+  });
+  const response = await request("en", validForm(), { raw: stream });
+  assert.equal(response.status, 200);
+  assert.equal((await response.json()).sent, true);
+  assert.match(deliveryPayload.text, /Nom : Élodie QA/);
+});
+
+for (const bytes of [new Uint8Array([0xff]), new Uint8Array([0xc3])]) {
+  test(`Malformed UTF-8 byte ${bytes[0]} is rejected without delivery`, async () => {
+    configureMockDelivery();
+    await expectError("en", validForm(), "INVALID_JSON", 400, "unreadableBody", { raw: bytes });
+    assert.equal(deliveryCount, 0);
+  });
+}

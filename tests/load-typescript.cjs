@@ -9,7 +9,7 @@ const projectRoot = path.resolve(__dirname, "..");
 
 /**
  * Load small server/data modules with the installed TypeScript compiler.
- * Works on Node 20.9+, without a build or an additional dependency. Each
+ * Uses the project's supported Node versions without a build or extra dependency. Each
  * loader has its own cache and mocks; Node's global loader is left untouched.
  */
 function createTypeScriptLoader({ mocks = {} } = {}) {

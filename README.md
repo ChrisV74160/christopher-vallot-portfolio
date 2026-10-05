@@ -1,25 +1,18 @@
 # Christopher VALLOT — Consultant Data & BI freelance
 
 Portfolio professionnel de [Christopher VALLOT](https://christophervallot.fr),
-basé à Tours. Le site présente mes services, six études de cas issues de mon
-parcours professionnel et un formulaire pour discuter d’un besoin Data & BI.
+basé à Tours : quatre services Data & BI, six études de cas issues du parcours
+professionnel et un formulaire de contact. Les employeurs et missions du parcours
+ne sont pas présentés comme des clients freelance.
 
-## Objectif
-
-Expliquer clairement mon accompagnement en intégration, Data Quality,
-automatisation et reporting Power BI. L’accueil met en avant quatre services,
-trois réalisations et la prise de contact, sans présenter les employeurs ou
-missions du parcours comme des clients freelance.
-
-## Stack
-
-Next.js 16 (App Router), React 19, TypeScript, CSS et Tailwind CSS 4.
-Lucide et React Icons pour les icônes, Zod pour la validation serveur,
-Resend pour les e-mails. Versions verrouillées dans `package-lock.json`.
+Next.js 16 (App Router), React 19, TypeScript, CSS et Tailwind CSS 4 ; Lucide et
+React Icons pour les icônes, Zod pour la validation serveur, Resend pour les e-mails.
+Les versions sont verrouillées dans `package-lock.json` ; les polices sont système.
 
 ## Installation locale
 
-Node.js 20.9 minimum et npm.
+Node.js 24 LTS recommandé (`.nvmrc`) et npm. Versions prises en charge :
+Node 22.13 ou supérieur dans la branche 22, ou Node 24 et supérieur.
 
 ```bash
 npm ci
@@ -27,117 +20,121 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Sous PowerShell, remplacer la commande `cp` par
-`Copy-Item .env.example .env.local`. Ne pas écraser un `.env.local` existant.
-Ouvrir <http://localhost:3000> ; les pages sont disponibles en `/fr` et `/en`.
+Sous PowerShell, utiliser `Copy-Item .env.example .env.local`.
+Ne pas écraser un `.env.local` existant. Ouvrir <http://localhost:3000> ;
+les pages sont disponibles en `/fr` et `/en`.
 
-`.env.example` décrit les variables nécessaires. Sans Resend, le formulaire
-valide les données en développement mais n’envoie aucun e-mail. Les secrets
-restent côté serveur et les fichiers `.env.local` ne sont pas suivis.
+Sans configuration Resend, le formulaire valide les données en développement
+mais n’envoie aucun e-mail. Les secrets restent côté serveur ; `.env.local`,
+`node_modules/`, `.next/` et les caches TypeScript sont ignorés par Git.
 
-## Commandes utiles
+## Commandes
 
 | Commande | Usage |
 | --- | --- |
 | `npm run dev` | Développement local |
+| `npm run check` | Lint, types, tests et cohérence des assets générés |
 | `npm run lint` | ESLint |
 | `npm run typecheck` | Vérification TypeScript |
-| `npm test` | Tests du formulaire, des contenus, de l’i18n, des icônes et de l’indexation |
-| `npm run build` | Build de production |
+| `npm test` | Tests Node.js : formulaire, i18n, contenus, routes, marque et indexation |
+| `npm run test:http` | Tests du site compilé démarré sur le port 3001, avec de vraies réponses HTTP |
+| `npm run assets:check` | Comparaison des dérivés avec leurs sources, sans écriture |
+| `npm run build` | Build de production, séparé de `check` |
 | `npm start` | Exécution du build |
-| `npm run icons:generate` | Régénération des icônes depuis le PNG maître |
+| `npm run icons:generate` | Régénération des PNG et du favicon depuis le PNG maître |
+| `npm run illustrations:generate` | Régénération des deux SVG depuis la source vectorielle |
 
-Les polices sont des piles système : aucun téléchargement externe de police.
-Les fichiers maîtres de marque et leurs scripts sont conservés dans `assets/`
-et `scripts/` ; seuls les dérivés utiles sont servis depuis `public/` et `app/`.
-Ne pas supprimer une source au seul motif qu’elle n’apparaît pas directement
-dans une page : les scripts et tests peuvent en dépendre.
+`npm test` découvre automatiquement `tests/*.test.cjs` et `tests/*.test.mjs`.
+La CI utilise Node 24 et exécute `check`, l’audit des dépendances de production
+et le build. Aucun secret d’e-mail n’est nécessaire pour ces contrôles.
 
-Un build exige `NEXT_PUBLIC_SITE_URL` avec l’origine HTTPS publique.
-L’indexation est activée uniquement avec `SITE_ENV=production`, hors preview.
+## Architecture et maintenance
 
-## Architecture
-
-- `app/[locale]/` : pages partagées FR/EN, métadonnées et layouts.
-- `app/api/contact/` : validation, antispam et envoi serveur.
+- `app/[locale]/` : pages FR/EN, layout, métadonnées et images de partage.
+- `app/api/contact/route.ts` : orchestration de la validation et de l’envoi.
+- `lib/contact-*.ts` : contrat partagé, schéma serveur, limites de requête et contenu des e-mails.
 - `components/` : navigation, formulaire, sections et illustrations statiques.
-- `data/identity.ts` : identité et liens publics.
-- `data/profile.ts` : expériences, dates, technologies et formation.
-- `data/projects.ts` : six études de cas liées aux expériences par identifiant.
-- `data/services.ts` : quatre domaines d’intervention.
-- `data/legal-config.ts` : informations légales et de confidentialité.
-- `i18n/` : traductions, URLs, registre des pages et métadonnées.
-- `styles/` : palette centralisée dans `theme.css`, styles et responsive.
-- `public/` : CV, logos des technologies et déclinaisons du hibou.
-- `tests/` : tests automatisés avec le moteur de test Node.js.
+- `data/` : identité publique, faits du parcours, études de cas, services et configuration légale.
+- `i18n/` : traductions, assemblage des contenus, URLs et registre des pages.
+- `styles/` : palette dans `theme.css` et styles importés par `app/globals.css`.
+- `assets/` et `scripts/` : sources de marque et génération ; `public/` et `app/` servent les dérivés utiles.
+- `tests/` : tests exécutés avec le moteur Node.js.
 
-Les faits communs du parcours ne sont pas recopiés dans les traductions.
-Les études de cas réutilisent les technologies de leur expérience source.
-Le CV français téléchargeable est `public/cv-christopher-vallot.pdf`.
-Les mentions d’attribution des logos sont dans `public/technologies/LICENSE.txt`.
+Les faits du parcours sont partagés entre langues ; les études de cas réutilisent
+les technologies de leur expérience source. Le SVG natif sert aux illustrations
+et aux logos de navigation ; le PNG maître conserve les icônes de navigateur
+et les aperçus sociaux. Les secrets et la validation Zod restent côté serveur.
 
-## FR / EN et accessibilité
+Le CV français est `public/cv-christopher-vallot.pdf`. L’attribution des logos des
+technologies est conservée dans `public/technologies/LICENSE.txt`.
+
+## Langues et accessibilité
 
 Les URLs canoniques utilisent `/fr` et `/en`. Le sélecteur conserve la page,
 les paramètres et l’ancre. Les anciennes URLs sans préfixe redirigent en 308
-vers le français. L’accueil `/` redirige en 307 selon la préférence mémorisée,
-ou vers `/fr`. Le registre `i18n/routes.ts` alimente le sitemap.
+vers le français ; `/` redirige en 307 selon le cookie de langue, ou vers `/fr`.
+Le registre `i18n/routes.ts` alimente le proxy et le sitemap.
 
-L’interface propose des focus visibles, des erreurs de formulaire associées
-aux champs et le respect de `prefers-reduced-motion`. Aucun mode de couleurs
-alternatif n’est nécessaire. Le cookie de langue dure un an. Aucun outil
-d’analytics n’est intégré.
+Focus visibles, erreurs associées aux champs et respect de `prefers-reduced-motion`
+sont intégrés. Le cookie de langue dure un an. Aucun outil d’analytics n’est intégré.
 
-## Formulaire
+## Formulaire et limites
 
-Validation client et serveur, champ antispam invisible et non focalisable,
-contrôle de durée, limite de taille et limitation de débit en mémoire.
-Cette dernière n’est pas partagée entre instances. Aucun envoi réussi n’est
-annoncé lorsque le service d’e-mail est indisponible.
+Validation client et serveur, antispam invisible, contrôle de durée, limite de
+corps et limitation de débit en mémoire. Cette limite s’applique à un seul
+processus : elle disparaît au redémarrage et n’est pas partagée entre instances.
+Une limite stricte nécessite un mécanisme distribué ou une règle de plateforme.
 
-Laisser les variables d’e-mail vides en développement pour tester sans envoi.
-En production, une configuration manquante renvoie une indisponibilité (503).
-Un test visuel avec réponse simulée ne valide pas la livraison réelle d’un e-mail.
+Netlify fournit `SITE_ID` aux Functions ; ne pas le définir localement. Le serveur
+utilise alors l’adresse de connexion fournie par Netlify. Sur un autre hébergement,
+le proxy doit remplacer les en-têtes d’adresse transmis par le client avant la route.
 
-## Déploiement
+En développement, une configuration d’e-mail absente valide sans envoyer.
+En production, une clé Resend absente ou un destinataire invalide renvoie 503.
+Un refus d’envoi ou une réponse Resend sans identifiant valide renvoie 502.
+Les tests utilisent un client d’e-mail simulé : ils ne prouvent pas la livraison
+réelle. Celle-ci doit être vérifiée sur l’hébergement configuré.
 
-Le site est déployé automatiquement via Netlify à partir de la branche de
-production. L’intégration Next.js et la route serveur de contact sont conservées.
+## Déploiement Netlify
 
-Avant publication : exécuter lint, typecheck, tests et build ; configurer
-`NEXT_PUBLIC_SITE_URL` (origine HTTPS) et `SITE_ENV=production` au build.
-En preview, conserver `SITE_ENV=preview`. Côté serveur, renseigner
-`RESEND_API_KEY`, `CONTACT_EMAIL` et `CONTACT_FROM_EMAIL` avec un domaine
-d’envoi vérifié. Ne jamais préfixer ces secrets par `NEXT_PUBLIC_`.
-Valider un envoi réel sur l’hébergement et confirmer les informations légales
-dans `data/legal-config.ts` avant l’ouverture commerciale.
+Le raccordement du dépôt, la branche de production, la commande `npm run build`
+et l’intégration Next.js se configurent dans le tableau de bord Netlify.
+Le dépôt ne contient pas de `netlify.toml` ; la CI GitHub contrôle le code et ne déploie pas.
+Conserver la prise en charge des Functions pour la route de contact et utiliser Node 24.
+
+Configurer `NEXT_PUBLIC_SITE_URL` avec l’origine publique HTTPS au build,
+y compris en preview ; une URL locale ou temporaire fait échouer le build.
+Activer l’indexation avec `SITE_ENV=production` uniquement pour le contexte public
+Production. Utiliser `SITE_ENV=preview` ailleurs ; le code bloque aussi les
+contextes Netlify hors production.
+
+Dans les Functions, configurer `RESEND_API_KEY` et `CONTACT_EMAIL`, puis un
+`CONTACT_FROM_EMAIL` sur un domaine d’envoi vérifié. Sans expéditeur explicite,
+le code conserve l’adresse de test Resend, qui reste soumise à ses restrictions.
+Ne jamais préfixer ces secrets par `NEXT_PUBLIC_`. Vérifier les informations
+légales dans `data/legal-config.ts` avant l’ouverture commerciale.
 
 ## Vérification avant publication
 
-```bash
-npm run lint
-npm run typecheck
-npm test
-npm run build
-```
-
-Pour vérifier le build localement sous PowerShell :
-
 ```powershell
+npm run check
 $env:NEXT_PUBLIC_SITE_URL = 'https://christophervallot.fr'
 $env:SITE_ENV = 'preview'
 npm run build
 npm start
 ```
 
-Le domaine canonique doit rester public et en HTTPS, même pour ce test local
-du build. `SITE_ENV=preview` garde ce build hors indexation.
+Pour les tests d’intégration, démarrer le build avec
+`npm start -- --hostname 127.0.0.1 --port 3001`, puis exécuter
+`npm run test:http` dans un autre terminal. `SITE_TEST_BASE_URL` permet de choisir
+une autre origine. Ces tests font uniquement des lectures HTTP : pages FR/EN,
+canoniques, redirections, chemins encodés, vraies 404 et images publiques.
+Le workflow démarre son propre serveur et exécute ces tests après la compilation.
 
-Contrôler les deux langues sur mobile et ordinateur : images, menus,
-liens des réalisations, formulaire, changements de langue et page 404.
-La compilation seule ne détecte pas une image publique manquante.
-Les dossiers `.next/` et `node_modules/` sont générés et ignorés par Git ;
-ils ne constituent pas du vieux code à publier.
+Le domaine canonique reste public et HTTPS même pour ce test local du build ;
+`SITE_ENV=preview` le garde hors indexation. Contrôler les deux langues sur mobile
+et ordinateur : images, menus, liens, formulaire, changement de langue et page 404.
+Une compilation réussie ne vérifie pas tous les chemins d’assets publics ni un envoi réel.
 
 ## Licence
 

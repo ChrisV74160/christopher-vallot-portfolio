@@ -1,6 +1,20 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync, readdirSync } from "node:fs";
+import {
+  copyFileSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  readdirSync,
+  rmSync,
+  statSync,
+  unlinkSync,
+  writeFileSync,
+} from "node:fs";
+import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
+import { basename, dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
@@ -13,13 +27,95 @@ test("Brand maintenance scripts and source files remain available", () => {
   assert.equal(pkg.scripts["icons:generate"], "node scripts/generate-brand-icons.mjs");
   for (const file of [
     "scripts/generate-brand-icons.mjs",
-    "scripts/generate-illustration-owl.mjs",
+    "scripts/build-owl-vector.mjs",
     "assets/owl.png",
     "assets/owl-brand-palette.png",
-    "public/brand/owl.webp",
-    "public/brand/hibou-original.webp",
+    "assets/illustration-owl.source.svg",
+    "public/brand/illustration-owl.svg",
+    "public/brand/owl-framed.svg",
     "public/technologies/LICENSE.txt",
   ]) assert.ok(read(file).length > 0, file);
+});
+
+const testDirectory = fileURLToPath(new URL("./", import.meta.url));
+const generators = [
+  {
+    script: "scripts/generate-brand-icons.mjs",
+    source: "assets/owl-brand-palette.png",
+    outputs: ["app/icon.png", "app/apple-icon.png", "app/favicon.ico"],
+  },
+  {
+    script: "scripts/build-owl-vector.mjs",
+    source: "assets/illustration-owl.source.svg",
+    outputs: ["public/brand/illustration-owl.svg", "public/brand/owl-framed.svg"],
+  },
+];
+
+function generatorFixture(t, generator) {
+  // Keep fixtures below tests so copied scripts resolve the real installed tools.
+  const directory = mkdtempSync(join(testDirectory, ".asset-check-"));
+  t.after(() => {
+    assert.equal(dirname(directory), testDirectory.replace(/[\\/]$/, ""));
+    assert.ok(basename(directory).startsWith(".asset-check-"));
+    rmSync(directory, { recursive: true, force: true });
+  });
+  mkdirSync(join(directory, "public/brand"), { recursive: true });
+  for (const file of [generator.script, generator.source, ...generator.outputs]) {
+    mkdirSync(dirname(join(directory, file)), { recursive: true });
+    copyFileSync(new URL("../" + file, import.meta.url), join(directory, file));
+  }
+  return directory;
+}
+
+const runGenerator = (directory, generator, args = []) => spawnSync(
+  process.execPath,
+  [join(directory, generator.script), ...args],
+  { cwd: directory, encoding: "utf8" },
+);
+
+const artifactSnapshot = (directory, files) => files.map((file) => ({
+  file,
+  digest: createHash("sha256").update(readFileSync(join(directory, file))).digest("hex"),
+  modifiedAt: statSync(join(directory, file), { bigint: true }).mtimeNs,
+}));
+
+for (const generator of generators) {
+  test(`${generator.script} checks generated artifacts without modifying them`, (t) => {
+    const directory = generatorFixture(t, generator);
+    const before = artifactSnapshot(directory, generator.outputs);
+    const publicFiles = readdirSync(join(directory, "public/brand"));
+    const result = runGenerator(directory, generator, ["--check"]);
+    assert.equal(result.status, 0, result.stderr);
+    assert.deepEqual(artifactSnapshot(directory, generator.outputs), before);
+    assert.deepEqual(readdirSync(join(directory, "public/brand")), publicFiles);
+  });
+
+  test(`${generator.script} reports stale or missing artifacts without repairing them`, (t) => {
+    const directory = generatorFixture(t, generator);
+    const [staleFile, missingFile] = generator.outputs;
+    writeFileSync(join(directory, staleFile), "deliberately stale artifact");
+    const before = artifactSnapshot(directory, generator.outputs);
+    const stale = runGenerator(directory, generator, ["--check"]);
+    assert.equal(stale.status, 1);
+    assert.ok(`${stale.stdout}${stale.stderr}`.includes(staleFile));
+    assert.deepEqual(artifactSnapshot(directory, generator.outputs), before);
+
+    unlinkSync(join(directory, missingFile));
+    const missing = runGenerator(directory, generator, ["--check"]);
+    assert.equal(missing.status, 1);
+    assert.ok(`${missing.stdout}${missing.stderr}`.includes(missingFile));
+    assert.ok(!readdirSync(dirname(join(directory, missingFile))).includes(basename(missingFile)));
+  });
+}
+
+test("Vector generation validates the source before replacing either site SVG", (t) => {
+  const generator = generators[1];
+  const directory = generatorFixture(t, generator);
+  const before = artifactSnapshot(directory, generator.outputs);
+  writeFileSync(join(directory, generator.source), '<svg xmlns="http://www.w3.org/2000/svg" width="440" height="482" viewBox="105 84 440 482"/>');
+  const result = runGenerator(directory, generator);
+  assert.notEqual(result.status, 0);
+  assert.deepEqual(artifactSnapshot(directory, generator.outputs), before);
 });
 
 test("Small-screen contact controls preserve the existing layout", () => {
@@ -111,7 +207,6 @@ test("Browser icons preserve their existing corrected transparent master", async
     const { data } = await sharp(read(file)).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
     assert.equal(data[3], 0, `${file}: transparent corner`);
   }
-  assert.equal((await sharp(read("public/brand/owl.webp")).metadata()).hasAlpha, true);
 });
 
 test("Technology logos remain local, safe and in their original brand colours", () => {
