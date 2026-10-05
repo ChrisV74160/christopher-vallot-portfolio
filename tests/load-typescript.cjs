@@ -25,6 +25,11 @@ function createTypeScriptLoader({ mocks = {} } = {}) {
   function load(sourcePath) {
     const filename = resolveSource(path.resolve(projectRoot, sourcePath));
     if (cache.has(filename)) return cache.get(filename).exports;
+    if (filename.endsWith(".json")) {
+      const loaded = { exports: JSON.parse(fs.readFileSync(filename, "utf8")) };
+      cache.set(filename, loaded);
+      return loaded.exports;
+    }
 
     const compiled = ts.transpileModule(fs.readFileSync(filename, "utf8"), {
       fileName: filename,

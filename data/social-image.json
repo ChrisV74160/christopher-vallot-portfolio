@@ -1,0 +1,14 @@
+{
+  "fr": {
+    "role": "Consultant Data & BI Freelance",
+    "firstLine": "Transformer le bruit",
+    "secondLine": "en signal.",
+    "automation": "Automatisation"
+  },
+  "en": {
+    "role": "Freelance Data & BI Consultant",
+    "firstLine": "Turn noise",
+    "secondLine": "into signal.",
+    "automation": "Automation"
+  }
+}

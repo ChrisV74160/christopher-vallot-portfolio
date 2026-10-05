@@ -9,15 +9,18 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "prebuild": "npm run assets:check",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "test": "node --test tests/*.test.cjs tests/*.test.mjs",
     "test:http": "node --test tests/integration/*.test.cjs",
     "check": "npm run lint && npm run typecheck && npm test && npm run assets:check",
-    "assets:check": "node scripts/generate-brand-icons.mjs --check && node scripts/build-owl-vector.mjs --check",
+    "assets:check": "node scripts/generate-assets.mjs --check",
+    "assets:generate": "node scripts/generate-assets.mjs",
     "icons:generate": "node scripts/generate-brand-icons.mjs",
-    "illustrations:generate": "node scripts/build-owl-vector.mjs"
+    "illustrations:generate": "node scripts/generate-owl-vector.mjs && node scripts/generate-artwork.mjs",
+    "technologies:generate": "node scripts/generate-technology-icons.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.37.0",
@@ -35,6 +38,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.3.8",
+    "satori": "0.32.0",
     "sharp": "0.35.4",
     "svgo": "4.1.0",
     "tailwindcss": "^4",

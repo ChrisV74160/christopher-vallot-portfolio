@@ -1,0 +1,29 @@
+{
+  "icons": {
+    "Python": { "slug": "python", "color": "var(--brand-secondary)", "source": "python.svg" },
+    "PySpark": { "slug": "apachespark", "color": "var(--brand-secondary)", "source": "apachespark.svg" },
+    "Pandas": { "slug": "pandas", "color": "var(--brand-secondary)", "source": "pandas.svg" },
+    "NumPy": { "slug": "numpy", "color": "var(--brand-secondary)", "source": "numpy.svg" },
+    "SQL": { "slug": "sql", "color": "var(--brand-secondary)", "family": "lucide", "glyph": "Database" },
+    "Shell": { "slug": "shell", "color": "var(--brand-secondary)", "family": "lucide", "glyph": "Terminal" },
+    "API": { "slug": "api", "color": "var(--brand-secondary)", "family": "lucide", "glyph": "Plug" },
+    "SAS": { "slug": "sas", "color": "var(--brand-secondary)", "source": "sas.svg" },
+    "Power BI": { "slug": "power-bi", "color": "var(--brand-secondary)", "source": "power-bi.svg" },
+    "DAX": { "slug": "dax", "color": "var(--brand-primary)", "family": "lucide", "glyph": "Braces" },
+    "Power Query": { "slug": "power-query", "color": "var(--brand-secondary)", "source": "power-query.svg" },
+    "Power Automate": { "slug": "power-automate", "color": "var(--brand-secondary)", "source": "power-automate.svg" },
+    "Cloudera": { "slug": "cloudera", "color": "#F96702", "family": "simple-icons", "glyph": "SiCloudera" },
+    "Teradata": { "slug": "teradata", "color": "#F37440", "family": "simple-icons", "glyph": "SiTeradata" },
+    "Data Quality": { "slug": "data-quality", "color": "var(--brand-quality)", "family": "lucide", "glyph": "ShieldCheck" },
+    "Playwright": { "slug": "playwright", "color": "var(--brand-secondary)", "source": "playwright.svg" },
+    "PowerShell": { "slug": "powershell", "color": "var(--brand-secondary)", "source": "powershell.svg" },
+    "JSON": { "slug": "json", "color": "var(--brand-primary)", "family": "simple-icons", "glyph": "SiJson" },
+    "Scikit-learn": { "slug": "scikitlearn", "color": "var(--brand-secondary)", "source": "scikitlearn.svg" },
+    "Matplotlib": { "slug": "matplotlib", "color": "var(--brand-secondary)", "source": "matplotlib.svg" },
+    "ONNX": { "slug": "onnx", "color": "#005CED", "family": "simple-icons", "glyph": "SiOnnx" },
+    "LLaMA": { "slug": "meta", "color": "#0866FF", "family": "simple-icons", "glyph": "SiMeta" },
+    "GitLab": { "slug": "gitlab", "color": "var(--brand-secondary)", "source": "gitlab.svg" },
+    "Jenkins": { "slug": "jenkins", "color": "var(--brand-secondary)", "source": "jenkins.svg" }
+  },
+  "fallback": { "slug": "code", "color": "var(--brand-primary)", "family": "lucide", "glyph": "Code2" }
+}

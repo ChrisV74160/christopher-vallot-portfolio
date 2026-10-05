@@ -41,8 +41,10 @@ mais n’envoie aucun e-mail. Les secrets restent côté serveur ; `.env.local`,
 | `npm run assets:check` | Comparaison des dérivés avec leurs sources, sans écriture |
 | `npm run build` | Build de production, séparé de `check` |
 | `npm start` | Exécution du build |
-| `npm run icons:generate` | Régénération des PNG et du favicon depuis le PNG maître |
-| `npm run illustrations:generate` | Régénération des deux SVG depuis la source vectorielle |
+| `npm run assets:generate` | Régénération de toutes les images depuis leurs sources |
+| `npm run icons:generate` | Icônes PNG/ICO depuis le hibou vectoriel encadré |
+| `npm run illustrations:generate` | Hibou et 17 illustrations SVG autonomes |
+| `npm run technologies:generate` | Logos SVG depuis les sources natives et le catalogue |
 
 `npm test` découvre automatiquement `tests/*.test.cjs` et `tests/*.test.mjs`.
 La CI utilise Node 24 et exécute `check`, l’audit des dépendances de production
@@ -61,9 +63,21 @@ et le build. Aucun secret d’e-mail n’est nécessaire pour ces contrôles.
 - `tests/` : tests exécutés avec le moteur Node.js.
 
 Les faits du parcours sont partagés entre langues ; les études de cas réutilisent
-les technologies de leur expérience source. Le SVG natif sert aux illustrations
-et aux logos de navigation ; le PNG maître conserve les icônes de navigateur
-et les aperçus sociaux. Les secrets et la validation Zod restent côté serveur.
+les technologies de leur expérience source. Les secrets et la validation Zod restent côté serveur.
+
+Les dessins sont définis dans `assets/vectors/`, les tracés du hibou dans
+`assets/illustration-owl.source.svg`, les logos dans `assets/technologies/`
+et `data/technology-icons.json`. Les scripts figent la palette et exportent des SVG
+autonomes, sans image bitmap incorporée. Le même hibou vectoriel alimente le logo
+encadré, les icônes PNG/ICO et les aperçus sociaux PNG. La police des aperçus est
+convertie en tracés ; sa source et sa licence sont dans `assets/fonts/`.
+Le portrait reste une photo : `assets/portrait.source.webp` produit un WebP de 672 px.
+Les pictogrammes d’interface restent les SVG natifs des bibliothèques verrouillées.
+
+Après une modification des sources, exécuter `npm run assets:generate` et versionner
+les dérivés avec leurs sources. `assets:check` vérifie leur cohérence sans les modifier
+et signale les images non enregistrées dans les dossiers générés ; le build et la CI
+exécutent ce contrôle. Les rendus intermédiaires restent en mémoire.
 
 Le CV français est `public/cv-christopher-vallot.pdf`. L’attribution des logos des
 technologies est conservée dans `public/technologies/LICENSE.txt`.

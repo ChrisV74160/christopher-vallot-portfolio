@@ -19,6 +19,7 @@ import sharp from "sharp";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { createTypeScriptLoader } from "./load-typescript.cjs";
+import { getOwlVectors } from "../scripts/lib/owl-vector.mjs";
 
 const read = (path) => readFileSync(new URL("../" + path, import.meta.url));
 
@@ -27,11 +28,8 @@ test("Brand maintenance scripts and source files remain available", () => {
   assert.equal(pkg.scripts["icons:generate"], "node scripts/generate-brand-icons.mjs");
   for (const file of [
     "scripts/generate-brand-icons.mjs",
-    "scripts/build-owl-vector.mjs",
-    "assets/owl.png",
-    "assets/owl-brand-palette.png",
+    "scripts/generate-owl-vector.mjs",
     "assets/illustration-owl.source.svg",
-    "public/brand/illustration-owl.svg",
     "public/brand/owl-framed.svg",
     "public/technologies/LICENSE.txt",
   ]) assert.ok(read(file).length > 0, file);
@@ -41,13 +39,13 @@ const testDirectory = fileURLToPath(new URL("./", import.meta.url));
 const generators = [
   {
     script: "scripts/generate-brand-icons.mjs",
-    source: "assets/owl-brand-palette.png",
+    source: "assets/illustration-owl.source.svg",
     outputs: ["app/icon.png", "app/apple-icon.png", "app/favicon.ico"],
   },
   {
-    script: "scripts/build-owl-vector.mjs",
+    script: "scripts/generate-owl-vector.mjs",
     source: "assets/illustration-owl.source.svg",
-    outputs: ["public/brand/illustration-owl.svg", "public/brand/owl-framed.svg"],
+    outputs: ["public/brand/owl-framed.svg"],
   },
 ];
 
@@ -60,7 +58,8 @@ function generatorFixture(t, generator) {
     rmSync(directory, { recursive: true, force: true });
   });
   mkdirSync(join(directory, "public/brand"), { recursive: true });
-  for (const file of [generator.script, generator.source, ...generator.outputs]) {
+  const helpers = readdirSync(new URL("../scripts/lib/", import.meta.url)).map(name => `scripts/lib/${name}`);
+  for (const file of [generator.script, generator.source, "styles/theme.css", ...helpers, ...generator.outputs]) {
     mkdirSync(dirname(join(directory, file)), { recursive: true });
     copyFileSync(new URL("../" + file, import.meta.url), join(directory, file));
   }
@@ -92,7 +91,8 @@ for (const generator of generators) {
 
   test(`${generator.script} reports stale or missing artifacts without repairing them`, (t) => {
     const directory = generatorFixture(t, generator);
-    const [staleFile, missingFile] = generator.outputs;
+    const staleFile = generator.outputs[0];
+    const missingFile = generator.outputs.at(-1);
     writeFileSync(join(directory, staleFile), "deliberately stale artifact");
     const before = artifactSnapshot(directory, generator.outputs);
     const stale = runGenerator(directory, generator, ["--check"]);
@@ -108,7 +108,7 @@ for (const generator of generators) {
   });
 }
 
-test("Vector generation validates the source before replacing either site SVG", (t) => {
+test("Vector generation validates the source before replacing the framed site SVG", (t) => {
   const generator = generators[1];
   const directory = generatorFixture(t, generator);
   const before = artifactSnapshot(directory, generator.outputs);
@@ -166,22 +166,22 @@ test("The framed vector keeps the navy rounded border and the shared owl colours
   assert.deepEqual(pixel(325, 503), [120, 165, 10, 255]);
 });
 
-test("The corrected owl has the original belly colour order and a transparent exterior", async () => {
-  const { data, info } = await sharp(read("assets/owl-brand-palette.png")).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+test("The native framed owl has the original belly colour order and a transparent exterior", async () => {
+  const { data, info } = await sharp(read("public/brand/owl-framed.svg")).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
   const pixel = (x, y) => {
     const offset = (Math.floor(y * info.height) * info.width + Math.floor(x * info.width)) * 4;
     return [...data.subarray(offset, offset + 4)];
   };
-  assert.deepEqual(pixel(.42, .61), [0, 101, 114, 255]);
-  assert.deepEqual(pixel(.42, .69), [0, 139, 86, 255]);
-  assert.deepEqual(pixel(.50, .77), [120, 165, 10, 255]);
+  assert.deepEqual(pixel(265 / 650, 394 / 650), [0, 101, 114, 255]);
+  assert.deepEqual(pixel(276 / 650, 454 / 650), [0, 139, 86, 255]);
+  assert.deepEqual(pixel(325 / 650, 503 / 650), [120, 165, 10, 255]);
   assert.deepEqual(pixel(.50, .08), [255, 255, 255, 255]);
   assert.equal(pixel(.01, .01)[3], 0);
   const colours = new Set();
   for (let i = 0; i < data.length; i += 4) {
     if (data[i + 3]) colours.add([...data.subarray(i, i + 3)].join(","));
   }
-  assert.deepEqual([...colours].sort(), ["0,63,92", "0,101,114", "0,139,86", "120,165,10", "255,166,0", "255,255,255"].sort());
+  for (const colour of ["0,63,92", "0,101,114", "0,139,86", "120,165,10", "255,166,0", "255,255,255"]) assert.ok(colours.has(colour));
   // The first and last visible pixel on each row must be the blue frame, never white.
   for (let y = 0; y < info.height; y++) {
     let first = -1, last = -1;
@@ -194,16 +194,17 @@ test("The corrected owl has the original belly colour order and a transparent ex
     for (const x of [first, last]) {
       if (x === -1) continue;
       const offset = (y * info.width + x) * 4;
-      assert.deepEqual([...data.subarray(offset, offset + 3)], [0, 63, 92], `White fringe on row ${y}`);
+      const [r, g, b] = data.subarray(offset, offset + 3);
+      assert.ok(r < 20 && g >= 50 && g < 90 && b >= 75 && b < 120, `Non-navy fringe on row ${y}`);
     }
   }
 });
 
-test("Browser icons preserve their existing corrected transparent master", async () => {
+test("Browser icons are generated directly from the shared native framed owl", async () => {
   for (const [file, size] of [["app/icon.png", 512], ["app/apple-icon.png", 180]]) {
-    const expected = await sharp(read("assets/owl-brand-palette.png"))
+    const expected = await sharp(read("public/brand/owl-framed.svg"), { density: 72 * size / 650 })
       .resize(size, size, { fit: "contain", background: "#00000000" }).png().toBuffer();
-    assert.deepEqual(read(file), expected);
+    assert.ok(read(file).equals(expected), `${file}: does not match the native vector rendering`);
     const { data } = await sharp(read(file)).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
     assert.equal(data[3], 0, `${file}: transparent corner`);
   }
@@ -242,18 +243,21 @@ test("The flat visual identity uses only the brand palette", () => {
   }
 });
 
-test("Data illustrations are static and use the supplied vector owl", () => {
+test("Data illustrations consume their generated self-contained vectors", () => {
   const source = read("components/visuals/data-artwork.tsx").toString();
   assert.doesNotMatch(source, /["']use client["']|<animate\b|setInterval|requestAnimationFrame/);
   const { DashboardArtwork, ConversationArtwork } = createTypeScriptLoader()("components/visuals/data-artwork.tsx");
-  for (const [component, props] of [
-    [DashboardArtwork, {}],
-    [DashboardArtwork, { variant: "contact" }],
-    [ConversationArtwork, {}],
-    [ConversationArtwork, { variant: "similar" }],
+  for (const [component, props, asset] of [
+    [DashboardArtwork, {}, "hero"],
+    [DashboardArtwork, { variant: "contact" }, "contact"],
+    [ConversationArtwork, {}, "conversation"],
+    [ConversationArtwork, { variant: "similar" }, "conversation-similar"],
   ]) {
     const markup = renderToStaticMarkup(createElement(component, props));
-    assert.equal((markup.match(/href="\/brand\/illustration-owl\.svg"/g) ?? []).length, 1);
+    assert.ok(markup.includes(`href="/artwork/${asset}.svg"`));
+    const vector = read(`public/artwork/${asset}.svg`).toString();
+    assert.doesNotMatch(vector, /<image\b|<animate\b|data:image/);
+    assert.match(vector, /<clipPath\b/);
     assert.doesNotMatch(markup, /hibou-original\.webp|\/brand\/owl\.webp/);
     assert.match(markup, /aria-hidden="true"/);
   }
@@ -261,7 +265,7 @@ test("Data illustrations are static and use the supplied vector owl", () => {
 
 test("The illustration vector preserves the supplied source rendering", async () => {
   const original = await sharp(read("assets/illustration-owl.source.svg")).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
-  const illustration = await sharp(read("public/brand/illustration-owl.svg")).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  const illustration = await sharp(Buffer.from((await getOwlVectors()).illustration)).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
   assert.equal(illustration.info.width, 440);
   assert.equal(illustration.info.height, 482);
   assert.deepEqual(illustration.info, original.info);
@@ -270,7 +274,7 @@ test("The illustration vector preserves the supplied source rendering", async ()
 });
 
 test("The illustration owl is a self-contained vector with a transparent exterior", async () => {
-  const bytes = read("public/brand/illustration-owl.svg");
+  const bytes = Buffer.from((await getOwlVectors()).illustration);
   const source = bytes.toString();
   assert.doesNotMatch(source, /<image\b|data:image|<foreignObject\b|<script\b|\son\w+\s*=/i);
   assert.doesNotMatch(source.replace("http://www.w3.org/2000/svg", ""), /https?:\/\/|(?:href|src)\s*=/i);
@@ -324,12 +328,14 @@ test("Every project renders the identical text-free schematic in cards and detai
     const variant = project.visualVariant;
     const schematic = renderToStaticMarkup(createElement(MissionArtwork, { variant }));
     distinct.add(schematic.replace(/data-mission="[^"]+"/, ""));
-    assert.doesNotMatch(schematic, /<text\b|<image\b|<foreignObject\b|hibou|owl|technologies\/|<title\b/i);
+    assert.doesNotMatch(schematic, /<text\b|<foreignObject\b|hibou|owl|technologies\/|<title\b/i);
+    const vector = read(`public/artwork/mission-${variant}.svg`).toString();
+    assert.doesNotMatch(vector, /<text\b|<image\b|<foreignObject\b|hibou|owl/i);
     for (const locale of ["fr", "en"]) {
       for (const detail of [false, true]) {
         const rendered = renderToStaticMarkup(createElement(ProjectVisual, { variant, detail }));
         assert.ok(rendered.includes(schematic), `${locale}/${project.slug}: changed schematic`);
-        assert.doesNotMatch(rendered, /project-visual-label|<text\b|<image\b/);
+        assert.doesNotMatch(rendered, /project-visual-label|<text\b/);
         assert.equal(rendered.replace(/<[^>]+>/g, "").trim(), "");
       }
     }
@@ -340,7 +346,7 @@ test("Every project renders the identical text-free schematic in cards and detai
 test("All case views share the homepage background and the CTA has no extra turquoise shape", () => {
   const source = read("components/project-visual.tsx").toString();
   const css = read("styles/data-artwork.css").toString();
-  const artwork = read("components/visuals/mission-artwork.tsx").toString();
+  const artwork = read("assets/vectors/mission-artwork.tsx").toString();
   assert.equal((source.match(/<CaseArtwork variant=\{variant\}/g) ?? []).length, 1);
   assert.doesNotMatch(source, /ConceptFlow|diagram\.label|diagram\.stages|diagram\.note/);
   assert.doesNotMatch(artwork, /<text\b|<foreignObject\b|<image\b|TechnologySvgIcon|["']use client["']/);
@@ -375,7 +381,7 @@ test("Case banners match the closing block width with a compact panoramic format
 });
 
 test("Contact foliage keeps a teal lower leaf and a separate green background", () => {
-  const art = read("components/visuals/data-artwork.tsx").toString();
+  const art = read("assets/vectors/data-artwork.tsx").toString();
   assert.match(art, /data-contact-leaf="lower"[^>]*fill=\{teal\}/);
   assert.match(art, /data-contact-background="green"[^>]*fill=\{green\}/);
   assert.match(art, /<ellipse data-contact-background="green"[^>]*transform="rotate\(-18 280 245\)"/);
@@ -385,7 +391,7 @@ test("Contact foliage keeps a teal lower leaf and a separate green background", 
 });
 
 test("Neighbouring chart bars never use the same palette colour", () => {
-  const source = read("components/visuals/data-artwork.tsx").toString();
+  const source = read("assets/vectors/data-artwork.tsx").toString();
   const palettes = [...source.matchAll(/fill=\{\[([a-z, ]+)\]\[i\]\}/g)];
   assert.ok(palettes.length >= 5);
   for (const [, values] of palettes) {
@@ -395,11 +401,11 @@ test("Neighbouring chart bars never use the same palette colour", () => {
   assert.doesNotMatch(source, /fill=\{i > 2 \? navy : green\}/);
 });
 
-test("Social previews reuse the current site icon, not a legacy owl", () => {
+test("Social previews serve the script-generated vector-derived images", () => {
   const route = read("app/[locale]/opengraph-image/route.tsx").toString();
-  assert.match(route, /readFile\(join\(process\.cwd\(\), "app\/icon\.png"\), "base64"\)/);
-  assert.match(route, /data:image\/png;base64/);
-  assert.doesNotMatch(route, /hibou\.svg/);
+  assert.match(route, /public.*social/);
+  assert.doesNotMatch(route, /next\/og|ImageResponse|data:image/);
+  for (const locale of ["fr", "en"]) assert.deepEqual(pngSize(read(`public/social/${locale}.png`)), [1200, 630]);
 });
 
 test("Browser and installation metadata use content-versioned icon URLs", () => {
@@ -433,8 +439,8 @@ test("The ICO contains the same owl in independent 16, 32, 48 and 96px PNG frame
     assert.equal(ico[entry + 1], size);
     assert.ok(offset >= 70 && offset + bytes <= ico.length);
     assert.deepEqual(pngSize(ico.subarray(offset, offset + bytes)), [size, size]);
-    const expected = await sharp(read("assets/owl-brand-palette.png"))
+    const expected = await sharp(read("public/brand/owl-framed.svg"), { density: 72 * size / 650 })
       .resize(size, size, { fit: "contain", background: "#00000000" }).png().toBuffer();
-    assert.deepEqual(ico.subarray(offset, offset + bytes), expected);
+    assert.ok(ico.subarray(offset, offset + bytes).equals(expected), `${size}px ICO frame differs from the vector`);
   }
 });

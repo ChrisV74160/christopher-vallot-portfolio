@@ -3,6 +3,8 @@ const assert = require("node:assert/strict");
 const { before, test } = require("node:test");
 const { setTimeout: delay } = require("node:timers/promises");
 const { createTypeScriptLoader } = require("../load-typescript.cjs");
+const { readFileSync, readdirSync } = require("node:fs");
+const { join } = require("node:path");
 /* eslint-enable @typescript-eslint/no-require-imports */
 
 const baseUrl = new URL(process.env.SITE_TEST_BASE_URL || "http://127.0.0.1:3001");
@@ -96,15 +98,17 @@ test("Redirects preserve queries and distinguish preferences from legacy URLs", 
   }
 });
 
-test("Brand vectors, browser icons and both social previews are served as images", async () => {
-  for (const [path, type] of [
-    ["/brand/owl-framed.svg", "image/svg+xml"], ["/brand/illustration-owl.svg", "image/svg+xml"],
-    ["/icon.png", "image/png"], ["/apple-icon.png", "image/png"],
-    ["/fr/opengraph-image", "image/png"], ["/en/opengraph-image", "image/png"],
-  ]) {
+test("All generated vectors, platform icons and portraits are served with their checked bytes", async () => {
+  const root = join(__dirname, "../..");
+  const files = ["app/icon.png", "app/apple-icon.png", "app/favicon.ico", "public/portrait.webp",
+    ...["brand", "artwork", "technologies", "social"].flatMap(directory => readdirSync(join(root, "public", directory))
+      .filter(name => /\.(svg|png)$/.test(name)).map(name => `public/${directory}/${name}`))];
+  const entries = files.map(file => [`/${file.replace(/^(app|public)\//, "")}`, file]);
+  for (const locale of ["fr", "en"]) entries.push([`/${locale}/opengraph-image`, `public/social/${locale}.png`]);
+  for (const [path, file] of entries) {
     const response = await get(path);
     assert.equal(response.status, 200, path);
-    assert.ok(response.headers.get("content-type")?.includes(type), path);
-    assert.ok((await response.arrayBuffer()).byteLength > 0, path);
+    assert.ok(response.headers.get("content-type")?.startsWith("image/"), path);
+    assert.ok(Buffer.from(await response.arrayBuffer()).equals(readFileSync(join(root, file))), `${path}: altered image response`);
   }
 });

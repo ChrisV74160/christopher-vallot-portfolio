@@ -1,4 +1,5 @@
 import { siteName, siteDescription } from "@/lib/site-config";
+import socialImage from "@/data/social-image.json";
 
 export const metaMessages = {
   fr: {
@@ -10,7 +11,7 @@ export const metaMessages = {
     projects: { title: "Projets data et études de cas", description: "Découvrez des études de cas issues d’expériences professionnelles en Business Intelligence, Data Quality, automatisation et traitement de données." },
     legal: { title: "Mentions légales", description: "Informations légales relatives au site professionnel de Christopher VALLOT, Consultant Data & BI Freelance." },
     privacy: { title: "Politique de confidentialité", description: "Politique de confidentialité et informations sur les données traitées par le formulaire de contact." },
-    og: { role: "Consultant Data & BI Freelance", firstLine: "Transformer le bruit", secondLine: "en signal.", automation: "Automatisation" },
+    og: socialImage.fr,
     skip: "Aller au contenu",
   },
   en: {
@@ -23,7 +24,7 @@ export const metaMessages = {
     projects: { title: "Data & BI projects and case studies", description: "Explore case studies from professional experience in Business Intelligence, Data Quality, automation and data processing." },
     legal: { title: "Legal notice", description: "Legal information about the professional website of Christopher VALLOT, freelance Data & BI Consultant." },
     privacy: { title: "Privacy policy", description: "Privacy policy and information about the data processed through the contact form." },
-    og: { role: "Freelance Data & BI Consultant", firstLine: "Turn noise", secondLine: "into signal.", automation: "Automation" },
+    og: socialImage.en,
     skip: "Skip to content",
   },
 } as const;

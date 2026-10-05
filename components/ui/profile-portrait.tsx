@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import profilePhoto from "@/assets/photo-profil-christopher-vallot.webp";
+import profilePhoto from "@/public/portrait.webp";
 import type { Locale } from "@/i18n/config";
 import { projectMessages } from "@/i18n/messages/projects";
 

@@ -1,17 +1,30 @@
 Third-party logo attribution
 
 Devicon: Python, Apache Spark (PySpark), NumPy, Pandas, Playwright, Matplotlib,
-GitLab, Scikit-learn, Jenkins and PowerShell. Original logos, unchanged.
+GitLab, Scikit-learn, Jenkins and PowerShell. Native SVG geometry and colours preserved.
 Source: https://github.com/devicons/devicon/tree/7330accdbc47e2dc0c19789a48533c4a3c50fe58/icons
 
-Microsoft: Power BI, Power Automate and Power Query. Original logos, unchanged.
+Microsoft: Power BI, Power Automate and Power Query. Native SVG geometry and colours preserved.
 Source: https://github.com/microsoft/PowerBI-Icons/tree/24f1db8bdfab951c25db591772140d2f4ec5bc1e/SVG
 License: Creative Commons Attribution 4.0 International
 https://creativecommons.org/licenses/by/4.0/
 
-SAS: unmodified favicon from https://www.sas.com/etc/designs/saswww/favicon.ico
+SAS: native S-symbol paths from the inline header SVG at
+https://www.sas.com/en_us/home.html (retrieved 2026-10-05).
+The symbol is centred in a square; #007EC4 preserves the previous favicon blue.
+Copyright: SAS Institute Inc. All rights reserved.
 
-Other brand glyphs are provided through react-icons/si (Simple Icons).
+Cloudera, Teradata, JSON, ONNX and Meta (LLaMA publisher) use native paths from
+react-icons/si (Simple Icons), CC0 1.0 Universal:
+https://creativecommons.org/publicdomain/zero/1.0/
+SQL, Shell, API, DAX, Data Quality and the generic fallback use lucide-react
+native SVG glyphs, ISC: https://github.com/lucide-icons/lucide/blob/main/LICENSE
+Database (SQL) and Terminal (Shell) are derived from Feather, MIT.
+
+SVG masters live in assets/technologies; library versions are locked in
+package-lock.json. All local technology SVGs are produced deterministically by
+scripts/generate-technology-icons.mjs using data/technology-icons.json.
+Colours, dimensions, filters and native geometry are retained during optimisation.
 All trademarks remain the property of their respective owners.
 These logos identify tools only; no endorsement or partnership is implied.
 
@@ -37,3 +50,45 @@ FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+Lucide license:
+
+ISC License
+
+Copyright (c) 2026 Lucide Icons and Contributors
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+Feather-derived glyphs license:
+
+The MIT License (MIT)
+
+Copyright (c) 2013-present Cole Bemis
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
