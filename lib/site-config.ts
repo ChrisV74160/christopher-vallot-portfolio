@@ -10,7 +10,7 @@ const transientHostnames = [
 export const siteName =
   "Christopher VALLOT | Consultant Data & BI freelance";
 export const siteDescription =
-  "Consultant Data & BI freelance à Tours : intégration et qualité des données, automatisation des traitements et reporting Power BI avec Python et SQL.";
+  "Consultant Data & BI freelance à Tours : intégration, qualité des données, automatisation et rapports Power BI avec SQL et Python.";
 
 function isTransientHostname(hostname: string) {
   const normalizedHostname = hostname.toLowerCase();

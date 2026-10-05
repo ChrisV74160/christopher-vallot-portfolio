@@ -12,10 +12,10 @@ export interface ProjectUiMessages {
 export const projectMessages: Record<Locale, ProjectUiMessages> = {
   fr: {
     technologies: "Technologies utilisées", viewCase: "Voir l’étude de cas", contactProject: "Discuter de votre projet",
-    portraitAlt: "Portrait de Christopher VALLOT", portraitLabel: "Profil / Data", portraitRole: "Consultant Data & BI Freelance · Tours",
+    portraitAlt: "Portrait de Christopher VALLOT", portraitLabel: "Parcours professionnel", portraitRole: "Consultant Data & BI freelance · Tours",
   },
   en: {
     technologies: "Technologies used", viewCase: "View the case study", contactProject: "Discuss your project",
-    portraitAlt: "Portrait of Christopher VALLOT", portraitLabel: "Profile / Data", portraitRole: "Freelance Data & BI Consultant · Tours",
+    portraitAlt: "Portrait of Christopher VALLOT", portraitLabel: "Professional background", portraitRole: "Freelance Data & BI Consultant · Tours",
   },
 };

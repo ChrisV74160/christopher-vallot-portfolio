@@ -33,7 +33,7 @@ export function buildContactEmail(
       `Nom : ${data.name}`,
       `Entreprise : ${company}`,
       `E-mail : ${data.email}`,
-      `Poste ou besoin : ${needLabel}`,
+      `Type de besoin : ${needLabel}`,
       "",
       "Message :",
       data.message,
@@ -43,7 +43,7 @@ export function buildContactEmail(
         <p><strong>Nom :</strong> ${escapeHtml(data.name)}</p>
         <p><strong>Entreprise :</strong> ${escapeHtml(company)}</p>
         <p><strong>E-mail :</strong> ${escapeHtml(data.email)}</p>
-        <p><strong>Poste ou besoin :</strong> ${escapeHtml(needLabel)}</p>
+        <p><strong>Type de besoin :</strong> ${escapeHtml(needLabel)}</p>
         <h2>Message</h2>
         <p style="white-space: pre-wrap;">${escapeHtml(data.message)}</p>
       `,

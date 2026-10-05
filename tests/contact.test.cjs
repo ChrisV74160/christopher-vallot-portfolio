@@ -240,7 +240,7 @@ test("Email delivery preserves routing, normalized values and escaped message co
   assert.equal(deliveryPayload.from, "Portfolio QA <portfolio@example.com>");
   assert.equal(deliveryPayload.to, "owner@example.com");
   assert.equal(deliveryPayload.replyTo, "qa@example.com");
-  assert.equal(deliveryPayload.subject, "Nouvelle demande portfolio — Data Quality");
+  assert.equal(deliveryPayload.subject, "Nouvelle demande portfolio — Qualité des données");
   assert.match(deliveryPayload.text, /Nom : Élodie <QA>\nEntreprise : Example & "Company"/);
   assert.match(deliveryPayload.text, /A sufficiently long enquiry\.\n<script>alert\('test'\)<\/script>/);
   assert.match(deliveryPayload.html, /Élodie &lt;QA&gt;/);

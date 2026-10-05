@@ -5,62 +5,61 @@ import { getExperienceById } from "./profile";
 const caseStudies = [
   {
     "slug": "migration-integration-donnees",
-    "title": "Migration et intégration de données multi-sources",
+    "title": "Migration de traitements de Cloudera vers Teradata",
     "status": "Expérience professionnelle",
-    "shortSummary": "Migrer et adapter des traitements de Cloudera vers Teradata, puis rapprocher des données issues de plusieurs sources.",
-    "seoDescription": "Étude de cas Data & BI : migration, intégration et fiabilisation de données multi-sources avec Python, PySpark, SQL, Cloudera et Teradata.",
-    "context": "Au sein d’une Data Factory, la mission porte sur le traitement, l’intégration et la migration de données entre Cloudera et Teradata.",
-    "problem": "L’enjeu est d’adapter les traitements à l’environnement cible, de traduire les règles métier en traitements techniques et de rapprocher les données issues de plusieurs sources.",
+    "shortSummary": "Adapter des traitements PySpark à Teradata et intégrer des données issues de plusieurs sources.",
+    "seoDescription": "Mission CNAV via Apside : traitements PySpark sur Cloudera, migration vers Teradata avec SQL et Shell, pseudonymisation et rapprochement en Python.",
+    "context": "Depuis juillet 2025, j’interviens via Apside au sein de la Data Factory de la CNAV sur le traitement, l’intégration et la migration de données.",
+    "problem": "La migration de Cloudera vers Teradata demande d’adapter les traitements aux contraintes du nouvel environnement tout en appliquant les règles métier.",
     "objectives": [
       "Faire évoluer les traitements PySpark sur Cloudera.",
       "Adapter les traitements à Teradata avec SQL et Shell.",
-      "Intégrer et rapprocher les données multi-sources."
+      "Intégrer des données issues de plusieurs sources et développer leur rapprochement en Python."
     ],
     "data": [
       "Données métier issues de plusieurs sources",
-      "Traitements PySpark sur Cloudera",
-      "Données destinées à Teradata"
+      "Données à pseudonymiser et à rapprocher",
+      "Données publiques collectées automatiquement"
     ],
     "method": [
-      "Évolution de traitements PySpark et traduction des règles métier.",
-      "Migration des traitements vers Teradata et adaptation à cet environnement avec SQL et Shell.",
-      "Pseudonymisation et rapprochement de données avec Python."
+      "Développer et faire évoluer les traitements PySpark sur Cloudera.",
+      "Traduire les règles métier et adapter les traitements à Teradata avec SQL et Shell.",
+      "Développer un traitement Python de pseudonymisation et de rapprochement de données."
     ],
-    "intervention": "L’intervention porte sur le développement et l’adaptation des traitements d’intégration. Un traitement Python de pseudonymisation et de rapprochement des données a également été réalisé.",
-    "result": "Des traitements adaptés à Teradata et des données préparées, intégrées et rapprochées pour les besoins métier. La mission est en cours.",
-    "sector": "Données décisionnelles",
+    "intervention": "Je traduis les règles métier en traitements d’intégration et de migration. Mes travaux comprennent aussi un traitement de pseudonymisation et de rapprochement, ainsi qu’un outil de collecte automatisée de données publiques.",
+    "result": "La mission est en cours. Les travaux menés couvrent l’évolution des traitements PySpark, leur adaptation à Teradata et le développement d’outils Python pour la pseudonymisation, le rapprochement et la collecte de données.",
+    "sector": "Intégration et migration de données",
     "featured": true,
     "visualVariant": "data-pipeline",
     "experienceId": "cnav-data-analyst"
   },
   {
     "slug": "automatisation-collecte-donnees",
-    "title": "Automatisation et structuration de données hétérogènes",
+    "title": "Prototypes de collecte et de comparaison sémantique",
     "status": "Expérience professionnelle",
-    "shortSummary": "Automatiser la collecte et structurer des contenus hétérogènes dans un format homogène et exploitable.",
-    "seoDescription": "Étude de cas Data & BI : automatisation de la collecte et structuration de données hétérogènes avec Python, Playwright, JSON et LLaMA.",
-    "context": "La mission au sein d’un pôle Innovation portait sur le développement de prototypes pour collecter et structurer des données issues de plateformes de marchés publics et d’un CRM.",
-    "problem": "Le processus devait réunir collecte automatisée, transformation des contenus et comparaison sémantique dans une architecture évolutive.",
+    "shortSummary": "Automatiser la collecte de documents, structurer des contenus en JSON et expérimenter la comparaison sémantique.",
+    "seoDescription": "Au pôle Innovation d’Apside : prototypes de collecte de documents, structuration de données CRM et comparaison sémantique avec Python, Playwright et LLaMA.",
+    "context": "D’avril à juin 2025, j’ai travaillé au pôle Innovation d’Apside sur plusieurs prototypes de collecte, d’automatisation et d’intelligence artificielle.",
+    "problem": "Les travaux répondaient à plusieurs besoins : récupérer des documents sur des plateformes de marchés publics, structurer des données CRM et expérimenter la comparaison sémantique de contenus.",
     "objectives": [
-      "Automatiser la collecte de données.",
-      "Structurer les informations récupérées.",
-      "Structurer les contenus non structurés au format JSON.",
-      "Comparer sémantiquement les données collectées."
+      "Automatiser la collecte de documents de marchés publics.",
+      "Structurer les données CRM pour automatiser certaines affectations.",
+      "Transformer des contenus non structurés en JSON.",
+      "Expérimenter la comparaison sémantique avec des mesures de similarité et des modèles de langage."
     ],
     "data": [
+      "Documents issus de plateformes de marchés publics",
       "Données CRM",
-      "Contenus non structurés",
-      "Données collectées sur le web",
-      "Données structurées en JSON"
+      "Contenus non structurés à transformer en JSON"
     ],
     "method": [
-      "Automatisation de la collecte avec Python et Playwright.",
-      "Structuration des données issues de sources hétérogènes.",
-      "Transformation des contenus au format JSON.",
-      "Conception d’un système de comparaison sémantique fondé sur un modèle de langage (LLM)."
+      "Automatiser la récupération de documents avec Python et Playwright.",
+      "Structurer les données CRM et convertir des contenus en JSON.",
+      "Combiner mesures de similarité et modèles de langage, dont LLaMA, pour comparer des contenus.",
+      "Organiser le code dans une architecture modulaire pour faciliter les évolutions."
     ],
-    "intervention": "La récupération de documents a été automatisée avec Python et Playwright. Les contenus ont été structurés en JSON et un système de comparaison sémantique a été développé à l’aide de modèles de langage (LLM).",
-    "result": "Des prototypes qui automatisent la collecte, structurent les contenus en JSON et permettent leur comparaison sémantique, dans une architecture modulaire.",
+    "intervention": "J’ai développé des prototypes sur ces différents sujets, en travaillant sur la collecte, la transformation des contenus et leur comparaison. L’architecture modulaire visait à faciliter la maintenance et l’évolution du code.",
+    "result": "Des prototypes de collecte automatisée, de structuration de données et de comparaison sémantique. Ces travaux exploratoires ont associé Python, Playwright, JSON et des modèles de langage.",
     "sector": "Automatisation et collecte de données",
     "featured": true,
     "visualVariant": "document-automation",
@@ -70,30 +69,29 @@ const caseStudies = [
     "slug": "integration-fiabilisation-flux-metier",
     "title": "Automatisation et fiabilisation de flux décisionnels",
     "status": "Expérience professionnelle",
-    "shortSummary": "Automatiser, consolider et contrôler des flux métier avant leur utilisation décisionnelle.",
-    "seoDescription": "Étude de cas Data & BI : automatisation et fiabilisation de flux décisionnels avec SAS, Python, SQL, PowerShell et Power BI.",
-    "context": "Au sein d’un pôle décisionnel, les données des flux santé et prévoyance devaient être intégrées, consolidées et rapprochées.",
-    "problem": "La diversité des flux et des traitements d’intégration nécessitait des contrôles de cohérence et des rapprochements entre les sources.",
+    "shortSummary": "Intégrer des flux santé et prévoyance, automatiser leur traitement et contrôler leur cohérence.",
+    "seoDescription": "Mission Harmonie Mutuelle via Apside : intégration SAS, reconstitution de données en Python, chargement PowerShell et contrôles avec Power BI.",
+    "context": "De février 2024 à mars 2025, j’ai travaillé via Apside au pôle décisionnel d’Harmonie Mutuelle sur les flux de données santé et prévoyance.",
+    "problem": "L’enjeu était de consolider les données issues de plusieurs sources et de vérifier leur cohérence pour alimenter le système décisionnel.",
     "objectives": [
-      "Automatiser les traitements d’intégration.",
+      "Développer et faire évoluer les traitements d’intégration.",
       "Extraire, transformer et consolider les données.",
-      "Contrôler la qualité des données et rapprocher les sources.",
-      "Fiabiliser l’extraction et l’alimentation des flux décisionnels."
+      "Contrôler leur cohérence et rapprocher les sources.",
+      "Automatiser la reconstitution des données et leur chargement."
     ],
     "data": [
-      "Flux de données métier",
-      "Données extraites de plusieurs sources",
-      "Données consolidées et reconstituées",
-      "Résultats de contrôles et de rapprochements"
+      "Flux de données santé et prévoyance",
+      "Données issues de plusieurs sources",
+      "Données à consolider, rapprocher et reconstituer"
     ],
     "method": [
-      "Développement de traitements d’intégration en SAS.",
-      "Automatisation avec Python et PowerShell.",
-      "Contrôles de qualité des données et rapprochements avec Power BI.",
-      "Consolidation et reconstitution des données."
+      "Développer les traitements d’intégration et de consolidation en SAS.",
+      "Automatiser la reconstitution de données avec Python.",
+      "Automatiser l’intégration et le chargement avec PowerShell.",
+      "Mettre en place des contrôles de cohérence et des rapprochements avec Power BI."
     ],
-    "intervention": "L’intervention a combiné le développement de traitements SAS, la reconstitution automatisée de données avec Python et l’intégration avec PowerShell. Des contrôles de cohérence et des rapprochements ont ensuite été mis en place avec Power BI.",
-    "result": "Des traitements d’intégration plus reproductibles et des données consolidées et contrôlées avant leur intégration dans le système décisionnel.",
+    "intervention": "J’ai contribué aux différentes étapes des flux : extraction, transformation, consolidation, reconstitution et chargement. Les contrôles et les rapprochements avec Power BI complétaient ces traitements pour travailler sur la fiabilité des données.",
+    "result": "Des traitements SAS développés et maintenus, une reconstitution automatisée avec Python, des chargements automatisés avec PowerShell et des contrôles de cohérence avec Power BI.",
     "sector": "Flux décisionnels",
     "featured": false,
     "visualVariant": "data-quality",
@@ -101,32 +99,31 @@ const caseStudies = [
   },
   {
     "slug": "reporting-power-bi-datalab",
-    "title": "Reporting Power BI et automatisation de processus",
+    "title": "Rapports Power BI et diffusion automatisée",
     "status": "Expérience professionnelle",
-    "shortSummary": "Préparer les données et automatiser la diffusion des rapports Power BI.",
-    "seoDescription": "Étude de cas Data & BI : préparation de données, reporting Power BI et automatisation de processus avec DAX, Power Query et Power Automate.",
-    "context": "La mission au sein du Datalab portait sur la préparation de données métier et leur exploitation dans des rapports Power BI.",
-    "problem": "L’enjeu était de fiabiliser les données, de traiter les anomalies et d’automatiser la diffusion des rapports, de la préparation à la restitution.",
+    "shortSummary": "Préparer et fiabiliser les données métier, créer des rapports Power BI et automatiser leur envoi.",
+    "seoDescription": "Mission au Datalab d’Harmonie Mutuelle via Apside : qualité des données, rapports Power BI avec DAX et Power Query, diffusion avec Power Automate.",
+    "context": "De mars 2022 à juillet 2023, j’ai travaillé via Apside au Datalab d’Harmonie Mutuelle sur l’analyse, le reporting et la qualité des données.",
+    "problem": "Les besoins métier demandaient des jeux de données structurés, un traitement des anomalies et des rapports dont la diffusion pouvait être automatisée.",
     "objectives": [
       "Intégrer les données métier dans un Datalab.",
       "Créer et fiabiliser des jeux de données.",
       "Concevoir des rapports et des tableaux de bord Power BI.",
-      "Automatiser la diffusion des rapports et améliorer les processus de reporting."
+      "Automatiser la diffusion des rapports."
     ],
     "data": [
-      "Données métier",
-      "Jeux de données du Datalab",
-      "Anomalies de données",
-      "Indicateurs de reporting"
+      "Données métier intégrées au Datalab",
+      "Jeux de données pour l’analyse et le reporting",
+      "Indicateurs présentés dans les rapports Power BI"
     ],
     "method": [
-      "Préparation et intégration des données dans le Datalab.",
-      "Création de jeux de données et analyse des anomalies.",
-      "Conception de rapports avec Power BI, DAX et Power Query.",
-      "Automatisation avec Power Automate."
+      "Préparer et intégrer les données dans le Datalab.",
+      "Structurer les jeux de données, identifier et corriger les anomalies.",
+      "Créer les rapports et les tableaux de bord avec Power BI, DAX et Power Query.",
+      "Automatiser l’envoi des rapports avec Power Automate."
     ],
-    "intervention": "Les jeux de données ont été préparés et structurés, puis les anomalies identifiées et corrigées. Des rapports Power BI ont été créés avec DAX et Power Query, et leur envoi automatisé avec Power Automate.",
-    "result": "Des jeux de données structurés et fiabilisés, des rapports Power BI exploitables par les équipes métier et une diffusion automatisée.",
+    "intervention": "J’ai travaillé de la préparation des données à leur restitution dans Power BI, en corrigeant les anomalies et en automatisant l’envoi des rapports. La mission comprenait aussi la maintenance et l’évolution d’un robot de gestion des contrats.",
+    "result": "Des jeux de données structurés, des anomalies corrigées, des rapports et des tableaux de bord Power BI créés, avec un envoi automatisé par Power Automate.",
     "sector": "Datalab et reporting",
     "featured": true,
     "visualVariant": "bi-reporting",
@@ -134,12 +131,12 @@ const caseStudies = [
   },
   {
     "slug": "industrialisation-modele-cotation",
-    "title": "Industrialisation d’un modèle d’analyse de risque",
+    "title": "Industrialisation d’un modèle de cotation d’entreprises",
     "status": "Expérience professionnelle",
-    "shortSummary": "Industrialiser un modèle d’analyse de risque et rendre ses résultats exploitables.",
-    "seoDescription": "Étude de cas Data & BI : industrialisation d’un modèle d’analyse de risque avec Python, Scikit-learn, ONNX et restitution par service web.",
-    "context": "Contribution à l’industrialisation et à l’évolution d’un modèle de cotation d’entreprises pour l’évaluation du risque de crédit, au sein d’un pôle Intelligence Artificielle.",
-    "problem": "Le modèle devait être adapté aux contraintes techniques de l’environnement et rendu accessible à d’autres composants par un service web.",
+    "shortSummary": "Adapter un modèle de cotation aux contraintes techniques et l’exposer par un service web.",
+    "seoDescription": "Mission Banque de France via Apside : contribution à l’industrialisation d’un modèle de cotation d’entreprises, préparation des données et service web.",
+    "context": "De novembre 2019 à juin 2021, j’ai contribué via Apside à l’industrialisation et à l’évolution d’un modèle de cotation d’entreprises au pôle Intelligence Artificielle de la Banque de France.",
+    "problem": "Ce modèle, utilisé pour évaluer le risque de crédit, devait être adapté aux contraintes techniques de l’environnement cible et exposé par un service web.",
     "objectives": [
       "Adapter le modèle aux contraintes techniques.",
       "Faire évoluer les traitements et préparer les données.",
@@ -150,12 +147,12 @@ const caseStudies = [
       "Données nécessaires au fonctionnement du modèle"
     ],
     "method": [
-      "Adaptation du modèle et maintenance des traitements associés.",
-      "Préparation et analyse des données avec Python, Pandas et NumPy.",
-      "Développement d’un service web rendant le modèle accessible à d’autres composants."
+      "Adapter le modèle et maintenir les traitements associés.",
+      "Préparer et analyser les données nécessaires au modèle.",
+      "Développer un service web pour exposer le modèle."
     ],
-    "intervention": "La contribution a porté sur l’adaptation et l’évolution du modèle, la préparation et l’analyse des données, ainsi que le développement de son service web.",
-    "result": "Un modèle adapté à l’environnement technique, des traitements maintenus et un service web rendant le modèle accessible à d’autres composants.",
+    "intervention": "J’ai contribué à l’adaptation du modèle, à l’évolution des traitements et à son exposition par un service web. Dans le cadre de cette mission, j’ai également développé un prototype de prédiction de prix immobiliers au mètre carré.",
+    "result": "Une contribution à l’adaptation du modèle de cotation, des traitements maintenus et un service web développé pour exposer le modèle.",
     "sector": "Risque de crédit",
     "featured": false,
     "visualVariant": "ml-model",
@@ -163,12 +160,12 @@ const caseStudies = [
   },
   {
     "slug": "developpement-api-python-automatisation",
-    "title": "Développement d’une API Python et automatisation des traitements",
+    "title": "API Python, contrôles et automatisation",
     "status": "Expérience professionnelle",
-    "shortSummary": "Centraliser des données, générer des PDF et automatiser les contrôles et les alertes avec Python.",
-    "seoDescription": "Étude de cas Dstny : développement d’une API Python, échanges SQL et API externes, génération de PDF, contrôles de cohérence et alertes sur les modifications de données.",
-    "context": "Chez Dstny, à Saint-Avertin, la mission menée de novembre 2018 à mars 2019 portait sur des solutions Python pour centraliser, traiter et contrôler des données issues de plusieurs sources.",
-    "problem": "L’application devait échanger avec des bases de données et des API externes, générer des documents, contrôler les données récupérées et détecter leurs modifications.",
+    "shortSummary": "Centraliser les données, générer des PDF et détecter les modifications avec des contrôles et des alertes.",
+    "seoDescription": "Chez Dstny : API Python, génération de PDF, intégration de bases de données et d’API externes, contrôles de cohérence, alertes et multithreading.",
+    "context": "De novembre 2018 à mars 2019, j’ai développé chez Dstny, à Saint-Avertin, des solutions Python pour centraliser, traiter et contrôler des données issues de plusieurs sources.",
+    "problem": "L’application devait récupérer des informations depuis des bases de données et des API externes, générer des documents PDF et signaler les modifications de données.",
     "objectives": [
       "Développer une API Python et automatiser la génération de PDF.",
       "Mettre en place les échanges avec les bases de données et les API externes.",
@@ -178,16 +175,16 @@ const caseStudies = [
     "data": [
       "Données provenant de bases de données",
       "Informations récupérées depuis des API externes",
-      "Données traitées par l’application et utilisées pour les documents PDF"
+      "Données utilisées pour générer les documents PDF"
     ],
     "method": [
-      "Développement d’une API Python permettant notamment la génération automatique de documents PDF.",
-      "Mise en place des échanges entre l’application et les bases de données, et récupération automatisée d’informations externes.",
-      "Développement de contrôles de cohérence et d’un système d’alertes sur les modifications de données.",
-      "Optimisation de certains traitements grâce au multithreading."
+      "Développer une API Python avec génération automatique de PDF.",
+      "Relier l’application aux bases de données et automatiser la récupération d’informations depuis les API externes.",
+      "Mettre en place des contrôles de cohérence et des alertes sur les modifications.",
+      "Optimiser certains traitements par multithreading."
     ],
-    "intervention": "L’intervention a porté sur l’API Python, les échanges avec les sources de données et la génération de PDF. Elle a également couvert les contrôles de cohérence, les alertes sur les modifications et l’optimisation de certains traitements par multithreading.",
-    "result": "Une API Python permettant de traiter des données de plusieurs sources et de générer des PDF, complétée par des contrôles de cohérence et des alertes lors de modifications de données.",
+    "intervention": "J’ai développé l’API, les échanges avec les sources de données, la génération de PDF, les contrôles et les alertes. Certains traitements ont été optimisés par multithreading.",
+    "result": "Une API Python avec génération automatique de PDF, des échanges avec les bases de données et les API externes, ainsi que des contrôles de cohérence et un système d’alertes.",
     "sector": "Développement Python et automatisation",
     "featured": false,
     "visualVariant": "python-api",

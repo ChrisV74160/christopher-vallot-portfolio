@@ -6,8 +6,8 @@ export const services = [
     "id": "integration-consolidation",
     "title": "Intégrer & consolider",
     "problem": "Vos données sont dispersées entre fichiers, bases et applications.",
-    "intervention": "Vos données sont préparées, transformées et rapprochées pour être utilisées ensemble.",
-    "outcome": "Un jeu de données consolidé et structuré pour vos usages.",
+    "intervention": "Je prépare, transforme et rapproche vos données pour les réunir dans un ensemble cohérent.",
+    "outcome": "Des données consolidées et structurées pour vos analyses et vos rapports.",
     "technologies": [
       "SQL",
       "Python",
@@ -18,9 +18,9 @@ export const services = [
   {
     "id": "data-quality",
     "title": "Fiabiliser & contrôler",
-    "problem": "Des incohérences ou des anomalies rendent vos données difficiles à utiliser.",
-    "intervention": "Des contrôles de qualité et des rapprochements permettent d’identifier les anomalies et les incohérences.",
-    "outcome": "Des données vérifiées et des anomalies identifiées.",
+    "problem": "Des écarts entre vos sources rendent vos données difficiles à exploiter.",
+    "intervention": "Je mets en place des contrôles de cohérence et des rapprochements pour repérer les anomalies et les traiter.",
+    "outcome": "Des contrôles de qualité et des anomalies identifiées pour guider les corrections.",
     "technologies": [
       "Data Quality",
       "SQL",
@@ -30,10 +30,10 @@ export const services = [
   },
   {
     "id": "automatisation",
-    "title": "Automatiser & industrialiser",
-    "problem": "L’extraction, la transformation des données et la production de rapports nécessitent encore des manipulations manuelles.",
-    "intervention": "L’automatisation des traitements récurrents s’appuie sur des outils adaptés à votre environnement.",
-    "outcome": "Des traitements reproductibles, documentés et simples à maintenir.",
+    "title": "Automatiser les traitements",
+    "problem": "Vos extractions, vos transformations ou vos envois de rapports reposent sur des tâches manuelles répétitives.",
+    "intervention": "J’automatise ces tâches avec les outils adaptés à votre environnement.",
+    "outcome": "Des traitements automatisés, structurés pour faciliter leur maintenance.",
     "technologies": [
       "Python",
       "SQL",
@@ -44,9 +44,9 @@ export const services = [
   {
     "id": "business-intelligence",
     "title": "Analyser & piloter",
-    "problem": "Vos rapports sont difficiles à comprendre, à faire évoluer ou à maintenir.",
-    "intervention": "L’analyse de vos données permet de créer ou d’améliorer vos modèles, indicateurs et rapports Power BI.",
-    "outcome": "Des rapports utiles aux équipes, avec des indicateurs compréhensibles.",
+    "problem": "Vos rapports ne répondent plus aux besoins des équipes ou sont difficiles à faire évoluer.",
+    "intervention": "Je crée ou refonds vos rapports Power BI, de la préparation des données à la définition des indicateurs.",
+    "outcome": "Des tableaux de bord adaptés aux besoins métier, avec des indicateurs clairs.",
     "technologies": [
       "Power BI",
       "SQL",

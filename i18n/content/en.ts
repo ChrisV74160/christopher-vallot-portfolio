@@ -10,56 +10,56 @@ import type { Experience, Profile } from "@/types/content";
 const experienceCopy = {
   "cnav-data-analyst": {
     "role": "Data Analyst",
-    "summary": "The ongoing assignment within CNAV’s Data Factory involves multi-source data integration and migration between different environments.",
+    "summary": "Within CNAV’s Data Factory, I work on data integration and the migration of processing from Cloudera to Teradata.",
     "interventions": [
-      "Translating business rules and adapting processing during migrations.",
-      "Developing a process for pseudonymising and reconciling data.",
-      "Building a tool to automate public data collection."
+      "Developing PySpark processing on Cloudera and adapting it for Teradata with SQL and Shell, while implementing business rules.",
+      "Pseudonymising and reconciling data with Python.",
+      "Developing a tool to automate public data collection."
     ]
   },
   "apside-ingenieur-etudes": {
     "role": "Software Development Engineer",
-    "summary": "Contribution to exploratory projects involving data collection, automation and artificial intelligence within Apside’s Innovation team.",
+    "summary": "Within Apside’s Innovation team, I developed prototypes for document collection, automation and semantic comparison.",
     "interventions": [
-      "Collecting documents from public procurement platforms and structuring their content.",
-      "Using CRM data to automate certain assignment tasks.",
-      "Developing a semantic comparison system and a modular architecture to support future changes."
+      "Automating document collection from public procurement platforms with Python and Playwright.",
+      "Structuring CRM data, automating certain assignment tasks and transforming unstructured content into JSON.",
+      "Experimenting with semantic comparison using similarity measures and language models within a modular architecture."
     ]
   },
   "harmonie-mutuelle-data-analyst-2024": {
     "role": "Data Analyst",
-    "summary": "The assignment within Harmonie Mutuelle’s BI team focused on the reliability of health and personal protection insurance data flows.",
+    "summary": "Within Harmonie Mutuelle’s BI team, I worked on the integration, automation and reliability of health and protection insurance data flows.",
     "interventions": [
-      "Developing integration processes and extracting, transforming and consolidating data from multiple sources.",
-      "Checking consistency and reconciling the processed data.",
-      "Automating data reconstruction and loading into the BI system."
+      "Developing and updating SAS processes to integrate, transform and consolidate data from multiple sources.",
+      "Implementing consistency checks and data reconciliation with Power BI.",
+      "Automating data reconstruction with Python and loading with PowerShell."
     ]
   },
   "harmonie-mutuelle-data-analyst-datalab": {
     "role": "Data Analyst",
-    "summary": "The assignment within Harmonie Mutuelle’s Datalab addressed business needs in analysis, reporting and data quality.",
+    "summary": "Within Harmonie Mutuelle’s Datalab, I prepared business data and created Power BI reports. I also maintained and updated a contract management robot.",
     "interventions": [
-      "Analysing, integrating and structuring datasets for business needs.",
-      "Identifying and correcting data anomalies.",
-      "Creating reports and dashboards, then automating their distribution."
+      "Analysing, integrating and structuring datasets for reporting.",
+      "Identifying and correcting anomalies to improve data quality.",
+      "Creating reports and dashboards with Power BI, DAX and Power Query, then automating their delivery with Power Automate."
     ]
   },
   "banque-de-france-ingenieur-etudes": {
     "role": "Software Development Engineer",
-    "summary": "Contribution to adapting and developing a company rating model for operational use in credit risk assessment, within Banque de France’s Artificial Intelligence team.",
+    "summary": "Within Banque de France’s Artificial Intelligence team, I contributed to adapting and updating a company rating model used to assess credit risk.",
     "interventions": [
-      "Adapting the model to technical constraints and updating its associated processing.",
-      "Preparing and analysing the data needed for the model to function.",
-      "Developing a web service giving other components access to the model."
+      "Adapting the model to technical constraints and maintaining its associated processing.",
+      "Preparing and analysing the data needed by the model.",
+      "Developing a web service to expose the model and a prototype to predict property prices per square metre."
     ]
   },
   "dstny-developpeur-python": {
     "role": "Python Developer",
-    "summary": "The assignment at Dstny focused on centralising, processing and checking data from multiple sources.",
+    "summary": "At Dstny, I developed Python solutions to centralise and check data from databases and external APIs.",
     "interventions": [
-      "Exchanging data with databases, automating external information retrieval and generating PDFs.",
-      "Checking consistency and setting up alerts for data changes.",
-      "Optimising some processes through parallel execution."
+      "Developing a Python API with automated PDF generation and connections to databases and external APIs.",
+      "Creating consistency checks and alerts for data changes.",
+      "Optimising selected processes through multithreading."
     ]
   }
 } satisfies Record<ExperienceId, Pick<Experience, "role" | "summary" | "interventions">>;
@@ -71,15 +71,15 @@ const education = [{ ...source.education[0], degree: "Bachelor’s degree in Com
 const workPrinciples = [
   {
     "name": "Scope before building",
-    "description": "The business need, available sources and expected outcome define the scope of the engagement."
+    "description": "I start with business needs and available data to translate requirements into processes, checks and reports."
   },
   {
     "name": "Build for the long term",
-    "description": "Readable, repeatable processes that are straightforward to maintain help teams take ownership."
+    "description": "I prioritise readable code and modular architecture to make maintenance and future changes easier."
   },
   {
     "name": "Make data understandable",
-    "description": "Documented processes and clear reporting help teams understand the solution and take ownership."
+    "description": "I structure data and indicators to produce clear reports that business teams can use."
   }
 ];
 const languages = [{ name: "English", description: "Very good reading comprehension, intermediate spoken English." }];
@@ -87,8 +87,8 @@ const profile: Profile = {
   ...source.profile,
   role: "Freelance Data & BI Consultant",
   experienceLabel: "Over 6 years of experience",
-  summary: "Reliable, usable data, from integration to automated processing.",
-  shortSummary: "Freelance Data & BI consultant based in Tours. Data integration and quality, process automation and Power BI reporting with SQL and Python.",
+  summary: "I integrate and validate your data, automate your processes and build your Power BI reports.",
+  shortSummary: "Freelance Data & BI consultant based in Tours, helping businesses with data integration and quality, automation and Power BI reporting using SQL and Python.",
   workModes: ["Remote", "Hybrid", "On site"],
   experiences, education, workPrinciples, languages,
 };
