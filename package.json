@@ -12,7 +12,7 @@
     "prebuild": "npm run assets:check",
     "start": "next start",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "next typegen && tsc --noEmit",
     "test": "node --test tests/*.test.cjs tests/*.test.mjs",
     "test:http": "node --test tests/integration/*.test.cjs",
     "check": "npm run lint && npm run typecheck && npm test && npm run assets:check",

@@ -193,7 +193,7 @@ export const profile = {
   role: "Consultant Data & BI freelance",
   experienceLabel: "Plus de 6 ans d’expérience",
   summary: "J’intègre et fiabilise vos données, automatise vos traitements et conçois vos rapports Power BI.",
-  shortSummary: "Consultant Data & BI freelance à Tours, j’accompagne les entreprises en intégration et qualité des données, automatisation et reporting Power BI, avec SQL et Python.",
+  shortSummary: "Consultant Data & BI freelance basé à Tours, j’aide les entreprises à intégrer et fiabiliser leurs données, à automatiser leurs traitements et à concevoir des rapports clairs avec Power BI, SQL et Python.",
   workModes: ["À distance", "Hybride", "Sur site"],
   experiences, education, languages, workPrinciples,
 } as const satisfies Profile;

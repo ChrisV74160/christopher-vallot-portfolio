@@ -25,8 +25,8 @@ export const sectionMessages = {
     "about": {
       "label": "À propos",
       "title": "À l’interface entre la donnée, la technique et le métier.",
-      "description": "Du développement Python chez Dstny aux missions réalisées via Apside à la Banque de France, chez Harmonie Mutuelle et à la CNAV, mon parcours relie le développement, le traitement des données et la Business Intelligence.",
-      "approach": "Je travaille avec les équipes métier pour traduire leurs besoins en traitements, contrôles et rapports, avec une attention portée à la clarté et à la maintenance.",
+      "description": "Mon parcours associe développement Python, intégration de données et Business Intelligence. Il s’appuie sur une expérience chez Dstny et sur des missions réalisées via Apside à la Banque de France, chez Harmonie Mutuelle et à la CNAV.",
+      "approach": "Je traduis les besoins métier en traitements de données, contrôles de qualité et rapports Power BI. Mon approche privilégie la fiabilité des données, la lisibilité du code et la simplicité de maintenance.",
       "linkedin": "Découvrir mon parcours sur LinkedIn",
       "newTab": " (nouvel onglet)",
       "cv": " Télécharger mon CV"
@@ -71,8 +71,8 @@ export const sectionMessages = {
     "about": {
       "label": "About",
       "title": "Connecting data, technology and business needs.",
-      "description": "From Python development at Dstny to assignments through Apside at Banque de France, Harmonie Mutuelle and CNAV, my background connects software development, data processing and business intelligence.",
-      "approach": "I work with business teams to translate their needs into processes, checks and reports, with a focus on clarity and maintainability.",
+      "description": "My background combines Python development, data integration and business intelligence. It draws on experience at Dstny and assignments through Apside at Banque de France, Harmonie Mutuelle and CNAV.",
+      "approach": "I translate business needs into data processes, quality checks and Power BI reports. My approach prioritises data reliability, readable code and straightforward maintenance.",
       "linkedin": "Explore my background on LinkedIn",
       "newTab": " (new tab)",
       "cv": " Download my CV (French)"

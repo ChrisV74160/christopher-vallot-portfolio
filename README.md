@@ -35,7 +35,7 @@ mais n’envoie aucun e-mail. Les secrets restent côté serveur ; `.env.local`,
 | `npm run dev` | Développement local |
 | `npm run check` | Lint, types, tests et cohérence des assets générés |
 | `npm run lint` | ESLint |
-| `npm run typecheck` | Vérification TypeScript |
+| `npm run typecheck` | Génération des types Next.js, puis vérification TypeScript |
 | `npm test` | Tests Node.js : formulaire, i18n, contenus, routes, marque et indexation |
 | `npm run test:http` | Tests du site compilé démarré sur le port 3001, avec de vraies réponses HTTP |
 | `npm run assets:check` | Comparaison des dérivés avec leurs sources, sans écriture |

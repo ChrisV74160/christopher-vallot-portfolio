@@ -88,7 +88,7 @@ const profile: Profile = {
   role: "Freelance Data & BI Consultant",
   experienceLabel: "Over 6 years of experience",
   summary: "I integrate and validate your data, automate your processes and build your Power BI reports.",
-  shortSummary: "Freelance Data & BI consultant based in Tours, helping businesses with data integration and quality, automation and Power BI reporting using SQL and Python.",
+  shortSummary: "As a freelance Data & BI consultant based in Tours, I help businesses integrate their data, improve its reliability, automate their processes and create clear reports using Power BI, SQL and Python.",
   workModes: ["Remote", "Hybrid", "On site"],
   experiences, education, workPrinciples, languages,
 };
