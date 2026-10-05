@@ -33,19 +33,41 @@ test("The small hero tagline uses the approved contrasting teal", () => {
   assert.match(read("styles/brand.css").toString(), /\.hero-tagline span \{ color: var\(--brand-secondary\); \}/);
 });
 
-test("Header and footer share the palette version of the supplied owl", async () => {
-  const component = read("components/ui/identity-mark.tsx").toString();
-  assert.match(component, /src="\/brand\/owl\.webp"/);
-  assert.doesNotMatch(component, /src="\/brand\/hibou\.svg"/);
+test("Header and footer share the framed native vector owl", async () => {
+  const { IdentityMark } = createTypeScriptLoader()("components/ui/identity-mark.tsx");
+  const component = renderToStaticMarkup(createElement(IdentityMark));
+  assert.match(component, /src="\/brand\/owl-framed\.svg"/);
+  assert.match(component, /width="48"/);
+  assert.match(component, /height="48"/);
+  assert.match(component, /aria-hidden="true"/);
   for (const file of ["components/site-header.tsx", "components/site-footer.tsx"]) {
     assert.match(read(file).toString(), /<IdentityMark\b/);
   }
-  const metadata = await sharp(read("public/brand/owl.webp")).metadata();
-  assert.equal(metadata.width, 192);
-  assert.equal(metadata.height, 192);
-  const expected = await sharp(read("assets/owl-brand-palette.png"))
-    .resize(192, 192, { fit: "contain", background: "#00000000" }).webp({ lossless: true }).toBuffer();
-  assert.deepEqual(read("public/brand/owl.webp"), expected);
+  const metadata = await sharp(read("public/brand/owl-framed.svg")).metadata();
+  assert.equal(metadata.format, "svg");
+  assert.equal(metadata.width, 650);
+  assert.equal(metadata.height, 650);
+});
+
+test("The framed vector keeps the navy rounded border and the shared owl colours", async () => {
+  const bytes = read("public/brand/owl-framed.svg");
+  const source = bytes.toString();
+  assert.doesNotMatch(source, /<image\b|data:image|<foreignObject\b|<script\b|\son\w+\s*=/i);
+  assert.doesNotMatch(source.replace("http://www.w3.org/2000/svg", ""), /https?:\/\/|(?:href|src)\s*=/i);
+  const { data, info } = await sharp(bytes).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  const pixel = (x, y) => [...data.subarray((y * info.width + x) * 4, (y * info.width + x) * 4 + 4)];
+  assert.equal(pixel(0, 0)[3], 0);
+  assert.equal(pixel(649, 649)[3], 0);
+  for (const [x, y] of [[325, 16], [16, 325], [634, 325], [325, 634]]) {
+    assert.deepEqual(pixel(x, y), [0, 63, 92, 255]);
+  }
+  for (const [x, y] of [[325, 45], [45, 325], [605, 325], [325, 605]]) {
+    assert.deepEqual(pixel(x, y), [255, 255, 255, 255]);
+  }
+  assert.deepEqual(pixel(325, 296), [255, 166, 0, 255]);
+  assert.deepEqual(pixel(265, 394), [0, 101, 114, 255]);
+  assert.deepEqual(pixel(276, 454), [0, 139, 86, 255]);
+  assert.deepEqual(pixel(325, 503), [120, 165, 10, 255]);
 });
 
 test("The corrected owl has the original belly colour order and a transparent exterior", async () => {
@@ -81,7 +103,7 @@ test("The corrected owl has the original belly colour order and a transparent ex
   }
 });
 
-test("Site icons use the same corrected transparent master as the header", async () => {
+test("Browser icons preserve their existing corrected transparent master", async () => {
   for (const [file, size] of [["app/icon.png", 512], ["app/apple-icon.png", 180]]) {
     const expected = await sharp(read("assets/owl-brand-palette.png"))
       .resize(size, size, { fit: "contain", background: "#00000000" }).png().toBuffer();
@@ -125,31 +147,47 @@ test("The flat visual identity uses only the brand palette", () => {
   }
 });
 
-test("Data illustrations are static and reuse the existing owl", () => {
+test("Data illustrations are static and use the supplied vector owl", () => {
   const source = read("components/visuals/data-artwork.tsx").toString();
   assert.doesNotMatch(source, /["']use client["']|<animate\b|setInterval|requestAnimationFrame/);
-  assert.match(source, /href="\/brand\/hibou-original\.webp"/);
-  assert.match(source, /aria-hidden="true"/);
+  const { DashboardArtwork, ConversationArtwork } = createTypeScriptLoader()("components/visuals/data-artwork.tsx");
+  for (const [component, props] of [
+    [DashboardArtwork, {}],
+    [DashboardArtwork, { variant: "contact" }],
+    [ConversationArtwork, {}],
+    [ConversationArtwork, { variant: "similar" }],
+  ]) {
+    const markup = renderToStaticMarkup(createElement(component, props));
+    assert.equal((markup.match(/href="\/brand\/illustration-owl\.svg"/g) ?? []).length, 1);
+    assert.doesNotMatch(markup, /hibou-original\.webp|\/brand\/owl\.webp/);
+    assert.match(markup, /aria-hidden="true"/);
+  }
 });
 
-test("Illustrations preserve the original owl pixels", async () => {
-  const original = await sharp(read("assets/owl.png")).raw().toBuffer({ resolveWithObject: true });
-  const illustration = await sharp(read("public/brand/hibou-original.webp")).raw().toBuffer({ resolveWithObject: true });
+test("The illustration vector preserves the supplied source rendering", async () => {
+  const original = await sharp(read("assets/illustration-owl.source.svg")).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  const illustration = await sharp(read("public/brand/illustration-owl.svg")).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  assert.equal(illustration.info.width, 440);
+  assert.equal(illustration.info.height, 482);
   assert.deepEqual(illustration.info, original.info);
-  assert.deepEqual(illustration.data, original.data);
+  const difference = illustration.data.reduce((sum, value, i) => sum + Math.abs(value - original.data[i]), 0) / illustration.data.length;
+  assert.ok(difference < 0.1, `Source/vector render mismatch: ${difference}`);
 });
 
-test("All three illustrations retain the original owl without its frame", () => {
-  const source = read("components/visuals/data-artwork.tsx").toString();
-  assert.match(source, /const clipId = useId\(\)/);
-  assert.match(source, /<clipPath id=\{clipId\} transform=/);
-  const clipContent = source.match(/<clipPath[^>]*>([\s\S]*?)<\/clipPath>/)?.[1];
-  assert.ok(clipContent);
-  assert.doesNotMatch(clipContent, /<g\b/);
-  assert.match(source, /clipPath=\{"url\(#" \+ clipId \+ "\)"\}/);
-  assert.equal((source.match(/<IllustrationOwl\b/g) ?? []).length, 3);
-  assert.doesNotMatch(source, /<IllustrationOwl[^>]* framed\s*\/>/);
-  assert.match(source, /scale\(\.985\)/);
+test("The illustration owl is a self-contained vector with a transparent exterior", async () => {
+  const bytes = read("public/brand/illustration-owl.svg");
+  const source = bytes.toString();
+  assert.doesNotMatch(source, /<image\b|data:image|<foreignObject\b|<script\b|\son\w+\s*=/i);
+  assert.doesNotMatch(source.replace("http://www.w3.org/2000/svg", ""), /https?:\/\/|(?:href|src)\s*=/i);
+  const { data, info } = await sharp(bytes).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  for (let x = 0; x < info.width; x++) {
+    assert.equal(data[x * 4 + 3], 0);
+    assert.equal(data[((info.height - 1) * info.width + x) * 4 + 3], 0);
+  }
+  for (let y = 0; y < info.height; y++) {
+    assert.equal(data[(y * info.width) * 4 + 3], 0);
+    assert.equal(data[(y * info.width + info.width - 1) * 4 + 3], 0);
+  }
 });
 
 test("Case drawings fill the frame and the contact CTA has its own conversation artwork", () => {

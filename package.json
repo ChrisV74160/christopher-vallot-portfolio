@@ -13,7 +13,8 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "test": "node --test tests/contact.test.cjs tests/i18n.test.cjs tests/brand-icon.test.mjs tests/professional-content.test.cjs tests/site-config.test.cjs",
-    "icons:generate": "node scripts/generate-brand-icons.mjs"
+    "icons:generate": "node scripts/generate-brand-icons.mjs",
+    "illustrations:generate": "node scripts/build-owl-vector.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.37.0",
@@ -32,6 +33,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.3.3",
     "sharp": "0.35.4",
+    "svgo": "4.1.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

@@ -1,5 +1,4 @@
 import { Cloud, Code2, Database, FileText, Settings, UsersRound } from "lucide-react";
-import { useId } from "react";
 import type { Locale } from "@/i18n/config";
 
 const navy = "var(--brand-primary)";
@@ -9,19 +8,10 @@ const lime = "var(--brand-tertiary)";
 const orange = "var(--brand-action)";
 const white = "var(--surface)";
 
-/** Preserve the original illustration silhouette without changing its pixels. */
+/** Share the supplied native vector across illustrations at their existing sizes. */
 function IllustrationOwl({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {
-  const clipId = useId();
   return (
-    <svg x={x} y={y} width={width} height={height} viewBox="105 84 440 482" focusable="false">
-      <defs>
-        <clipPath id={clipId} transform="translate(325 325) scale(.985) translate(-325 -325)">
-          {/* Inset the vector crop to exclude the source image's white edge pixels. */}
-          <path d="M136 89C164 115 190 125 218 132C253 106 289 92 325 92C362 92 399 108 431 132C466 123 493 107 514 89C525 123 508 157 489 174C518 208 530 257 504 303C529 329 541 354 540 384C543 449 485 514 428 527C437 544 433 559 424 560C416 560 410 551 405 546C401 565 386 565 376 547C369 563 355 565 350 553C345 541 349 527 356 520Q325 539 294 520C302 531 304 544 299 555C292 566 280 557 274 547C267 564 252 564 244 547C238 563 224 563 218 551C214 543 216 534 221 527C167 512 110 454 109 386C108 354 119 326 144 303C121 260 128 214 160 174C138 155 125 119 136 89Z" />
-        </clipPath>
-      </defs>
-      <image href="/brand/hibou-original.webp" width="650" height="650" clipPath={"url(#" + clipId + ")"} />
-    </svg>
+    <image href="/brand/illustration-owl.svg" x={x} y={y} width={width} height={height} />
   );
 }
 

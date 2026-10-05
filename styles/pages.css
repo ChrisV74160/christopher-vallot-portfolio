@@ -101,6 +101,7 @@
 /* Legal and system pages */
 .legal-content { max-width: 54rem; padding-bottom: var(--section-space); }
 .legal-content h2 { border-top: 1px solid var(--line); margin: 2.8rem 0 0; padding-top: 2rem; font-size: 1.4rem; font-weight: 630; letter-spacing: -0.025em; }
+.legal-content > section:first-of-type > h2 { border-top: 0; }
 .legal-content h3 { margin: 1.8rem 0 0; font-size: 1rem; font-weight: 630; }
 .legal-content p, .legal-content li, .legal-content dd { color: var(--ink-soft); line-height: 1.76; }
 .legal-content a { color: var(--electric); text-decoration: underline; text-underline-offset: 0.22em; }

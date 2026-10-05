@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="440" height="482" viewBox="105 84 440 482" role="img" aria-labelledby="owl-title">
+  <title id="owl-title">Hibou — identité du site, sans cadre</title>
+  <!-- Native, manually authored geometry in the site's 650-unit coordinate system.
+       The body uses the IllustrationOwl vector crop; feet have complete native contours.
+       The source image is used only for visual comparison, never embedded. -->
+  <defs>
+    <clipPath id="owl-silhouette" transform="translate(325 325) scale(.985) translate(-325 -325)">
+      <path d="M136 89C164 115 190 125 218 132C253 106 289 92 325 92C362 92 399 108 431 132C466 123 493 107 514 89C525 123 508 157 489 174C518 208 530 257 504 303C529 329 541 354 540 384C543 449 485 514 428 527L356 520Q325 539 294 520L221 527C167 512 110 454 109 386C108 354 119 326 144 303C121 260 128 214 160 174C138 155 125 119 136 89Z"/>
+    </clipPath>
+  </defs>
+  <g id="owl">
+  <g id="owl-body" clip-path="url(#owl-silhouette)">
+    <rect id="head-and-body" x="105" y="84" width="440" height="430" fill="#003F5C"/>
+    <g id="brows" fill="#006572">
+      <path id="brow-left" d="M174 132 C194 139 214 132 240 141 C285 154 312 192 304 245 C292 208 271 190 238 183 C204 179 178 162 171 138 Q168 129 174 132Z"/>
+      <path id="brow-right" d="M476 132 C456 139 436 132 410 141 C365 154 338 192 346 245 C358 208 379 190 412 183 C446 179 472 162 479 138 Q482 129 476 132Z"/>
+    </g>
+    <g id="eyes">
+      <ellipse id="eye-ring-left" cx="233" cy="250" rx="69.3" ry="67.7" fill="#FFFFFF"/>
+      <ellipse id="eye-ring-right" cx="417" cy="250" rx="69.3" ry="67.7" fill="#FFFFFF"/>
+      <ellipse id="pupil-left" cx="240" cy="251" rx="45.2" ry="44.1" fill="#003F5C"/>
+      <ellipse id="pupil-right" cx="410" cy="251" rx="45.2" ry="44.1" fill="#003F5C"/>
+      <circle id="eye-shine-left" cx="254" cy="234" r="12.2" fill="#FFFFFF"/>
+      <circle id="eye-shine-right" cx="395" cy="234" r="12.2" fill="#FFFFFF"/>
+    </g>
+    <path id="beak" d="M325 261 C335 270 343 278 348 286 C345 303 337 320 325 331 C313 320 305 303 302 286 C307 278 315 270 325 261Z" fill="#FFA600"/>
+    <!-- White continues beneath both wings, so their inner edges meet white,
+         never the navy body. The visible wing contours remain unchanged. -->
+    <path id="belly-wing-join" d="M213.345 359 L325 360 L436.655 359 L440 465 H210Z" fill="#FFFFFF"/>
+    <g id="wings" fill="#006572">
+      <path id="wing-left" d="M145 301 C176 309 213 344 227 390 C235.4 417.6 227 442 227 462 C229 490 246 510 260 521 L221 529 C164 515 109 452 108 386 C106 352 120 321 145 301Z"/>
+      <path id="wing-right" d="M505 301 C474 309 437 344 423 390 C414.6 417.6 423 442 423 462 C421 490 404 510 390 521 L429 529 C486 515 541 452 542 386 C544 352 530 321 505 301Z"/>
+      <g id="flight-feathers" fill="#003F5C">
+        <path id="flight-left" d="M154 355 C143 412 169 480 222 529 L261 522 C238 502 230 484 227 462Z"/>
+        <path id="flight-right" d="M496 355 C507 412 481 480 428 529 L389 522 C412 502 420 484 423 462Z"/>
+      </g>
+    </g>
+    <!-- Shared wing-edge curves and aligned handles keep both thigh joins smooth. -->
+    <path id="belly" d="M213.345 359 C248 325 291 323 325 359 C359 323 402 325 436.655 359 C431.045 368.552 426.36 378.959 423 390 C414.6 417.6 423 442 423 462 C423 488 403 520 373 538 C350 547 300 547 277 538 C247 520 227 488 227 462 C227 442 235.4 417.6 227 390 C223.64 378.959 218.955 368.552 213.345 359Z" fill="#FFFFFF"/>
+    <g id="belly-plumage">
+      <path id="feather-upper-left" d="M240 367 C265 385 289 386 317 368 C314 418 249 418 240 367Z" fill="#006572"/>
+      <path id="feather-upper-right" d="M333 368 C361 386 385 385 410 367 C401 418 336 418 333 368Z" fill="#006572"/>
+      <path id="feather-middle-left" d="M248 415 C271 431 294 431 318 415 C315 464 253 463 248 415Z" fill="#008B56"/>
+      <path id="feather-middle-right" d="M332 415 C356 431 379 431 402 415 C397 463 335 464 332 415Z" fill="#008B56"/>
+      <path id="feather-lower" d="M285 462 C311 480 339 480 365 462 C358 512 292 512 285 462Z" fill="#78A50A"/>
+    </g>
+  </g>
+    <!-- Complete rounded feet: two upper lobes, three toes, no silhouette clipping. -->
+    <g id="feet" transform="translate(325 325) scale(.985) translate(-325 -325)" fill="#FFA600">
+      <path id="foot-left" d="M259.3 519.3 C242 506 222 514 216 535 C211 553 219 562 228 562 C235 562 242 552 245 544 C249 555 252 562 259 562 C266 562 272 554 274.7 544.3 C280 556 286 562 292 562 C301 562 305 550 302 541 C299 521 283 505 259.3 519.3Z"/>
+      <path id="foot-right" transform="translate(650 0) scale(-1 1)" d="M259.3 519.3 C242 506 222 514 216 535 C211 553 219 562 228 562 C235 562 242 552 245 544 C249 555 252 562 259 562 C266 562 272 554 274.7 544.3 C280 556 286 562 292 562 C301 562 305 550 302 541 C299 521 283 505 259.3 519.3Z"/>
+    </g>
+  </g>
+</svg>
