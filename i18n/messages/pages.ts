@@ -4,11 +4,11 @@ export const pageMessages = {
     "about": {
       "label": "À propos",
       "title": "Christopher VALLOT, consultant Data & BI",
-      "intro": "Basé à Tours, j’accompagne les entreprises à distance, en hybride ou sur site.",
+      "intro": "Accompagnement des entreprises depuis Tours, à distance, en mode hybride ou sur site.",
       "approach": "Mon approche",
       "approachTitle": "À l’interface entre la donnée, la technique et le métier.",
-      "approachFirst": "Je viens du développement informatique et j’ai progressivement orienté mon parcours vers la Data et la Business Intelligence. Mes expériences couvrent l’intégration, la qualité des données, l’automatisation et le reporting.",
-      "approachSecond": "J’aime remettre de l’ordre dans des données ou des traitements difficiles à maintenir. Je pars du besoin métier pour construire une solution fiable, documentée et compréhensible par les équipes.",
+      "approachFirst": "Mon parcours a débuté dans le développement informatique avant de s’orienter vers la donnée et la Business Intelligence. Mes expériences couvrent l’intégration, la qualité des données, l’automatisation et le reporting.",
+      "approachSecond": "Le besoin métier guide la remise en ordre des données et des traitements difficiles à maintenir. L’objectif : une solution fiable, documentée et compréhensible par les équipes.",
       "linkedin": "Profil LinkedIn",
       "newTab": " (nouvel onglet)",
       "cv": " Télécharger mon CV",
@@ -28,7 +28,7 @@ export const pageMessages = {
     "projects": {
       "label": "Réalisations",
       "title": "Mes réalisations Data & BI",
-      "intro": "Ces études de cas reprennent des missions issues de mon parcours professionnel. Elles présentent les problématiques, approches et technologies utilisées sans divulguer de données internes ou d’informations confidentielles.",
+      "intro": "Ces études de cas présentent des missions réalisées au cours de mon parcours professionnel. Elles décrivent les enjeux, les approches et les technologies utilisées, sans divulguer de données internes ou d’informations confidentielles.",
       "count": " études de cas",
       "status": "Expériences professionnelles",
       "listTitle": "Liste complète des études de cas"
@@ -63,11 +63,11 @@ export const pageMessages = {
     "about": {
       "label": "About",
       "title": "Christopher VALLOT, Data & BI Consultant",
-      "intro": "Based in Tours, I work with businesses remotely, in hybrid arrangements or on site.",
+      "intro": "Data & BI consulting based in Tours, with remote, hybrid and on-site engagements.",
       "approach": "My approach",
       "approachTitle": "Connecting data, technology and business needs.",
-      "approachFirst": "I started in software development and gradually moved into Data and Business Intelligence. My experience covers integration, data quality, automation and reporting.",
-      "approachSecond": "I enjoy bringing order to data and processes that have become hard to maintain. I start with the business need to build a reliable, documented solution that teams can understand.",
+      "approachFirst": "My career began in software development before moving into data and business intelligence. My experience covers data integration, data quality, automation and reporting.",
+      "approachSecond": "Bringing order to data and processes starts with the business need. The aim is a reliable, documented solution that teams can understand.",
       "linkedin": "LinkedIn profile",
       "newTab": " (new tab)",
       "cv": " Download my CV (French)",
@@ -82,7 +82,7 @@ export const pageMessages = {
       "qualitiesDescription": "Three priorities when working with teams.",
       "education": "Education",
       "educationTitle": "Education and language",
-      "mission": "assignment"
+      "mission": "assignment at"
     },
     "projects": {
       "label": "Projects",

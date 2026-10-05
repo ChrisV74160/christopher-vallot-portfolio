@@ -5,7 +5,7 @@ export const sectionMessages = {
       "title": "Consultant Data & BI freelance",
       "signature": "Transformer le bruit en ",
       "signal": "signal.",
-      "description": "J’intègre, fiabilise et automatise vos données pour les rendre réellement exploitables.",
+      "description": "Des données fiables et exploitables, de l’intégration à l’automatisation de vos traitements.",
       "linkedin": "Voir mon LinkedIn",
       "newTab": " (nouvel onglet)",
       "cv": "Télécharger mon CV",
@@ -18,15 +18,15 @@ export const sectionMessages = {
     "services": {
       "label": "Services",
       "title": "Des données dispersées à des outils utiles.",
-      "description": "J’accompagne les PME, ETI et équipes métier, Data ou IT sur quatre besoins complémentaires.",
+      "description": "Quatre services complémentaires pour les PME, les ETI et les équipes métier, Data ou IT.",
       "outcome": "Livrable attendu",
       "technologies": "Technologies et savoir-faire"
     },
     "about": {
       "label": "À propos",
       "title": "À l’interface entre la donnée, la technique et le métier.",
-      "description": "Je viens du développement informatique. Mes missions via Apside à la CNAV, chez Harmonie Mutuelle et à la Banque de France m’ont progressivement conduit vers l’intégration, la qualité des données et la Business Intelligence.",
-      "approach": "J’accorde une importance particulière à la fiabilité des traitements, à leur maintenabilité et à leur compréhension par les équipes qui les utilisent.",
+      "description": "Mon parcours a débuté dans le développement informatique. Les missions réalisées via Apside à la CNAV, chez Harmonie Mutuelle et à la Banque de France l’ont progressivement orienté vers l’intégration, la qualité des données et la Business Intelligence.",
+      "approach": "La fiabilité des traitements, leur facilité de maintenance et leur compréhension par les équipes guident chaque intervention.",
       "linkedin": "Découvrir mon parcours sur LinkedIn",
       "newTab": " (nouvel onglet)",
       "cv": " Télécharger mon CV"
@@ -34,7 +34,7 @@ export const sectionMessages = {
     "contact": {
       "label": "Contact",
       "title": "Parlons de votre projet Data & BI",
-      "description": "Expliquez-moi votre contexte, ce qui vous bloque aujourd’hui et le résultat que vous souhaitez obtenir. Je pourrai vous répondre avec une première lecture du besoin.",
+      "description": "Présentez votre contexte, les difficultés rencontrées et le résultat attendu. Ces éléments permettront de préciser votre besoin et les pistes d’intervention.",
       "direct": "Contacts directs",
       "linkedinProfile": "Profil LinkedIn de",
       "newTab": " (nouvel onglet)"
@@ -42,7 +42,7 @@ export const sectionMessages = {
     "projects": {
       "label": "Études de cas",
       "title": "Des réalisations concrètes.",
-      "description": "Trois expériences professionnelles pour découvrir mon travail. Aucune donnée interne ou confidentielle n’est divulguée.",
+      "description": "Trois études de cas issues de mon parcours professionnel. Aucune donnée interne ou confidentielle n’est divulguée.",
       "all": "Voir toutes les réalisations"
     }
   },
@@ -51,7 +51,7 @@ export const sectionMessages = {
       "title": "Freelance Data & BI Consultant",
       "signature": "Turn noise into ",
       "signal": "signal.",
-      "description": "I integrate, improve and automate your data so your teams can put it to practical use.",
+      "description": "Reliable, usable data, from integration to automated processing.",
       "linkedin": "View my LinkedIn",
       "newTab": " (new tab)",
       "cv": "Download my CV (French)",
@@ -64,15 +64,15 @@ export const sectionMessages = {
     "services": {
       "label": "Services",
       "title": "From scattered data to useful tools.",
-      "description": "I help small and mid-sized businesses and business, Data and IT teams with four connected needs.",
+      "description": "Four complementary services for small and mid-sized companies and for business, data and IT teams.",
       "outcome": "Expected deliverable",
       "technologies": "Technologies and expertise"
     },
     "about": {
       "label": "About",
       "title": "Connecting data, technology and business needs.",
-      "description": "I started in software development. My assignments through Apside at CNAV, Harmonie Mutuelle and Banque de France gradually led me towards data integration, data quality and Business Intelligence.",
-      "approach": "I pay particular attention to reliable, maintainable processes that the teams using them can understand.",
+      "description": "My career began in software development. Assignments through Apside at CNAV, Harmonie Mutuelle and Banque de France gradually shaped a focus on data integration, data quality and business intelligence.",
+      "approach": "Each engagement prioritises reliable, maintainable processes that teams can understand.",
       "linkedin": "Explore my background on LinkedIn",
       "newTab": " (new tab)",
       "cv": " Download my CV (French)"
@@ -80,7 +80,7 @@ export const sectionMessages = {
     "contact": {
       "label": "Contact",
       "title": "Let’s discuss your Data & BI project",
-      "description": "Tell me about your context, what is holding you back and the outcome you need. I can then give you an initial assessment.",
+      "description": "Describe your situation, the challenges you face and the outcome you need. These details will help clarify your requirements and possible next steps.",
       "direct": "Direct contact details",
       "linkedinProfile": "LinkedIn profile of",
       "newTab": " (opens in a new tab)"
@@ -88,7 +88,7 @@ export const sectionMessages = {
     "projects": {
       "label": "Case studies",
       "title": "A closer look at my work.",
-      "description": "Three examples from my professional experience. No internal or confidential data is disclosed.",
+      "description": "Three case studies from my professional background. No internal or confidential data is disclosed.",
       "all": "View all projects"
     }
   }

@@ -23,6 +23,7 @@ export function HeroSection({ locale = "fr" }: { locale?: Locale }) {
           <div className="hero-copy">
             <p className="hero-identity">{profile.firstName} <span>{profile.lastName}</span></p>
             <h1 className="hero-positioning" id="hero-title">{t.title}</h1>
+            <p className="hero-tagline">{t.signature}<span>{t.signal}</span></p>
             <p className="hero-lead">{t.description}</p>
             <div className="hero-proof">
               <ul className="hero-proof-list" aria-label={t.technologies}>
@@ -47,7 +48,6 @@ export function HeroSection({ locale = "fr" }: { locale?: Locale }) {
               </a>
               <a href={profile.contact.cvUrl} download><ArrowDownToLine aria-hidden="true" size={16} />{t.cv}</a>
             </div>
-            <p className="hero-tagline">{t.signature}<span>{t.signal}</span></p>
           </div>
           <DashboardArtwork className="hero-artwork" />
         </div>

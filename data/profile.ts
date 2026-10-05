@@ -12,7 +12,7 @@ const experienceFacts = [
     "endDate": null,
     "role": "Data Analyst",
     "location": "Tours",
-    "summary": "Au sein de la Data Factory de la CNAV, j’interviens sur des données multi-sources à intégrer et à migrer entre différents environnements.",
+    "summary": "La mission au sein de la Data Factory de la CNAV porte sur l’intégration et la migration de données issues de plusieurs sources, entre différents environnements.",
     "interventions": [
       "Traduction des règles métier et adaptation des traitements lors des migrations.",
       "Développement d’un traitement de pseudonymisation et de rapprochement de données.",
@@ -38,9 +38,9 @@ const experienceFacts = [
     "endDate": "2025-06",
     "role": "Ingénieur d’études et de développement",
     "location": "Saint-Pierre-des-Corps",
-    "summary": "Au Pôle Innovation d’Apside, j’ai participé à des projets exploratoires autour de la collecte de données, de l’automatisation et de l’intelligence artificielle.",
+    "summary": "Contribution à des projets exploratoires de collecte de données, d’automatisation et d’intelligence artificielle au sein du pôle Innovation d’Apside.",
     "interventions": [
-      "Collecte documentaire sur des plateformes de marchés publics et structuration de contenus non structurés.",
+      "Collecte de documents sur des plateformes de marchés publics et structuration de leur contenu.",
       "Exploitation de données CRM pour automatiser certaines affectations.",
       "Développement d’un système de comparaison sémantique et d’une architecture modulaire pour faciliter les évolutions."
     ],
@@ -61,9 +61,9 @@ const experienceFacts = [
     "endDate": "2025-03",
     "role": "Data Analyst",
     "location": "Angers",
-    "summary": "Au pôle décisionnel d’Harmonie Mutuelle, j’intervenais sur la fiabilité des flux de données liés à la santé et à la prévoyance.",
+    "summary": "Au sein du pôle décisionnel d’Harmonie Mutuelle, la mission portait sur la fiabilité des flux de données liés à la santé et à la prévoyance.",
     "interventions": [
-      "Évolution des traitements d’intégration, extraction, transformation et consolidation de plusieurs sources.",
+      "Évolution des traitements d’intégration, d’extraction, de transformation et de consolidation de données issues de plusieurs sources.",
       "Contrôles de cohérence et rapprochement des données traitées.",
       "Automatisation de la reconstitution de données et de l’alimentation du système décisionnel."
     ],
@@ -84,7 +84,7 @@ const experienceFacts = [
     "endDate": "2023-07",
     "role": "Data Analyst",
     "location": "Saint-Pierre-des-Corps",
-    "summary": "Chez Harmonie Mutuelle, j’intervenais dans un Datalab sur les besoins métier d’analyse, de reporting et de qualité des données.",
+    "summary": "La mission au sein du Datalab d’Harmonie Mutuelle portait sur les besoins métier en analyse, en reporting et en qualité des données.",
     "interventions": [
       "Analyse, intégration et structuration de jeux de données adaptés aux besoins métier.",
       "Identification et correction d’anomalies dans les données.",
@@ -106,13 +106,13 @@ const experienceFacts = [
     "employer": "Apside",
     "startDate": "2019-11",
     "endDate": "2021-06",
-    "role": "Ingénieur d’études et développement",
+    "role": "Ingénieur d’études et de développement",
     "location": "Poitiers",
-    "summary": "Au pôle Intelligence Artificielle de la Banque de France, j’ai contribué à l’industrialisation d’un modèle de cotation d’entreprises pour l’évaluation du risque de crédit.",
+    "summary": "Contribution à l’industrialisation d’un modèle de cotation d’entreprises pour l’évaluation du risque de crédit, au sein du pôle Intelligence Artificielle de la Banque de France.",
     "interventions": [
       "Adaptation du modèle aux contraintes techniques et évolution des traitements associés.",
       "Préparation et analyse des données nécessaires au fonctionnement du modèle.",
-      "Développement d’un webservice pour exposer le modèle."
+      "Développement d’un service web rendant le modèle accessible à d’autres composants."
     ],
     "technologies": [
       "Python",
@@ -132,7 +132,7 @@ const experienceFacts = [
     "endDate": "2019-03",
     "role": "Développeur Python",
     "location": "Saint-Avertin",
-    "summary": "Chez Dstny, j’intervenais sur la centralisation, le traitement et le contrôle de données provenant de plusieurs sources.",
+    "summary": "Chez Dstny, la mission portait sur la centralisation, le traitement et le contrôle de données provenant de plusieurs sources.",
     "interventions": [
       "Échanges avec les bases de données, récupération automatisée d’informations externes et génération de PDF.",
       "Contrôles de cohérence et alertes sur les modifications de données.",
@@ -165,21 +165,21 @@ export const education = [
     "degree": "Licence Informatique",
     "period": "2015 — 2018",
     "location": "Tours",
-    "description": "Formation généraliste en informatique avec développement, bases de données, algorithmique et systèmes."
+    "description": "Formation généraliste en informatique couvrant le développement, les bases de données, l’algorithmique et les systèmes."
   }
 ] as const satisfies readonly Education[];
 export const workPrinciples = [
   {
     "name": "Cadrer avant de construire",
-    "description": "Je pars du besoin métier, des sources disponibles et du résultat attendu pour définir ce qui est utile."
+    "description": "Le besoin métier, les sources disponibles et le résultat attendu définissent le périmètre de l’intervention."
   },
   {
     "name": "Construire pour durer",
-    "description": "Je privilégie des traitements lisibles, reproductibles et simples à maintenir."
+    "description": "Des traitements lisibles, reproductibles et simples à maintenir facilitent la reprise par les équipes."
   },
   {
     "name": "Rendre la donnée compréhensible",
-    "description": "Je documente les traitements et restitue l’information pour que les équipes puissent la comprendre et la reprendre."
+    "description": "La documentation des traitements et la clarté des restitutions permettent aux équipes de comprendre la solution et de la reprendre."
   }
 ] as const satisfies readonly WorkPrinciple[];
 export const languages = [
@@ -192,8 +192,8 @@ export const profile = {
   ...identity,
   role: "Consultant Data & BI freelance",
   experienceLabel: "Plus de 6 ans d’expérience",
-  summary: "J’intègre, fiabilise et automatise vos données pour les rendre réellement exploitables.",
-  shortSummary: "Consultant Data & BI freelance à Tours. Intégration, Data Quality, automatisation et reporting Power BI, avec SQL et Python.",
+  summary: "Des données fiables et exploitables, de l’intégration à l’automatisation de vos traitements.",
+  shortSummary: "Consultant Data & BI freelance à Tours. Intégration et qualité des données, automatisation des traitements et reporting Power BI avec SQL et Python.",
   workModes: ["À distance", "Hybride", "Sur site"],
   experiences, education, languages, workPrinciples,
 } as const satisfies Profile;

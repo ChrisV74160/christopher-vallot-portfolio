@@ -88,11 +88,10 @@ img, svg { max-width: 100%; }
 }
 .section-shell--compact { padding-block: clamp(4.5rem, 7vw, 7rem); }
 
-/* On the landing page, adjacent sections share one transition space instead of
-   adding both sections' vertical padding. Immersive modules keep their own rhythm. */
-.landing-page > .section-shell + .section-shell,
-.landing-page > .section-shell + .contact-section {
-  padding-top: 0;
+/* Landing-page sections share the same vertical spacing, including compact ones. */
+.landing-page > .section-shell,
+.landing-page > .contact-section {
+  padding-block: var(--section-space);
 }
 
 .eyebrow {

@@ -3,11 +3,11 @@ import type { ProjectCaseStudy } from "@/types/content";
 
 const copy = {
   "developpement-api-python-automatisation": {
-    "title": "Python API development and data automation",
+    "title": "Python API development and process automation",
     "shortSummary": "Centralising data, generating PDFs and automating checks and alerts with Python.",
     "seoDescription": "Dstny case study: Python API development, SQL and external API integration, PDF generation, consistency checks and alerts for data changes.",
-    "context": "At Dstny in Saint-Avertin, from November 2018 to March 2019, I worked on Python solutions to centralise, process and check data from different sources.",
-    "problem": "The application needed to exchange information with databases and external APIs, generate documents and check the data retrieved and subsequent changes.",
+    "context": "The assignment at Dstny in Saint-Avertin, from November 2018 to March 2019, focused on Python solutions to centralise, process and check data from multiple sources.",
+    "problem": "The application needed to exchange information with databases and external APIs, generate documents, check the retrieved data and detect changes.",
     "objectives": [
       "Develop a Python API and automate PDF generation.",
       "Implement exchanges with databases and external APIs.",
@@ -25,16 +25,16 @@ const copy = {
       "Developing consistency checks and an alert system for data changes.",
       "Optimising selected processes through multithreading."
     ],
-    "intervention": "I developed the Python API, data-source integrations and PDF generation. I also implemented consistency checks and alerts for data changes, and optimised selected processes through multithreading.",
+    "intervention": "The work covered the Python API, data-source integrations and PDF generation. It also included consistency checks, alerts for data changes and optimisation of selected processes through multithreading.",
     "result": "A Python API for processing data from multiple sources and generating PDFs, complemented by consistency checks and alerts when data changes.",
     "sector": "Python development and automation",
   },
   "migration-integration-donnees": {
     "title": "Multi-source data migration and integration",
-    "shortSummary": "Adapting processing from Cloudera to Teradata and reconciling multi-source data.",
+    "shortSummary": "Migrating and adapting processing from Cloudera to Teradata, and reconciling data from multiple sources.",
     "seoDescription": "Data & BI case study: migrating, integrating and improving multi-source data reliability with Python, PySpark, SQL, Cloudera and Teradata.",
-    "context": "Within a Data Factory, I work on data processing, integration and migration between Cloudera and Teradata.",
-    "problem": "Existing processing needs to be adapted to the target environment while translating business rules and bringing multiple sources together.",
+    "context": "The ongoing assignment within a Data Factory involves data processing, integration and migration between Cloudera and Teradata.",
+    "problem": "The challenge is to adapt processing to the target environment, implement business rules and reconcile data from multiple sources.",
     "objectives": [
       "Develop PySpark processing on Cloudera.",
       "Adapt processing for Teradata with SQL and Shell.",
@@ -50,20 +50,20 @@ const copy = {
       "Migrating and adapting processing for Teradata with SQL and Shell.",
       "Pseudonymising and reconciling data with Python."
     ],
-    "intervention": "I develop and adapt integration processes. I have also built Python processing for data pseudonymisation and reconciliation.",
+    "intervention": "The work involves developing and adapting integration processes. A Python process for data pseudonymisation and reconciliation has also been built.",
     "result": "Processing adapted for Teradata and data prepared, integrated and reconciled for business needs. The assignment is ongoing.",
     "sector": "Business intelligence data",
   },
   "automatisation-collecte-donnees": {
     "title": "Automating and structuring heterogeneous data",
-    "shortSummary": "Automating collection and turning heterogeneous content into consistent, usable data.",
+    "shortSummary": "Automating collection and structuring heterogeneous content in a consistent, usable format.",
     "seoDescription": "Data & BI case study: automated collection and structuring of heterogeneous data with Python, Playwright, JSON and LLaMA.",
-    "context": "Within an Innovation team, I developed prototypes to collect and structure data from public procurement platforms and a CRM.",
+    "context": "The assignment within an Innovation team focused on prototypes to collect and structure data from public procurement platforms and a CRM.",
     "problem": "The process needed to combine automated collection, content transformation and semantic comparison within an extensible architecture.",
     "objectives": [
       "Automate data collection.",
       "Structure the information collected.",
-      "Transform unstructured content into JSON.",
+      "Structure unstructured content as JSON.",
       "Compare the collected data semantically."
     ],
     "data": [
@@ -75,10 +75,10 @@ const copy = {
     "method": [
       "Automating collection with Python and Playwright.",
       "Structuring data from heterogeneous sources.",
-      "Transforming content into JSON.",
-      "Designing an LLM-based semantic comparison system."
+      "Structuring content as JSON.",
+      "Designing a semantic comparison system based on a large language model (LLM)."
     ],
-    "intervention": "I automated document retrieval with Python and Playwright, structured content into JSON and developed a semantic comparison system using LLMs.",
+    "intervention": "Document retrieval was automated with Python and Playwright. Content was structured as JSON, and a semantic comparison system was developed using large language models (LLMs).",
     "result": "Prototypes that automate collection, structure content into JSON and support semantic comparison within a modular architecture.",
     "sector": "Automation and data collection",
   },
@@ -87,11 +87,11 @@ const copy = {
     "shortSummary": "Automating, consolidating and checking business data flows before they are used for decision-making.",
     "seoDescription": "Data & BI case study: automating and improving BI data flow reliability with SAS, Python, SQL, PowerShell and Power BI.",
     "context": "Within a BI team, data from health and personal protection insurance flows needed to be integrated, consolidated and reconciled.",
-    "problem": "The data needed to be reconciled and checked despite the variety of flows and integration processes.",
+    "problem": "The variety of data flows and integration processes required consistency checks and reconciliation across sources.",
     "objectives": [
       "Automate integration processes.",
       "Extract, transform and consolidate data.",
-      "Check Data Quality and reconcile sources.",
+      "Check data quality and reconcile data across sources.",
       "Improve the reliability of extraction and loading for BI data flows."
     ],
     "data": [
@@ -103,24 +103,24 @@ const copy = {
     "method": [
       "Developing integration processes in SAS.",
       "Automating with Python and PowerShell.",
-      "Checking Data Quality and reconciling data with Power BI.",
+      "Checking data quality and reconciling data with Power BI.",
       "Consolidating and reconstructing data."
     ],
-    "intervention": "I developed SAS processing, automated data reconstruction with Python and integration with PowerShell, and set up consistency checks and reconciliation with Power BI.",
-    "result": "More repeatable integration processes, with consolidated and checked data before it is loaded into BI flows.",
+    "intervention": "The work combined SAS processing, automated data reconstruction with Python and integration with PowerShell. Consistency checks and reconciliation were then implemented with Power BI.",
+    "result": "More repeatable integration processes, with consolidated and checked data ready to be loaded into the BI system.",
     "sector": "BI data flows",
   },
   "reporting-power-bi-datalab": {
     "title": "Power BI reporting and process automation",
-    "shortSummary": "Preparing data and automating its presentation in Power BI reports.",
+    "shortSummary": "Preparing data and automating the delivery of Power BI reports.",
     "seoDescription": "Data & BI case study: data preparation, Power BI reporting and process automation with DAX, Power Query and Power Automate.",
-    "context": "Preparing business data for use in a Datalab and in reports.",
-    "problem": "Preparation, anomaly analysis, reporting and automation involved several complementary steps.",
+    "context": "The assignment within a Datalab focused on preparing business data for use in Power BI reports.",
+    "problem": "The challenge was to improve data reliability, resolve anomalies and automate report delivery, from data preparation through to reporting.",
     "objectives": [
       "Integrate business data into a Datalab.",
       "Create datasets and improve their reliability.",
       "Design Power BI reports and dashboards.",
-      "Automate reporting and improve processes."
+      "Automate report delivery and improve reporting processes."
     ],
     "data": [
       "Business data",
@@ -134,20 +134,20 @@ const copy = {
       "Designing reports with Power BI, DAX and Power Query.",
       "Automating with Power Automate."
     ],
-    "intervention": "I prepared and structured datasets, identified and resolved anomalies, built Power BI reports with DAX and Power Query and automated delivery with Power Automate.",
-    "result": "Structured, reliable data combined with Power BI reports that business users can use directly, alongside automated reporting processes.",
+    "intervention": "Datasets were prepared and structured, and anomalies identified and corrected. Power BI reports were built with DAX and Power Query, and their delivery automated with Power Automate.",
+    "result": "Structured, reliable datasets, usable Power BI reports for business teams and automated report delivery.",
     "sector": "Datalab and reporting",
   },
   "industrialisation-modele-cotation": {
-    "title": "Productionising a risk analysis model",
-    "shortSummary": "Bringing a risk analysis model into production and making its outputs usable.",
-    "seoDescription": "Data & BI case study: productionising a risk analysis model with Python, Scikit-learn, ONNX and access through a web service.",
-    "context": "Within an Artificial Intelligence team, I contributed to the productionisation and development of a company rating model for credit risk assessment.",
-    "problem": "The model needed to be adapted to the technical environment and exposed for use by other components.",
+    "title": "Adapting a company rating model for operational use",
+    "shortSummary": "Adapting a company rating model for credit risk assessment and making it accessible through a web service.",
+    "seoDescription": "Data & BI case study: adapting a company rating model for credit risk assessment with Python, Scikit-learn, ONNX and a web service.",
+    "context": "Contribution to adapting and developing a company rating model for operational use in credit risk assessment, within an Artificial Intelligence team.",
+    "problem": "The model needed to be adapted to the technical environment and made accessible to other components through a web service.",
     "objectives": [
       "Adapt the model to technical constraints.",
-      "Maintain its processing and prepare the data.",
-      "Expose the model through a web service."
+      "Update the associated processing and prepare the data.",
+      "Make the model accessible through a web service."
     ],
     "data": [
       "Company data used for rating",
@@ -156,10 +156,10 @@ const copy = {
     "method": [
       "Adapting the model and maintaining its associated processing.",
       "Preparing and analysing data with Python, Pandas and NumPy.",
-      "Developing a web service to expose the model."
+      "Developing a web service giving other components access to the model."
     ],
-    "intervention": "I contributed to model adaptation and maintenance, data preparation and analysis, and the development of its web service.",
-    "result": "A model adapted to the technical environment, maintained processing and a web service exposing the model.",
+    "intervention": "The contribution covered model adaptation and development, data preparation and analysis, and the development of the model’s web service.",
+    "result": "A model adapted to the technical environment, maintained data processing workflows and a web service giving other components access to the model.",
     "sector": "Credit risk",
   }
 };

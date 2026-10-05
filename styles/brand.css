@@ -51,7 +51,7 @@
 .hero-proof-list { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.6rem 1rem; margin: 0; padding: 0; list-style: none; }
 .hero-stack-item { display: inline-flex; align-items: center; gap: 0.45rem; color: var(--brand-primary); font-size: 0.9rem; font-weight: 650; }
 .hero-stack-item .technology-icon { border: 0; background: var(--surface); width: 1.6rem; height: 1.9rem; }
-.hero-tagline { margin: 1.5rem auto 0; color: var(--brand-primary); font-size: 1rem; font-weight: 500; line-height: 1.6; }
+.hero-tagline { margin: 1.5rem auto 0; color: var(--brand-primary); font-size: clamp(1.5rem, 2.5vw, 2rem); font-weight: 500; line-height: 1.6; text-wrap: balance; }
 .hero-tagline span { color: var(--brand-secondary); }
 .hero-lead { max-width: 42rem; margin: 1.5rem auto 0; font-size: clamp(1.15rem, 1.8vw, 1.4rem); line-height: 1.65; }
 .hero-actions { justify-content: center; margin-top: 1.65rem; }
@@ -174,7 +174,7 @@
   .hero-identity { background: var(--surface); margin: 0 0 1.25rem; font-size: 1.25rem; font-weight: 650; letter-spacing: -0.02em; line-height: 1.4; }
   .hero-identity span { display: inline; }
   .hero-positioning { margin: 0 auto; max-width: 20ch; color: var(--brand-primary); font-size: clamp(2.6rem, 5.3vw, 4.75rem); font-weight: 650; letter-spacing: -0.045em; line-height: 1.1; text-wrap: balance; }
-  .hero-tagline { margin: 1.5rem auto 0; color: var(--brand-primary); font-size: 1rem; font-weight: 500; line-height: 1.6; }
+  .hero-tagline { margin: 1.5rem auto 0; color: var(--brand-primary); font-weight: 500; line-height: 1.6; }
   .hero-proof-list { display: flex; gap: 0.6rem 1rem; }
   .hero-stack-item { font-size: 0.85rem; }
   .hero-actions { flex-direction: row; }
@@ -246,7 +246,7 @@
 @media (max-width: 48rem) {
   .hero-positioning { margin-inline: 0; font-size: clamp(2.35rem, 9.5vw, 3.6rem); }
   .hero-identity { font-size: 1.2rem; }
-  .hero-tagline { margin-inline: 0; font-size: 1rem; }
+  .hero-tagline { margin-inline: 0; }
   .hero-grid { padding-top: 0; }
   .hero-meta { flex-direction: row; flex-wrap: wrap; gap: 0.5rem 1.25rem; }
   .work-principles { grid-template-columns: minmax(0, 1fr); }
