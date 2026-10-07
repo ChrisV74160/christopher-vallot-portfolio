@@ -159,7 +159,7 @@ export function DashboardArtworkSource({ geometry, variant = "hero" }: { geometr
       <rect x="410" y="216" width="98" height="116" rx="12" fill={white} stroke={teal} strokeWidth="1.5" />
       {[19, 32, 47, 61].map((height, i) => <rect key={i} x={426 + i * 18} y={290 - height} width="12" height={height} rx="2" fill={[green, lime, teal, orange][i]} />)}
       <path d="M426 306H491M426 319H468" stroke={teal} strokeWidth="4" strokeLinecap="round" />
-      <IllustrationOwl geometry={geometry} x={201} y={44} width={140} height={150} />
+      <IllustrationOwl geometry={geometry} x={201} y={47} width={140} height={150} />
     </svg>
   );
 }
@@ -237,7 +237,7 @@ export function ConversationArtworkSource({ geometry, variant = "default" }: { g
     {[89, 64, 48].map((width,i) => <rect key={i} x="282" y={259 + i*13} width={width} height="6" rx="3" fill={[teal, green, lime][i]} />)}
     <path d="M62 77L50 61M75 61L72 42" stroke={orange} strokeWidth="4" strokeLinecap="round" />
     </>}
-    <IllustrationOwl geometry={geometry} x={variant === "similar" ? 156 : 91} y={variant === "similar" ? 26 : 10} width={variant === "similar" ? 112 : 126} height={variant === "similar" ? 120 : 135} />
+    <IllustrationOwl geometry={geometry} x={variant === "similar" ? 156 : 91} y={variant === "similar" ? 29 : 13} width={variant === "similar" ? 112 : 126} height={variant === "similar" ? 120 : 135} />
   </svg>;
 }
 
